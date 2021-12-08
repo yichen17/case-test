@@ -27,6 +27,8 @@ import java.sql.SQLException;
  *
  *     缺陷：保存图片到数据库，图片数据传输存在压力。 url形式存储则存在迁移的压力，因为图片都保存在某一个目录，
  *     且数据库存的是对应url，如果更改图片位置需要进行批量操作。
+ *
+ *     优化：前后端数据流传输，一般通过 base64加密
  */
 @RestController
 @RequestMapping("/image")
@@ -45,7 +47,8 @@ public class ImageSaveController {
     public String save(){
         FileInputStream fileInputStream=null;
         try{
-            String path="G:\\project\\case-test\\src\\main\\resources\\image\\dog.jpeg";
+//            String path="G:\\project\\case-test\\src\\main\\resources\\image\\dog.jpeg";
+            String path="D:\\hytrix\\case-test\\src\\main\\resources\\image\\dog.jpeg";
             fileInputStream=new FileInputStream(new File(path));
         }
         catch (IOException e){
