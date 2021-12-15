@@ -1,9 +1,11 @@
 package com.yichen.casetest.controller;
 
+import com.yichen.casetest.service.CacheService;
 import com.yichen.casetest.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
@@ -21,6 +23,10 @@ public class RedisController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private CacheService cacheService;
+
 
     @RequestMapping("/add")
     public String addToRedis(String key)throws Exception{
@@ -43,6 +49,26 @@ public class RedisController {
         Long expire = stringRedisTemplate.getExpire(key);
         return ""+expire;
     }
+
+    /**
+     *   ===============     测试  @cache  ===============
+     */
+    @RequestMapping("/cache/get")
+    public String cacheGet(@RequestParam("name") String name){
+        String value=cacheService.get(name);
+        return value;
+    }
+
+    @RequestMapping("/cache/save")
+    public String cacheSave(@RequestParam("name") String name,@RequestParam("value") String value){
+        return cacheService.save(name,value);
+    }
+
+    @RequestMapping("/cache/delete")
+    public void cacheDelete(@RequestParam("name") String name){
+        cacheService.delete(name);
+    }
+
 
 
 }

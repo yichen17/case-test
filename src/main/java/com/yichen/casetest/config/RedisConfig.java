@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.validation.annotation.Validated;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
@@ -63,7 +64,7 @@ public class RedisConfig {
      * 使用 redis 连接池
      * @return
      */
-    @Bean("jedisConnectionFactory2")
+//    @Bean("jedisConnectionFactory2")
     public RedisConnectionFactory redisConnectionFactory(){
         JedisPoolConfig poolConfig=new JedisPoolConfig();
         poolConfig.setMaxIdle(maxIdle);
@@ -85,12 +86,12 @@ public class RedisConfig {
     }
 
     /**
-     * bean 命名默认规则为  方法名
+     * bean 命名默认规则为  方法名   ===>    通过 @Value 可以在多个匹配的情况下指定使用哪个bean
      * @param factory
      * @return
      */
-    @Bean(name = "redisTemplate")
-    public StringRedisTemplate redisTemplate(JedisConnectionFactory factory) {
+//    @Bean(name = "redisTemplate")
+    public StringRedisTemplate redisTemplate(@Value("jedisConnectionFactory2") JedisConnectionFactory factory) {
         StringRedisTemplate template = new StringRedisTemplate();
         template.setConnectionFactory(factory);
         // key采用String的序列化方式
