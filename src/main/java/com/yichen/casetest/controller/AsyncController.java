@@ -27,4 +27,9 @@ public class AsyncController {
         return "执行完毕";
     }
 
+    @GetMapping("/getCoreSize")
+    public String getCoreSize(){
+        return "cpu核心数 "+Runtime.getRuntime().availableProcessors();
+    }
+
 }
