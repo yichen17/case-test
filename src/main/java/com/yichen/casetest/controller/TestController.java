@@ -2,8 +2,10 @@ package com.yichen.casetest.controller;
 
 import com.yichen.casetest.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/1/10 15:48
  * @describe 研究原理的测试controller
  */
-@RestController
+@Controller
 @RequestMapping("/test")
 public class TestController {
 
@@ -20,6 +22,7 @@ public class TestController {
     private TestService testService;
 
     @RequestMapping("/get")
+    @ResponseBody
     public String get(){
         return "test-get";
     }
@@ -30,9 +33,24 @@ public class TestController {
      * @return
      */
     @GetMapping("/getById")
+    @ResponseBody
     public String getDataById(Long id){
         return testService.getByid(id).toString();
     }
+
+    @GetMapping("/")
+    @ResponseBody
+    public String nginxTestA(){
+        return "nginx a";
+    }
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public String nginxTestB(){
+        return "nginx b";
+    }
+
+
 
 
 }
