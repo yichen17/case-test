@@ -1,6 +1,7 @@
 package com.yichen.casetest.test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.yichen.casetest.model.JsonDto;
 import org.apache.commons.compress.utils.Lists;
 
@@ -26,5 +27,8 @@ public class JsonTest {
         food.add("白菜豆腐");
         dto.setFoods(food);
         System.out.println(JSON.toJSONString(dto));
+
+        System.out.println(null instanceof JSONObject);
+
     }
 }
