@@ -11,8 +11,11 @@ import java.math.BigDecimal;
 public class BaseTypeTest {
 
     public static void main(String[] args) {
-        BigDecimal data=null;
-        System.out.println(data.toString());
+        // 空指针异常
+//        BigDecimal data=null;
+//        System.out.println(data.toString());
+
+
     }
 
 }
