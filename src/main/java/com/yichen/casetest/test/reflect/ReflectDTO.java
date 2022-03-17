@@ -2,6 +2,8 @@ package com.yichen.casetest.test.reflect;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -17,5 +19,10 @@ public class ReflectDTO {
     private Integer age;
 
     private Long id;
+
+    public BigDecimal cost;
+
+    protected Double price;
+
 
 }

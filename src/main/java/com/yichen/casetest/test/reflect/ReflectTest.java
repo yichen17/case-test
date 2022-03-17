@@ -1,10 +1,9 @@
 package com.yichen.casetest.test.reflect;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Qiuxinchao
@@ -42,9 +41,11 @@ public class ReflectTest {
 
     public static void main(String[] args) {
 
-        ReflectTest test = new ReflectTest();
-
-
+//        ReflectTest test = new ReflectTest();
+        Set<String> names = Arrays.stream(ReflectDTO.class.getDeclaredFields()).flatMap(p -> Stream.of(p.getName())).collect(Collectors.toSet());
+        for(String name : names){
+            System.out.println(name);
+        }
 
     }
 
