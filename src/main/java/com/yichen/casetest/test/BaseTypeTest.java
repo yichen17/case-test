@@ -15,6 +15,8 @@ public class BaseTypeTest {
 //        BigDecimal data=null;
 //        System.out.println(data.toString());
 
+        Long l = 10L;
+        System.out.println(l.equals(10L));
 
     }
 
