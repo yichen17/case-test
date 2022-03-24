@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 @Component
-@Order(-999)
+@Order(-1)
 public class AspectTestA {
 
     @Pointcut("execution(* com.yichen.casetest.controller.AspectController.*(..))")

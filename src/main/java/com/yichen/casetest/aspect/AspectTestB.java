@@ -1,10 +1,16 @@
 package com.yichen.casetest.aspect;
 
+import com.yichen.casetest.model.AspectVo;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
 
 /**
  * @author Qiuxinchao
@@ -23,8 +29,17 @@ public class AspectTestB {
     }
 
     @Before("decryptPointCut()")
-    public void before(){
+    public void before(JoinPoint joinPoint){
         log.info("AspectTestB before");
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Object[] args = joinPoint.getArgs();
+        if (args != null && args.length == 1 && args[0] instanceof AspectVo){
+            AspectVo vo = (AspectVo) args[0];
+            vo.setAddress("海底两万里");
+            vo.setAge(18);
+            vo.setName("狂杀一条街");
+        }
     }
 
     @After("decryptPointCut()")
