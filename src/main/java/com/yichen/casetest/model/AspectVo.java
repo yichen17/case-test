@@ -20,4 +20,6 @@ public class AspectVo {
 
     private Integer age;
 
+    private String encrypt;
+
 }

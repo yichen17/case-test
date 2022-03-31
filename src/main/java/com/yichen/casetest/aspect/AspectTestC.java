@@ -6,18 +6,10 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
-import org.springframework.web.bind.support.DefaultDataBinderFactory;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 /**
@@ -26,21 +18,18 @@ import java.lang.reflect.Method;
  * @date 2022/3/24 10:56
  * @describe 切面测试b
  */
-//@Aspect
-//@Slf4j
-//@Component
-//@Order(Ordered.HIGHEST_PRECEDENCE)
+@Aspect
+@Slf4j
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AspectTestC {
 
-
-
-
-    @Pointcut("")
+    @Pointcut("@annotation(javax.validation.Valid)")
     public void decryptPointCut() {
     }
 
     @Before("decryptPointCut()")
-    public void before(JoinPoint joinPoint) throws Exception{
+    public void before(JoinPoint joinPoint){
         Object[] args = joinPoint.getArgs();
         if (args != null && args.length == 1 && args[0] instanceof AspectVo){
             AspectVo vo = (AspectVo) args[0];
@@ -49,7 +38,5 @@ public class AspectTestC {
             vo.setName("狂杀一条街");
         }
     }
-
-
 
 }

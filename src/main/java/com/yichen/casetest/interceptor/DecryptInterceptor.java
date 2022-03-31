@@ -2,6 +2,7 @@ package com.yichen.casetest.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.yichen.casetest.servlet.DecryptServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 /**
  * @author Qiuxinchao
@@ -22,47 +24,20 @@ import java.io.InputStreamReader;
  *   =>  http://stackoverflow.com/questions/28975025/advise-controller-method-before-valid-annotation-is-handled
  *   =>  https://stackoverflow.com/questions/39271035/how-do-i-get-my-spring-aspects-to-execute-before-valid-validated-annotation-on
  */
-@Component
 @Slf4j
 public class DecryptInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws Exception  {
-
-        JSONObject jsonParam = getJSONParam(request);
-        jsonParam.forEach((key, value) -> log.info("key =>  {}, value => {}", key, value));
-        jsonParam.put("name","yichen");
-        ServletInputStream inputStream = request.getInputStream();
-
-//        return super.preHandle(request,response,handler);
+        if (request instanceof DecryptServletRequestWrapper){
+            DecryptServletRequestWrapper requestWrapper = (DecryptServletRequestWrapper) request;
+            Map<String, Object> requestBody = requestWrapper.getRequestBody();
+            requestBody.put("name","yichen");
+            DecryptServletRequestWrapper.printMap(requestBody);
+        }
         return true;
     }
 
-
-    /**
-     * 获取 入参
-     * @param request 请求
-     * @return 入参结果集
-     */
-    public static JSONObject getJSONParam(HttpServletRequest request) {
-        JSONObject jsonParam = null;
-        try {
-            // 获取输入流
-            BufferedReader streamReader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
-
-            // 写入数据到Stringbuilder
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = streamReader.readLine()) != null) {
-                sb.append(line);
-            }
-            jsonParam = JSONObject.parseObject(sb.toString());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        log.info("getJsonParam => {}", JSON.toJSONString(jsonParam));
-        return jsonParam;
-    }
 
 
 }
