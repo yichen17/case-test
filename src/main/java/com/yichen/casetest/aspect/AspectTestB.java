@@ -31,15 +31,6 @@ public class AspectTestB {
     @Before("decryptPointCut()")
     public void before(JoinPoint joinPoint){
         log.info("AspectTestB before");
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        Object[] args = joinPoint.getArgs();
-        if (args != null && args.length == 1 && args[0] instanceof AspectVo){
-            AspectVo vo = (AspectVo) args[0];
-            vo.setAddress("海底两万里");
-            vo.setAge(18);
-            vo.setName("狂杀一条街");
-        }
     }
 
     @After("decryptPointCut()")

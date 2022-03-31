@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -22,14 +24,18 @@ import java.io.InputStreamReader;
  */
 @Component
 @Slf4j
-public class DecryptInterceptor extends HandlerInterceptorAdapter {
+public class DecryptInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws Exception  {
 
         JSONObject jsonParam = getJSONParam(request);
         jsonParam.forEach((key, value) -> log.info("key =>  {}, value => {}", key, value));
-        return super.preHandle(request,response,handler);
+        jsonParam.put("name","yichen");
+        ServletInputStream inputStream = request.getInputStream();
+
+//        return super.preHandle(request,response,handler);
+        return true;
     }
 
 
