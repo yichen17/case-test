@@ -1,1 +1,6 @@
 java 技术博客  https://yaoyuanyy.github.io/
+
+
+1、单纯使用拦截器不能单纯读取数据，会导致controller拿不到请求数据。也无法调用 inputStream 的 reset() 方法。
+解决办法是装饰类，即读取原 httpServletRequest数据后，保存请求数据，并重写 getInputStream 方法，使得数据为我们保存
+的数据
