@@ -35,7 +35,9 @@ public class DecryptServletRequestWrapper extends HttpServletRequestWrapper {
         // 这里手动赋值，可以是 解密数据
         requestBody = new HashMap<>(16);
         JSONObject params = getJsonParam(request);
-        requestBody.putAll(params);
+        if (params != null){
+            requestBody.putAll(params);
+        }
         printMap(requestBody);
     }
 
