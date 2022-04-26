@@ -5,6 +5,7 @@ import com.yichen.casetest.model.AspectVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -33,6 +34,18 @@ public class AspectController {
     public String testJudge(@RequestBody @Valid AspectVo aspectVo){
         log.info("请求到达controller-testJudge");
         return JSON.toJSONString(aspectVo);
+    }
+
+    @RequestMapping("/testTransJson")
+    public String testTransJson(@RequestBody AspectVo aspectVo){
+        log.info("测试 @RequestBody 入参方式");
+        return JSON.toJSONString(aspectVo);
+    }
+
+    @RequestMapping("/testTransForm")
+    public String testTransForm(@RequestParam(value = "name",required = false) String name,@RequestParam(value = "age", required = false)Integer age){
+        log.info("测试 @RequestParam 入参方式");
+        return "name => " + name + " age => " + age;
     }
 
 
