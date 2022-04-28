@@ -23,10 +23,12 @@ public class ConcurrentRequestTestOther {
 
     private static int count = 0;
 
-    @Scheduled(cron = "0 0/20 * * * ?")
+    private static int type = 0;
+
+    @Scheduled(cron = "0 0/10 * * * ?")
 //    public static void main(String[] args) throws Exception {
     public static void test() throws Exception {
-        ExecutorService executor = new ThreadPoolExecutor(10,10,0L,TimeUnit.SECONDS,new LinkedBlockingQueue<>(),new ThreadPoolExecutor.DiscardOldestPolicy());
+//        ExecutorService executor = new ThreadPoolExecutor(10,10,0L,TimeUnit.SECONDS,new LinkedBlockingQueue<>(),new ThreadPoolExecutor.DiscardOldestPolicy());
 //        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10, new ThreadFactory() {
 //            @Override
 //            public Thread newThread(Runnable r) {
@@ -34,25 +36,53 @@ public class ConcurrentRequestTestOther {
 //                return new Thread("test thread "+ count++);
 //            }
 //        });
-        CountDownLatch latch = new CountDownLatch(10);
-        for(int i=0;i<10;i++){
-            executor.execute(() -> {
-                try {
-                    execute();
-                }
-                catch (Exception e){
-                    log.error("出错 {}",e.getMessage(),e);
-                }
-                finally {
-                    latch.countDown();
-                }
-            });
+//        CountDownLatch latch = new CountDownLatch(10);
+//        for(int i=0;i<10;i++){
+//            executor.execute(() -> {
+//                try {
+//                    execute();
+//                }
+//                catch (Exception e){
+//                    log.error("出错 {}",e.getMessage(),e);
+//                }
+//                finally {
+//                    latch.countDown();
+//                }
+//            });
+//        }
+//        latch.await();
+//        executor.shutdown();
+
+        if (type < 5){
+            Thread.sleep((int)(Math.random()*2000 + 1));
+            String result = HttpUtil.get("http://localhost:8088/sftp/download");
+            System.out.println(result);
+            type ++;
         }
-        latch.await();
-        executor.shutdown();
+        else {
+            ExecutorService executor = new ThreadPoolExecutor(2,2,0L,TimeUnit.SECONDS,new LinkedBlockingQueue<>(),new ThreadPoolExecutor.DiscardOldestPolicy());
+            CountDownLatch latch = new CountDownLatch(2);
+            for(int i=0;i<2;i++){
+                executor.execute(() -> {
+                    try {
+                        execute();
+                    }
+                    catch (Exception e){
+                        log.error("出错 {}",e.getMessage(),e);
+                    }
+                    finally {
+                        latch.countDown();
+                    }
+                });
+            }
+            latch.await();
+            executor.shutdown();
+            type = type % 5;
+        }
     }
-    public static void execute(){
-        for(int j=0;j<20;j++){
+    public static void execute() throws Exception{
+        for(int j=0;j<2;j++){
+            Thread.sleep(200);
             String result = HttpUtil.get("http://localhost:8088/sftp/download");
             System.out.println(result);
         }
