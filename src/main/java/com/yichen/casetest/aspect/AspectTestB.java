@@ -18,10 +18,10 @@ import java.lang.reflect.Method;
  * @date 2022/3/24 10:56
  * @describe 切面测试b
  */
-@Aspect
+//@Aspect
 @Slf4j
-@Component
-@Order(-100)
+//@Component
+//@Order(-100)
 public class AspectTestB {
 
     @Pointcut("execution(* com.yichen.casetest.controller.AspectController.*(..))")

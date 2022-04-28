@@ -18,10 +18,10 @@ import java.lang.reflect.Method;
  * @date 2022/3/24 10:56
  * @describe 切面测试b
  */
-@Aspect
+//@Aspect
 @Slf4j
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+//@Component
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AspectTestC {
 
     @Pointcut("@annotation(javax.validation.Valid)")

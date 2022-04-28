@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
  * @date 2022/3/24 10:56
  * @describe 切面测试a
  */
-@Aspect
+//@Aspect
 @Slf4j
-@Component
-@Order(-1)
+//@Component
+//@Order(-1)
 public class AspectTestA {
 
     @Pointcut("execution(* com.yichen.casetest.controller.AspectController.*(..))")
