@@ -1,9 +1,14 @@
 package com.yichen.casetest.model;
 
 import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.IO;
+import com.yichen.casetest.utils.ReflectUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+
+import java.io.InputStream;
+import java.io.PipedInputStream;
 
 /**
  * @author ChenYingxin
@@ -28,10 +33,29 @@ public class SftpPool {
     public ChannelSftp borrowObject() throws Exception {
         try {
             log.info("borrowObject {}",printInformation());
-            return pool.borrowObject();
+            ChannelSftp channelSftp = pool.borrowObject();
+            printChannelSftpStatus(channelSftp);
+            return channelSftp;
         } catch (Exception e) {
             log.warn("获取对象出错 {}",e.getMessage());
             throw new Exception("SFTP连接池获取ftp连接失败", e);
+        }
+    }
+
+    private void printChannelSftpStatus(ChannelSftp channelSftp){
+        try {
+            IO io = ReflectUtils.getFieldFromObject(channelSftp, "io", IO.class);
+            if (io != null){
+                InputStream inputStream = ReflectUtils.getFieldFromObject(io, "in", InputStream.class);
+                if (inputStream instanceof PipedInputStream){
+                    boolean closedByWriter = ReflectUtils.getFieldFromObject(inputStream, "closedByWriter", Boolean.class);
+                    boolean closedByReader = ReflectUtils.getFieldFromObject(inputStream, "closedByReader", Boolean.class);
+                    log.warn("channelSftp {} 输入流 {} {}", channelSftp, closedByWriter, closedByReader);
+                }
+            }
+        }
+        catch (Exception e){
+            log.error("出现错误 {}",e.getMessage(),e);
         }
     }
 
@@ -42,6 +66,7 @@ public class SftpPool {
      */
     public void returnObject(ChannelSftp channelSftp) {
         if (channelSftp != null) {
+            printChannelSftpStatus(channelSftp);
             pool.returnObject(channelSftp);
         }
         else {

@@ -17,7 +17,7 @@ import java.util.concurrent.*;
  * @describe 并发请求测试
  */
 @Slf4j
-@Configuration
+//@Configuration
 @EnableScheduling
 public class ConcurrentRequestTestOther {
 
