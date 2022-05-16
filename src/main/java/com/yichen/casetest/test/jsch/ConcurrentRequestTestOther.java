@@ -18,7 +18,7 @@ import java.util.concurrent.*;
  */
 @Slf4j
 //@Configuration
-@EnableScheduling
+//@EnableScheduling
 public class ConcurrentRequestTestOther {
 
     private static int count = 0;

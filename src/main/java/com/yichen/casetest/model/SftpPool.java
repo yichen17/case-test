@@ -5,7 +5,9 @@ import com.jcraft.jsch.IO;
 import com.yichen.casetest.utils.ReflectUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.pool2.DestroyMode;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -18,6 +20,9 @@ import java.io.PipedInputStream;
 @Data
 @Slf4j
 public class SftpPool {
+
+    @Autowired
+    private SftpFactory sftpFactory;
 
     private GenericObjectPool<ChannelSftp> pool;
 
@@ -32,8 +37,16 @@ public class SftpPool {
      */
     public ChannelSftp borrowObject() throws Exception {
         try {
-            log.info("borrowObject {}",printInformation());
+//            ChannelSftp channelSftp;
+//            while( (channelSftp = pool.borrowObject()) == null){
+//                log.warn("取出的对象为null,从对象池中移除");
+//                sftpFactory.destroyObject(sftpFactory.wrap(channelSftp));
+                // 感觉没用
+//                pool.invalidateObject(null, DestroyMode.ABANDONED);
+//            }
+
             ChannelSftp channelSftp = pool.borrowObject();
+            log.info("borrowObject {}",printInformation());
             printChannelSftpStatus(channelSftp);
             return channelSftp;
         } catch (Exception e) {

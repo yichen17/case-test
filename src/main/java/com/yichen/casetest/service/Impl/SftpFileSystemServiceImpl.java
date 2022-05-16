@@ -28,14 +28,16 @@ public class SftpFileSystemServiceImpl implements SftpFileSystemService {
     public File downloadFile(String targetPath) throws Exception {
         ChannelSftp sftp = sftpPool.borrowObject();
         OutputStream outputStream = null;
+        File file = null;
         try {
-            File file = new File(targetPath.substring(targetPath.lastIndexOf("/") + 1));
+            log.info("Download file sftp {}",sftp);
+            file = new File(targetPath.substring(targetPath.lastIndexOf("/") + 1));
             outputStream = new FileOutputStream(file);
             sftp.get(targetPath, outputStream);
             log.info("Download file success. TargetPath: {}", targetPath);
             return file;
         } catch (Exception e) {
-            log.error("Download file failure. TargetPath: {}", targetPath, e);
+            log.error("Download file failure. TargetPath: {}，sftp {}, outputStream {}, file {}", targetPath, sftp, outputStream, file, e);
             throw new Exception("下载文件失败");
         } finally {
             if (outputStream != null) {

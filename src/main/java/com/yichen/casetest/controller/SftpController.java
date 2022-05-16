@@ -34,8 +34,8 @@ public class SftpController {
     @GetMapping("/download")
     public String download(){
         String filePath = "/test/pdf/register.pdf";
-        FileOutputStream outputStream;
-        FileInputStream inputStream;
+//        FileOutputStream outputStream;
+//        FileInputStream inputStream;
         try {
             File file = service.downloadFile(filePath);
 //            outputStream = new FileOutputStream("F:\\data\\pdf-test\\" + System.currentTimeMillis() + "-" + file.getName());
@@ -53,7 +53,7 @@ public class SftpController {
             // 发邮件
 //            iMailService.sendAttachmentsMail("q07218396@163.com", file, "test.pdf", "yichen"); // 不可用
 
-//            MailUtil.send("q07218396@163.com", "测试数据","测试jsch pipe close",false,file);
+            MailUtil.send("q07218396@163.com", "测试数据","测试jsch pipe close",false,file);
 
             return "成功";
         }

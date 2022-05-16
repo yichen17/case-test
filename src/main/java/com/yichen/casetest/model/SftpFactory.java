@@ -42,6 +42,10 @@ public class SftpFactory extends BasePooledObjectFactory<ChannelSftp> {
             Properties sshConfig = new Properties();
             sshConfig.put(SESSION_CONFIG_STRICT_HOST_KEY_CHECKING, "no");
             sshSession.setConfig(sshConfig);
+            // 设置心跳时间，默认为0，此时不发送心跳
+//            sshSession.setServerAliveInterval(300000);
+            // 设置最大失败次数
+//            sshSession.setServerAliveCountMax(3);
             sshSession.connect(properties.getSessionConnectTimeout());
             ChannelSftp channel = (ChannelSftp) sshSession.openChannel(properties.getProtocol());
             channel.connect(properties.getChannelConnectedTimeout());
