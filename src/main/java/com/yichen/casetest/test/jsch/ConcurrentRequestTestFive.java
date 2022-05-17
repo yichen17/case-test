@@ -30,9 +30,9 @@ public class ConcurrentRequestTestFive {
 
 
         System.out.println("start");
-        CountDownLatch countDownLatch = new CountDownLatch(6);
+        CountDownLatch countDownLatch = new CountDownLatch(8);
         CountDownLatch requestInSameTime = new CountDownLatch(1);
-        for(int i=0;i<3;i++){
+        for(int i=0;i<4;i++){
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -51,7 +51,7 @@ public class ConcurrentRequestTestFive {
             });
         }
 
-        for(int i=0;i<3;i++){
+        for(int i=0;i<4;i++){
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
