@@ -28,6 +28,9 @@ public class SftpPool {
 
     public SftpPool(SftpFactory factory) {
         this.pool = new GenericObjectPool<>(factory, factory.getProperties().getPool());
+        log.warn("默认对象池配置-testOnBorrow {}",pool.getTestOnBorrow());
+        this.pool.setTestOnBorrow(true);
+        log.warn("更改后对象池配置-testOnBorrow {}",pool.getTestOnBorrow());
     }
 
     /**

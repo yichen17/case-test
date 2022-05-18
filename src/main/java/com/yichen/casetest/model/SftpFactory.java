@@ -57,6 +57,15 @@ public class SftpFactory extends BasePooledObjectFactory<ChannelSftp> {
     }
 
     @Override
+    public boolean validateObject(PooledObject<ChannelSftp> p) {
+        log.warn("validate-object {}",p);
+        ChannelSftp channelSftp = p.getObject();
+        boolean result = (!channelSftp.isClosed()) && (!channelSftp.isEOF());
+        log.warn("channelSftp-{}-validate-{}",p,result);
+        return result;
+    }
+
+    @Override
     public PooledObject<ChannelSftp> wrap(ChannelSftp channelSftp) {
         return new DefaultPooledObject<>(channelSftp);
     }
