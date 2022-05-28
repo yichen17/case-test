@@ -59,11 +59,11 @@
             <scope>test</scope>
         </dependency>
         <!-- redis 所需要的依赖 -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>2.2.6.RELEASE</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.data</groupId>-->
+<!--            <artifactId>spring-data-redis</artifactId>-->
+<!--            <version>2.2.6.RELEASE</version>-->
+<!--        </dependency>-->
         <!-- 连接池需要配置 -->
         <dependency>
             <groupId>redis.clients</groupId>
@@ -145,6 +145,18 @@
             <version>1.6.2</version>
         </dependency>
         <!-- sftp 依赖 end-->
+
+        <!-- cache start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
+            <version>1.4.7.RELEASE</version>
+        </dependency>
+        <!--cache end -->
 
 
     </dependencies>

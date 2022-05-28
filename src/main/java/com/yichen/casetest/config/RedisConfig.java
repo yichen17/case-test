@@ -106,4 +106,9 @@ public class RedisConfig {
         return template;
     }
 
+//    @Bean
+//    public RedisCacheConfiguration cacheConfiguration(){
+//        return RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMillis(60));
+//    }
+
 }

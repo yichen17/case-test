@@ -30,7 +30,7 @@ public class RedisController {
 
     @RequestMapping("/add")
     public String addToRedis(String key)throws Exception{
-        String end="2021-10-25 13:00:00";
+        String end="2022-05-29 13:00:00";
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date endDate = sdf.parse(end);
         stringRedisTemplate.opsForValue().set(key,"111");
