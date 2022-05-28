@@ -21,7 +21,7 @@ public class CacheService {
     @Autowired
     private JsonTestMapper mapper;
 
-    @CachePut(value = "cache",key = "#name")
+    @CachePut(value = "c10m",key = "#name", cacheManager = "serviceRedisCacheManager")
     public String save(String name,String value){
         log.info("加入缓存 key {} value {}",name,value);
         return "6666";

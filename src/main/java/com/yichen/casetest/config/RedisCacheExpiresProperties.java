@@ -10,8 +10,8 @@ import java.util.Map;
  * @date 2022/5/27 14:57
  * @describe redis 缓存时长配置
  */
-//@ConfigurationProperties(prefix = "spring.cache.redis")
-public class RedisCacheExpiresConfiguration {
+@ConfigurationProperties(prefix = "spring.cache.redis")
+public class RedisCacheExpiresProperties {
 
     /**
      * cacheName:ExpireTime(秒)
