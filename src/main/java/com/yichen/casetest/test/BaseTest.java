@@ -23,6 +23,9 @@ public class BaseTest {
         tt.indexOf("12");
         Collections.unmodifiableSet(new HashSet<>());
 
+        String cache = "2022-06-01";
+        System.out.println(cache.replaceAll("-",":"));
+
 //        String caseTet = "boo:and::foo";
 //        String[] items = caseTet.split("o",0);
 //        for (String item : items){

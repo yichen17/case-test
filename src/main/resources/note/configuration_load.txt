@@ -1,0 +1,4 @@
+1、写了两个配置类，RedisConfig、CustomRedisCacheManageConfiguration,其中后者依赖前者。但是debug的时候发现虽然后者没
+捕捉到，但是实际使用的是前者创建的bean。
+    1) @DependsOn 替换 @ConditionalOnBean
+    2) 编写 spring.factories

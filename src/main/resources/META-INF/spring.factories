@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.yichen.casetest.config.CustomRedisCacheManagerConfiguration,\
+  com.yichen.casetest.config.RedisConfig

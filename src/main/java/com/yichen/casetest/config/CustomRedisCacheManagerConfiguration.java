@@ -1,8 +1,10 @@
 package com.yichen.casetest.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -11,12 +13,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -38,6 +40,7 @@ import java.util.Map;
 @AutoConfigureAfter({CacheAutoConfiguration.class})
 @ConditionalOnClass(RedisOperations.class)
 @EnableConfigurationProperties({RedisProperties.class, CacheProperties.class, RedisCacheExpiresProperties.class})
+//@AutoConfigureOrder(-1)
 public class CustomRedisCacheManagerConfiguration {
 
     private final CacheProperties cacheProperties;
@@ -47,7 +50,22 @@ public class CustomRedisCacheManagerConfiguration {
         this.cacheProperties = cacheProperties;
     }
 
+
+//    @Bean(name = "customRedisConnectionFactory")
+//    public RedisConnectionFactory customRedisConnectionFactory(){
+//        RedisStandaloneConfiguration redisStandaloneConfiguration=new RedisStandaloneConfiguration();
+//        redisStandaloneConfiguration.setDatabase(12);
+//        redisStandaloneConfiguration.setHostName("127.0.0.1");
+//        redisStandaloneConfiguration.setPassword("yichen");
+//        redisStandaloneConfiguration.setPort(6379);
+//
+//        return new JedisConnectionFactory(redisStandaloneConfiguration);
+//    }
+
+//    @Primary
     @Bean(name = "serviceRedisCacheManager")
+//    @DependsOn("customRedisConnectionFactory")
+//    @ConditionalOnBean(type = "RedisConnectionFactory")
     @ConditionalOnBean(name = "customRedisConnectionFactory")
     public RedisCacheManager serviceRedisCacheManager(
             @Qualifier("customRedisConnectionFactory") RedisConnectionFactory customRedisConnectionFactory,
