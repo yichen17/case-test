@@ -1,8 +1,10 @@
 package com.yichen.casetest.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.yichen.casetest.model.DataTest;
 import com.yichen.casetest.model.JsonDto;
 import com.yichen.casetest.service.TestService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/test")
+@Slf4j
 public class TestController {
 
     @Autowired
@@ -72,6 +75,21 @@ public class TestController {
             headers.put(headerName,request.getHeader(headerName));
         }
         return JSON.toJSONString(headers);
+    }
+
+
+    @RequestMapping("/errorTest")
+    @ResponseBody
+    public String errorTest(){
+        // 如果捕获的异常总仍然有错误，则不会打印错误日志，继续抛出错误
+        DataTest dataTest = null;
+        try {
+            int s = 1/0;
+        }
+        catch (Exception e){
+            log.error("出现错误 {}", dataTest.getMoney());
+        }
+        return "error";
     }
 
 
