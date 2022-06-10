@@ -92,6 +92,12 @@ public class TestController {
         return "error";
     }
 
+    @RequestMapping("/urlTest")
+    @ResponseBody
+    public String urlTest(HttpServletRequest request){
+        // get 为查询入参  ? 后面的内容
+        return request.getQueryString();
+    }
 
 
 

@@ -35,7 +35,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @describe redis 配置
  */
 
-@Configuration
+//@Configuration
 //@ImportResource
 @ConditionalOnClass(RedisOperations.class)
 @AutoConfigureBefore({CacheAutoConfiguration.class})

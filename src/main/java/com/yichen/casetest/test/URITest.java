@@ -16,7 +16,8 @@ import java.net.URISyntaxException;
 public class URITest {
 
     public static void main(String[] args) {
-        String s = "redis://user:password@example.com:6379";
+//        String s = "redis://user:password@example.com:6379";
+        String s= "https://wxtest.9fbank.com/h5/#/billList?token=ef1503005bb401002e505dca00e04b498b4ae8e1c7573906";
         try {
             URI uri = new URI(s);
             log.warn("analysis uri {}", JSON.toJSONString(uri));

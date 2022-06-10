@@ -36,7 +36,7 @@ import java.util.Map;
  * @date 2022/5/28 19:13
  * @describe 自定义 redisCacheManage
  */
-@Configuration
+//@Configuration
 @AutoConfigureAfter({CacheAutoConfiguration.class})
 @ConditionalOnClass(RedisOperations.class)
 @EnableConfigurationProperties({RedisProperties.class, CacheProperties.class, RedisCacheExpiresProperties.class})
@@ -62,7 +62,7 @@ public class CustomRedisCacheManagerConfiguration {
 //        return new JedisConnectionFactory(redisStandaloneConfiguration);
 //    }
 
-//    @Primary
+    @Primary
     @Bean(name = "serviceRedisCacheManager")
 //    @DependsOn("customRedisConnectionFactory")
 //    @ConditionalOnBean(type = "RedisConnectionFactory")
