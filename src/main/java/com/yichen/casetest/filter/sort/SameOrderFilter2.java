@@ -18,9 +18,9 @@ import java.io.IOException;
  * @describe
  */
 @Slf4j
-@WebFilter(filterName = "SameOrderFilter2", urlPatterns = "/*")
-@Component
-@Order(3)
+//@WebFilter(filterName = "SameOrderFilter2", urlPatterns = "/*")
+//@Component
+//@Order(3)
 public class SameOrderFilter2 extends OncePerRequestFilter {
 
     public SameOrderFilter2() {
