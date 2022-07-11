@@ -2,6 +2,7 @@ package com.yichen.casetest.filter;
 
 import com.yichen.casetest.servlet.DecryptServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class DecryptFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        log.info("DecryptFilter");
         DecryptServletRequestWrapper requestWrapper = null;
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;

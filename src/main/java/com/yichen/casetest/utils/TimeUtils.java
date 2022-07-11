@@ -4,6 +4,7 @@ import com.yichen.casetest.constants.CommonConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -63,5 +64,26 @@ public class TimeUtils {
             return -1L;
         }
     }
+
+    /**
+     * 以秒为单位变更时间
+     * @param date 原时间
+     * @param seconds 变更表述  负数前移，正数后移
+     * @return
+     */
+    public static Date changeBySeconds(Date date, int seconds) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.SECOND, seconds);
+        date = c.getTime();
+        return date;
+    }
+
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        System.out.println(changeBySeconds(date, -86400));
+    }
+
 
 }

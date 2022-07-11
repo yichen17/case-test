@@ -35,7 +35,7 @@ public class AspectTestC {
             AspectVo vo = (AspectVo) args[0];
             vo.setAddress("海底两万里");
             vo.setAge(18);
-            vo.setName("狂杀一条街");
+//            vo.setName("狂杀一条街");
         }
     }
 

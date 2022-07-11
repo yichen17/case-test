@@ -12,14 +12,17 @@ import javax.validation.constraints.NotEmpty;
  * @describe 切面测试数据 vo
  */
 @Data
-public class AspectVo {
-    @NotEmpty(message = "名字不能为空")
-    private String name;
+public class AspectVo<T> {
+//    @NotEmpty(message = "名字不能为空")
+//    private String name;
 
+    @NotEmpty(message = "地址不能为空")
     private String address;
 
     private Integer age;
 
     private String encrypt;
+
+    private T data;
 
 }

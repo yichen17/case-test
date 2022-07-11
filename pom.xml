@@ -159,6 +159,13 @@
         <!--cache end -->
 
 
+        <!-- actuator 监控信息 start -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>

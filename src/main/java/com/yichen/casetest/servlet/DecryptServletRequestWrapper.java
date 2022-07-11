@@ -21,7 +21,15 @@ import java.util.*;
 @Slf4j
 public class DecryptServletRequestWrapper extends HttpServletRequestWrapper {
 
+    /**
+     * 请求数据体
+     */
     private Map<String,Object> requestBody;
+
+    /**
+     * 请求头
+     */
+    private Map<String,Object> requestHeader;
 
 
     /**
