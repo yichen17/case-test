@@ -1,6 +1,7 @@
 package com.yichen.casetest.utils;
 
 import com.yichen.casetest.constants.CommonConstants;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,9 +81,55 @@ public class TimeUtils {
     }
 
 
+    /**
+     * 将指定格式的时间字符串转换成对应的毫秒时间戳
+     * @param s 格式时间戳字符串
+     * @param format  字符串时间格式要求
+     * @return
+     * @throws Exception
+     */
+    public  static  long convertDateToTimeStamp(String s, String format)throws  Exception{
+        if (StringUtils.hasLength(format)){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.parse(s).getTime();
+    }
+
+
+    /**
+     * 获取某月的最后一天
+     *
+     */
+    public static String getLastDayOfMonth(int year,int month)
+    {
+        Calendar cal = Calendar.getInstance();
+        //设置年份
+        cal.set(Calendar.YEAR,year);
+        //设置月份
+        cal.set(Calendar.MONTH, month);
+        //获取某月最大天数
+        int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        //设置日历中月份的最大天数
+        cal.set(Calendar.DAY_OF_MONTH, lastDay);
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String lastDayOfMonth = sdf.format(cal.getTime());
+
+        return lastDayOfMonth;
+    }
+
+
+
+
+
     public static void main(String[] args) {
         Date date = new Date();
         System.out.println(changeBySeconds(date, -86400));
+
+
+        String lastDay = getLastDayOfMonth(2021,7);
+        System.out.println("获取当前月的最后一天：" + lastDay);
     }
 
 
