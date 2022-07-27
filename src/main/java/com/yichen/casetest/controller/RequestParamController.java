@@ -2,6 +2,7 @@ package com.yichen.casetest.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.yichen.casetest.model.ParamFromStreamDto;
+import com.yichen.casetest.model.dto.TestFormDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,18 @@ public class RequestParamController {
         logger.info("reqString {}",reqString);
         ParamFromStreamDto dto = JSON.parseObject(reqString, ParamFromStreamDto.class);
         return dto.toString();
+    }
+
+    /**
+     * 表单数据可以通过这种方式接收数据    单个参数的话  @RequestParam
+     * 接收json数据需要加 @RequestBody
+     * @param dto
+     * @return
+     */
+    @RequestMapping("/testForm")
+    public String testForm(TestFormDTO dto, HttpServletRequest request){
+        logger.info("testForm arrive, request string {}",getReqString(request));
+        return JSON.toJSONString(dto);
     }
 
 
