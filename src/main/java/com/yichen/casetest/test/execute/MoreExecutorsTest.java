@@ -16,6 +16,9 @@ import java.util.concurrent.*;
  *          => 解决办法   1、设置核心线程数为 0 此时等待 keepAliveTime 后核心线程数归0会启动销毁程序
  *                      2、手动在程序执行完毕后 destroy
  *                      3、  pool.allowCoreThreadTimeOut(true)  设置核心线程也允许过期销毁
+ *     =>  other extend
+ *         1、创建线程池后没使用会自动销毁吧
+ *
  */
 public class MoreExecutorsTest {
     public static void main(String[] args) {
