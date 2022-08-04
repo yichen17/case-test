@@ -23,13 +23,13 @@ public class CaseTestApplication {
         // https://stackoverflow.com/questions/39386168/programmatically-restart-spring-boot-application-refresh-spring-context
         SpringApplication application = new SpringApplication(CaseTestApplication.class);
         CaseTestApplication.args = args;
-        CaseTestApplication.context = application.run(args);
+
 
         // 启动时长监控   浏览器就能打开
         // curl --location --request POST 'http://localhost:8088/test/yichen/actuator/startup'
         // https://www.amitph.com/spring-boot-startup-monitoring/
         application.setApplicationStartup(new BufferingApplicationStartup(10000));
-        application.run(args);
+        CaseTestApplication.context = application.run(args);
     }
 
     /**
