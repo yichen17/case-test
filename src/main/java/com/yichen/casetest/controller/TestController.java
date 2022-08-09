@@ -4,12 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.yichen.casetest.model.DataTest;
 import com.yichen.casetest.model.JsonDto;
 import com.yichen.casetest.service.TestService;
+import com.yichen.casetest.test.mapstruct.Person;
+import com.yichen.casetest.test.mapstruct.PersonDTO;
+import com.yichen.casetest.test.mapstruct.PersonMapper;
+import com.yichen.casetest.utils.FastJsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -97,6 +102,19 @@ public class TestController {
     public String urlTest(HttpServletRequest request){
         // get 为查询入参  ? 后面的内容
         return request.getQueryString();
+    }
+
+    @RequestMapping("/mapStruct")
+    @ResponseBody
+    public String mapStruct(){
+        Person person = new Person();
+        person.setDescribe("测试");
+        person.setAge(18);
+        person.setName("张三");
+        person.setHeight(170.5);
+        person.setSource(new BigDecimal("100"));
+        PersonDTO dto = PersonMapper.INSTANCT.convert(person);
+        return FastJsonUtils.toJson(dto);
     }
 
 
