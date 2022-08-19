@@ -30,7 +30,17 @@ public class ListTest {
         user.setName("shanliang");
 //        users1.add(user);
         users.add(users1);
-        List<List<User>> collect = users.stream().filter(p -> "yichen".equals(p.get(0).getName())).collect(Collectors.toList());
+//        List<List<User>> collect = users.stream().filter(p -> "yichen".equals(p.get(0).getName())).collect(Collectors.toList());
+        List<List<User>> collect = users.stream().filter(p -> p.size() > 0).collect(Collectors.toList());
+
+        // 会报错   IndexOutOfBoundsException
+//        users1.get(0);
+
+        // 会先判断长度 0直接结束
+        for (User u : users1){
+            System.out.println(user.getName());
+        }
+
     }
 
 }

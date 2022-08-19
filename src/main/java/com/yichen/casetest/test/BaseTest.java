@@ -2,8 +2,10 @@ package com.yichen.casetest.test;
 
 import org.apache.tomcat.util.buf.Utf8Decoder;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author Qiuxinchao
@@ -32,6 +34,29 @@ public class BaseTest {
 //            System.out.println(item);
 //        }
 
+        System.out.println(testResult());
+
+        List<String>  testErgodic = new ArrayList<>();
+        for (String item : testErgodic){
+            System.out.println(item);
+        }
+
+    }
+
+
+    public static String testResult(){
+        try {
+            System.out.println("hello");
+            return "111";
+        }
+        catch (Exception e ){
+            System.out.println("error");
+            return "222";
+        }
+        finally {
+            System.out.println("finally");
+//            return "finally";
+        }
     }
 
 }
