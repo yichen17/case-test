@@ -117,6 +117,12 @@ public class TestController {
         return FastJsonUtils.toJson(dto);
     }
 
+    @RequestMapping("testLong")
+    @ResponseBody
+    public long longTest(){
+        return 11147369423569007L;
+    }
+
 
 
 }

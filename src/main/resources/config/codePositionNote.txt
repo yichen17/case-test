@@ -1,0 +1,93 @@
+原始数据
+爬取年行政代码 title 2021年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/202203/20220300040708.shtml
+爬取年行政代码 title 2020年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/202105/20210500033655.shtml
+爬取年行政代码 title 2019年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/202002/20200200025008.shtml
+爬取年行政代码 title 2018年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201903/20190300014989.shtml
+爬取年行政代码 title 2017年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201803/20180315008048.shtml
+爬取年行政代码 title 2016年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201705/20170515004409.shtml
+爬取年行政代码 title 2015年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201611/20161115002410.shtml
+爬取年行政代码 title 2014年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854923.shtml
+爬取年行政代码 title 2013年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854922.shtml
+爬取年行政代码 title 2012年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854921.shtml
+爬取年行政代码 title 2011年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201706/20170615004707.shtml
+爬取年行政代码 title 2010年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854918.shtml
+爬取年行政代码 title 2009年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854917.shtml
+爬取年行政代码 title 2008年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854916.shtml
+爬取年行政代码 title 2007年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854913.shtml
+爬取年行政代码 title 2006年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854908.shtml
+爬取年行政代码 title 2005年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854907.shtml
+爬取年行政代码 title 2004年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854906.shtml
+爬取年行政代码 title 2003年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854904.shtml
+爬取年行政代码 title 2002年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854903.shtml
+爬取年行政代码 title 2001年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854902.shtml
+爬取年行政代码 title 2000年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854900.shtml
+爬取年行政代码 title 1999年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854899.shtml
+爬取年行政代码 title 1998年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854896.shtml
+爬取年行政代码 title 1997年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854894.shtml
+爬取年行政代码 title 1996年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854893.shtml
+爬取年行政代码 title 1995年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854892.shtml
+爬取年行政代码 title 1994年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854890.shtml
+爬取年行政代码 title 1993年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854887.shtml
+爬取年行政代码 title 1992年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854885.shtml
+爬取年行政代码 title 1991年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854882.shtml
+爬取年行政代码 title 1990年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854869.shtml
+爬取年行政代码 title 1989年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854867.shtml
+爬取年行政代码 title 1988年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854866.shtml
+爬取年行政代码 title 1987年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854865.shtml
+爬取年行政代码 title 1986年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854863.shtml
+爬取年行政代码 title 1985年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854860.shtml
+爬取年行政代码 title 1984年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854858.shtml
+爬取年行政代码 title 1983年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854857.shtml
+爬取年行政代码 title 1982年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854854.shtml
+爬取年行政代码 title 1981年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854853.shtml
+爬取年行政代码 title 1980年中华人民共和国行政区划代码 href /article/sj/xzqh/1980/201507/20150715854852.shtml
+爬取年行政代码 title 统计上使用的县以下行政区划代码编制规则 href /article/sj/xzqh/1980/201507/20150715854849.shtml
+爬取年行政代码 title 民政统计代码编制规则 href /article/sj/xzqh/1980/201507/20150715854848.shtml
+
+
+组装后数据
+https://www.mca.gov.cn/article/sj/xzqh/1980/202203/20220300040708.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/202105/20210500033655.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/202002/20200200025008.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201903/20190300014989.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201803/20180315008048.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201705/20170515004409.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201611/20161115002410.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854923.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854922.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854921.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201706/20170615004707.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854918.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854917.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854916.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854913.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854908.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854907.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854906.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854904.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854903.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854902.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854900.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854899.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854896.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854894.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854893.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854892.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854890.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854887.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854885.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854882.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854869.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854867.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854866.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854865.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854863.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854860.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854858.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854857.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854854.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854853.shtml
+https://www.mca.gov.cn/article/sj/xzqh/1980/201507/20150715854852.shtml
+
+
+

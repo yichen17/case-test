@@ -204,6 +204,21 @@
         </dependency>
         <!-- end -->
 
+        <!-- 解析html -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.3</version>
+        </dependency>
+        <!-- end -->
+
+        <dependency>
+            <groupId>com.googlecode.aviator</groupId>
+            <artifactId>aviator</artifactId>
+            <version>4.2.3</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

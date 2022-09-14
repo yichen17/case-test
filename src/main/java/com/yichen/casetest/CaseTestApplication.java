@@ -1,10 +1,10 @@
 package com.yichen.casetest;
 
+import com.yichen.casetest.config.position.LocationPropertiesListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -22,6 +22,8 @@ public class CaseTestApplication {
         // 手动重启容器
         // https://stackoverflow.com/questions/39386168/programmatically-restart-spring-boot-application-refresh-spring-context
         SpringApplication application = new SpringApplication(CaseTestApplication.class);
+        // 添加自定义
+        application.addListeners(new LocationPropertiesListener("config/keyValueData.properties"));
         CaseTestApplication.args = args;
 
 
