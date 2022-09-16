@@ -1,4 +1,4 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.regex;
 
 import java.util.ArrayList;
 import java.util.List;

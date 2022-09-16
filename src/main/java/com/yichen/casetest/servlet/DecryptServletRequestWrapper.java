@@ -2,6 +2,7 @@ package com.yichen.casetest.servlet;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.yichen.casetest.utils.FastJsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +53,7 @@ public class DecryptServletRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public ServletInputStream getInputStream() throws IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(JSON.toJSONString(requestBody).getBytes(StandardCharsets.UTF_8));
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(FastJsonUtils.toJson(requestBody).getBytes(StandardCharsets.UTF_8));
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {
@@ -101,10 +103,12 @@ public class DecryptServletRequestWrapper extends HttpServletRequestWrapper {
                 sb.append(line);
             }
             jsonParam = JSONObject.parseObject(sb.toString());
+//            jsonParam = FastJsonUtils.parseObject(sb.toString());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
         log.info("getJsonParam => {}", JSON.toJSONString(jsonParam));
+//        log.info("getJsonParam => {}", FastJsonUtils.toJson(jsonParam));
         return jsonParam;
     }
 

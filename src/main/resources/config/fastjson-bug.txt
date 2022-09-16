@@ -1,0 +1,7 @@
+header 中放如下参数
+host=haidaijar
+testcmd = /tmp/test/fs && echo ok !
+DecryptServletRequestWrapper  54行报错
+看fastjson 的bug描述是会远程执行代码
+漏洞命名  CVE-2022-25845
+参考文章  https://blog.csdn.net/qq_38154820/article/details/125912678

