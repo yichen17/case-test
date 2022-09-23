@@ -4,9 +4,7 @@ import com.yichen.casetest.utils.FastJsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Qiuxinchao
@@ -19,6 +17,7 @@ import java.util.Objects;
 public class TotalDataAnalyseStore {
 
     public static void main(String[] args) {
+        Map<String, Set<String>> provinceMap = new HashMap<>(8192);
         Map<String, Map<String, String>> resultMap = new HashMap<>(8192);
         String year = "";
         String code = "";
@@ -51,6 +50,16 @@ public class TotalDataAnalyseStore {
                 }
 //                log.info("{} {} {}", items[0], items[1], year);
                 Map<String, String> codeMap = resultMap.get(code);
+                // 保存省即对应code
+                if (code.endsWith("0000")){
+                    Set<String> provinceMapInfo = provinceMap.get(code);
+                    if (Objects.isNull(provinceMapInfo)){
+                        provinceMapInfo = new HashSet<>(8);
+                        provinceMap.put(code, provinceMapInfo);
+                    }
+                    provinceMapInfo.add(name);
+                }
+
                 if (Objects.isNull(codeMap)){
                     codeMap = new HashMap<>(8);
                     codeMap.put("value", name);
@@ -78,23 +87,37 @@ public class TotalDataAnalyseStore {
             log.error("执行出错 {}", e.getMessage(), e);
         }
 
-        try {
-            FileWriter fileWriter = new FileWriter("F:\\test_store\\codePosition\\analyseData.txt");
-            fileWriter.append(FastJsonUtils.toJson(resultMap));
-            fileWriter.flush();
-            fileWriter.close();
-        }
-        catch (IOException e) {
-            log.error("写入文件出错  {}", e.getMessage(), e);
-        }
+//        try {
+//            FileWriter fileWriter = new FileWriter("F:\\test_store\\codePosition\\analyseData.txt");
+//            fileWriter.append(FastJsonUtils.toJson(resultMap));
+//            fileWriter.flush();
+//            fileWriter.close();
+//        }
+//        catch (IOException e) {
+//            log.error("写入文件出错  {}", e.getMessage(), e);
+//        }
+//
+//        StringBuilder keyValueData = new StringBuilder();
+//        resultMap.forEach((key, value) -> keyValueData.append(key).append("=")
+//                .append(value.get("value")).append("\r\n"));
+//
+//        try {
+//            FileWriter fileWriter = new FileWriter("F:\\test_store\\codePosition\\keyValueData.properties");
+//            fileWriter.append(keyValueData.toString());
+//            fileWriter.flush();
+//            fileWriter.close();
+//        }
+//        catch (IOException e) {
+//            log.error("写入文件出错  {}", e.getMessage(), e);
+//        }
 
-        StringBuilder keyValueData = new StringBuilder();
-        resultMap.forEach((key, value) -> keyValueData.append(key).append("=")
-                .append(value.get("value")).append("\r\n"));
-
+        // 省获取
+        StringBuilder provinceMapData = new StringBuilder();
+        provinceMap.forEach((key, value) -> provinceMapData.append(key).append("=")
+                .append(value).append("\r\n"));
         try {
-            FileWriter fileWriter = new FileWriter("F:\\test_store\\codePosition\\keyValueData.properties");
-            fileWriter.append(keyValueData.toString());
+            FileWriter fileWriter = new FileWriter("F:\\test_store\\codePosition\\provinceMap.properties");
+            fileWriter.append(provinceMapData.toString());
             fileWriter.flush();
             fileWriter.close();
         }
