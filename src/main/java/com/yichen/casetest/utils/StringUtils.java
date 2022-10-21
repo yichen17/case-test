@@ -35,7 +35,7 @@ public class StringUtils {
     /**
      * 区正则，区只需要截取一个
      */
-    private static final Pattern DISTRICT_REGEX = Pattern.compile("(?<district>[^市]+市|[^县]+县|[^旗]+旗|[^区]+区)");
+    private static final Pattern DISTRICT_REGEX = Pattern.compile("(?<district>[^县]+县|[^旗]+旗|[^区]+区)");
 
     /**
      * 参考 https://blog.csdn.net/weixin_43703157/article/details/87340629
@@ -82,6 +82,27 @@ public class StringUtils {
         map.put("district",district);
         map.put("address",addr);
         return map;
+    }
+
+    private static final String[] PROVINCES = {"安徽省","贵州省","湖南省","辽宁省","陕西省","新疆维吾尔自治区","澳门特别行政区","河北省","广东省","甘肃省","吉林省","上海市","福建省","香港特别行政区","云南省","天津市","重庆市","河南省","广西壮族自治区","黑龙江省","江西省","江苏省","青海省","北京市","台湾省","西藏自治区","内蒙古自治区","湖北省","四川省","山东省","海南省","浙江省","宁夏回族自治区","山西省"};
+
+    /**
+     * 校验  是否是省字段
+     * @param province 校验的省
+     * @return
+     */
+    public static boolean isProvince(String province){
+        return Arrays.asList(PROVINCES).contains(province);
+    }
+
+    /**
+     * 校验地址是否符合要求   一般而言身份证地址只包含中文和数字
+     * @param address 待校验的地址
+     * @return true-校验通过  false-校验不通过
+     */
+    private static final String ADDRESS_CHECK = "^[0-9\u4e00-\u9fa5-()a-zA-Z]*$";
+    public static boolean validAddress(String address){
+        return address.matches(ADDRESS_CHECK);
     }
 
 }

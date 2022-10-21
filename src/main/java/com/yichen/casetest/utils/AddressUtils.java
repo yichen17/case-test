@@ -2,8 +2,10 @@ package com.yichen.casetest.utils;
 
 import com.yichen.casetest.config.position.LocationPropertiesListenerConfig;
 import com.yichen.casetest.model.utils.AddressDto;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,6 +14,7 @@ import java.util.Map;
  * @date 2022/9/22 10:16
  * @describe 地址工具
  */
+@Slf4j
 public class AddressUtils {
 
 
@@ -35,7 +38,20 @@ public class AddressUtils {
     public static AddressDto getAddressInfo(String certId, String address){
         // 问题点 1、户籍地址变了身份证切出来的和实际的不一致 2、orc识别出来的初始数据有问题(1-异常字符% 2-识别字符丢失 原浙江省 识别后江省)  3、身份证上的地址有挺多以市开头的，没有省字段
         // 切分户籍地址 存放省市区
-        Map<String, String> maps = StringUtils.getAddress(address);
+        Map<String, String> maps = new HashMap<>(4);
+        // 正则校验 如果包含特殊字符，直接使用字符串切分
+        if (StringUtils.validAddress(address)){
+            // 切分户籍地址 存放省市区  执行异常 使用身份证号切分
+            try {
+                maps = StringUtils.getAddress(address);
+            }
+            catch (Exception e){
+                log.error("地址正则切分出错 {} {}", address, e.getMessage());
+            }
+        }
+        else {
+            log.warn("身份证地址不符合要求 {}", address);
+        }
         // 1、先尝试切分获取数据
         String province = maps.get("province");
         String city = maps.get("city");
