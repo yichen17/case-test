@@ -1,4 +1,4 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.basetype;
 
 /**
  * @author Qiuxinchao

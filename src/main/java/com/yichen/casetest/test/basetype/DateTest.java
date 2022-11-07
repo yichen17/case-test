@@ -1,4 +1,4 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.basetype;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.Date;
  * @date 2022/3/11 9:18
  * @describe
  */
-public class DateTeset {
+public class DateTest {
     public static void main(String[] args) {
         Date date = new Date();
         System.out.println(date);

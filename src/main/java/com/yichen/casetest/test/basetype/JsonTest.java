@@ -1,4 +1,4 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.basetype;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
