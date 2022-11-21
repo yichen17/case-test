@@ -1,9 +1,11 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.basetype;
 
 import com.yichen.casetest.model.User;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -16,6 +18,21 @@ public class ListTest {
 
     public static void main(String[] args) {
         testIndexOutOfBoundsException();
+        testListStreamRemove();
+        System.out.println(UUID.randomUUID().toString().replace("-",""));
+    }
+
+
+    /**
+     * 测试从list中移除Stream流过滤出来的数据
+     */
+    private static void testListStreamRemove(){
+//        List<String> data = Arrays.asList("shanliang", "yichen", "banyu", "monkey");
+        List<String> data = new ArrayList<>();
+        data.add("shanliang"); data.add("yichen"); data.add("banyu"); data.add("monkey");
+        List<String> filterData = data.stream().filter(p -> p.contains("e")).collect(Collectors.toList());
+        data.removeAll(filterData);
+        System.out.println(StringUtils.join(data, ","));
     }
 
     /**

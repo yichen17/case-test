@@ -1,4 +1,4 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.basetype;
 
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
