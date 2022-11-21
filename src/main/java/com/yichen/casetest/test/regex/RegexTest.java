@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
  * @describe 正则表达式测试
  */
 public class RegexTest {
+
+    private static final Pattern QUERY_STRING_PATTERN = Pattern.compile("(?<!\\{)\\?");
+
     public static void main(String[] args) {
         try{
             int pos=0;
@@ -25,6 +28,12 @@ public class RegexTest {
                 list.add(res.substring(2, m.group().length() - 1));
             }
             System.out.println(list);
+            String s = "/test?name=yichen";
+            Matcher matcher1 = QUERY_STRING_PATTERN.matcher(s);
+            while (matcher1.find()){
+                System.out.println(s.substring(0, matcher1.start()));
+            }
+
         }
         catch (Exception e){
             System.out.println(e.getCause());
