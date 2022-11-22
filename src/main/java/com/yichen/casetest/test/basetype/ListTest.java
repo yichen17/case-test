@@ -1,6 +1,12 @@
 package com.yichen.casetest.test.basetype;
 
+import com.google.common.collect.Lists;
 import com.yichen.casetest.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,12 +20,59 @@ import java.util.stream.Collectors;
  * @date 2022/8/17 9:42
  * @describe 数组测试
  */
+@Slf4j
 public class ListTest {
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class Person{
+        private String name;
+        private String address;
+        private Integer age;
+        private Integer height;
+    }
 
     public static void main(String[] args) {
         testIndexOutOfBoundsException();
         testListStreamRemove();
         System.out.println(UUID.randomUUID().toString().replace("-",""));
+        com.yichen.casetest.utils.StringUtils.divisionLine();
+        listToArray();
+        com.yichen.casetest.utils.StringUtils.divisionLine();
+        stringFormat();
+        com.yichen.casetest.utils.StringUtils.divisionLine();
+        addAllTest();
+    }
+
+    private static void  listToArray(){
+        List<String> list = Arrays.asList("111", "222");
+        String[] data = list.toArray(new String[0]);
+        log.info(String.join(",", data));
+    }
+
+    /**
+     * list addAll不会去重， removeALl重复也只会移除一次
+     */
+    private static void addAllTest(){
+        Person p1 = Person.builder().age(10).height(100).build();
+        Person p2 = Person.builder().age(10).height(110).build();
+        Person p3 = Person.builder().age(15).height(120).build();
+        Person p4 = Person.builder().age(18).height(90).build();
+        List<Person> list = new ArrayList<>(16);
+        list.add(p1);list.add(p2);list.add(p3);list.add(p4);
+        List<Person> filter = new ArrayList<>();
+        filter.addAll(list.stream().filter(p -> p.getAge() == 10).collect(Collectors.toList()));
+        filter.addAll(list.stream().filter(p -> p.getHeight() > 105).collect(Collectors.toList()));
+        log.info(list.stream().map(p -> String.format("%s-%s", p.getAge(), p.getHeight())).collect(Collectors.joining(",")));
+        log.info(filter.stream().map(p -> String.format("%s-%s", p.getAge(), p.getHeight())).collect(Collectors.joining(",")));
+        list.removeAll(filter);
+        log.info(list.stream().map(p -> String.format("%s-%s", p.getAge(), p.getHeight())).collect(Collectors.joining(",")));
+    }
+
+    private static void stringFormat(){
+        log.info(String.format("%s有%s块钱","yichen", 50L));
     }
 
 
