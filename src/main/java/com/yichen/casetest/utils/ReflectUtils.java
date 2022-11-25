@@ -3,6 +3,7 @@ package com.yichen.casetest.utils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -89,6 +90,46 @@ public class ReflectUtils {
         if (superclass != null && !superclass.equals(Object.class) ){
             getAllDeclareField(superclass, fields);
         }
+    }
+
+    /**
+     * 获得所有定义的方法 不论作用域 去重
+     * class#getDeclaredMethods 获取所有当前类的方法，不包含继承类
+     * @param object 目标对象
+     * @return
+     */
+    public static Set<String> getAllDistinctDeclareMethod(Class<?> object){
+        Set<String> result = new HashSet<>(16);
+        Method[] methods = object.getDeclaredMethods();
+        for (Method method : methods){
+            result.add(method.getName());
+        }
+        Class<?> superclass = object.getSuperclass();
+        if (superclass != null && !superclass.equals(Object.class) ){
+            result.addAll(getAllDistinctDeclareMethod(superclass));
+        }
+        return result;
+    }
+
+    /**
+     * 获得所有定义的方法 public 去重
+     * 接口的静态方法只归定义者所有
+     * class#getMethod 中多个同名同入参不同出参的解释 ==>  https://stackoverflow.com/questions/36701071/more-than-one-method-with-the-same-parameter-types-in-a-class
+     * @param object 目标对象
+     * @return
+     */
+    public static Set<String> getAllPublicDistinctDeclareMethod(Class<?> object){
+        Set<String> result = new HashSet<>(16);
+        // object.getMethods() 拿到的是 public 方法
+        Method[] methods = object.getMethods();
+        for (Method method : methods){
+            result.add(method.getName());
+        }
+        Class<?> superclass = object.getSuperclass();
+        if (superclass != null && !superclass.equals(Object.class) ){
+            result.addAll(getAllPublicDistinctDeclareMethod(superclass));
+        }
+        return result;
     }
 
 

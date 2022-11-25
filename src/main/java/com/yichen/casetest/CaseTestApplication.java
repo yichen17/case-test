@@ -7,11 +7,13 @@ import org.springframework.boot.context.metrics.buffering.BufferingApplicationSt
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 // 开启缓存
 @EnableCaching
 @ConfigurationPropertiesScan("com.yichen.casetest.config")
+@EnableSwagger2
 //@ServletComponentScan("com.yichen.casetest.filter.sort")
 public class CaseTestApplication {
 

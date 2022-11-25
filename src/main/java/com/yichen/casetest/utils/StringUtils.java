@@ -23,6 +23,14 @@ public class StringUtils {
         log.info("======================================||============================================");
     }
 
+    public static void divisionLine(String desc){
+        log.info("======================================{}============================================", desc);
+    }
+
+    public static void print(Object object){
+        log.info("==> {}", FastJsonUtils.toJson(object));
+    }
+
     /**
      * 从大小写英文字母和数字中构造随机字符串
      * @param len 随机字符串长度
