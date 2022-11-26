@@ -18,7 +18,13 @@ public class ReflectServiceImpl extends AbstractReflectService {
     @Autowired
     private ReflectCallService reflectCallService;
 
-    private String reflectTest(String name, String age){
+    public String reflectTest(String name, String age){
+        String s = name + "-" + age;
+        log.info("==> {} ==> ???", s);
+        return reflectCallService.getName();
+    }
+
+    private String reflectTest1(String name, String age){
         String s = name + "-" + age;
         log.info("==> {} ==> ???", s);
         return reflectCallService.getName();

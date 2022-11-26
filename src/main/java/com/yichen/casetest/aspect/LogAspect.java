@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 //@EnableAspectJAutoProxy
 @Aspect
-//@Component
+@Component
 @Slf4j
 public class LogAspect {
 
@@ -29,13 +29,13 @@ public class LogAspect {
     }
 
     @Before("logAspect()")
-    public void before(){
-        log.info("logAspect before");
+    public void before(JoinPoint joinPoint){
+        log.info("{} logAspect before", joinPoint.getTarget().getClass().getName());
     }
 
     @After("logAspect()")
-    public void after(){
-        log.info("logAspect after");
+    public void after(JoinPoint joinPoint){
+        log.info(" {} logAspect after", joinPoint.getTarget().getClass().getName());
     }
 }
 
