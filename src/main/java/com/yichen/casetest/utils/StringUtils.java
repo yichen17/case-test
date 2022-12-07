@@ -1,5 +1,7 @@
 package com.yichen.casetest.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +14,22 @@ import java.util.regex.Pattern;
  * @date 2022/7/17 20:22
  * @describe 字符串工具类
  */
+@Slf4j
 public class StringUtils {
 
     private final  static  String ALPHA_NUMBER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    public static void divisionLine(){
+        log.info("======================================||============================================");
+    }
+
+    public static void divisionLine(String desc){
+        log.info("======================================{}============================================", desc);
+    }
+
+    public static void print(Object object){
+        log.info("==> {}", FastJsonUtils.toJson(object));
+    }
 
     /**
      * 从大小写英文字母和数字中构造随机字符串

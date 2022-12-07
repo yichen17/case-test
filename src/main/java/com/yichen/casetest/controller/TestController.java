@@ -7,18 +7,20 @@ import com.yichen.casetest.service.TestService;
 import com.yichen.casetest.test.mapstruct.Person;
 import com.yichen.casetest.test.mapstruct.PersonDTO;
 import com.yichen.casetest.test.mapstruct.PersonMapper;
+import com.yichen.casetest.test.service.Teacher;
+import com.yichen.casetest.test.service.reflect.impl.ReflectServiceImpl;
 import com.yichen.casetest.utils.FastJsonUtils;
+import com.yichen.casetest.utils.ReflectUtils;
+import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Qiuxinchao
@@ -140,6 +142,54 @@ public class TestController {
         return "ok";
     }
 
+    @Autowired
+    private Teacher teacher;
 
+
+    @Autowired
+    private ReflectServiceImpl reflectService;
+
+    /**
+     * 反射测试     通过反射调用一个bean的私有方法，公司的代码里中反射类中的属性为空，然后又代理(cglib)，但是这里我自己模拟的话没有代理。。。
+     * https://www.freesion.com/article/65211179151/  略有启发  => 但是我这里用了事务也还是jdk proxy。。。
+     * ==> 什么情况下会 cglib proxy 接管 ？？？    => 触发场景是有切面 即 @Aspect   => 原因解读 cglib生成代理子类，子类不包含私有方法
+     *   https://blog.csdn.net/J080624/article/details/69485899
+     * @param name
+     * @param age
+     * @return
+     */
+    @PostMapping("/reflectTest")
+    @ResponseBody
+    public Object reflectTest(@RequestParam String name, @RequestParam String age){
+        try {
+
+
+            Method method = ReflectServiceImpl.class.getDeclaredMethod("reflectTest", String.class, String.class);
+//            method.setAccessible(true);
+            return method.invoke(reflectService, name, age);
+
+        }
+        catch (Exception e){
+            log.error("reflectTest出现错误{}", e.getMessage(), e);
+        }
+        return "error";
+    }
+
+    @PostMapping("/reflectTest1")
+    @ResponseBody
+    public Object reflectTest1(@RequestParam String name, @RequestParam String age){
+        try {
+
+
+            Method method = ReflectServiceImpl.class.getDeclaredMethod("reflectTest1", String.class, String.class);
+            method.setAccessible(true);
+            return method.invoke(reflectService, name, age);
+
+        }
+        catch (Exception e){
+            log.error("reflectTest出现错误{}", e.getMessage(), e);
+        }
+        return "error";
+    }
 
 }
