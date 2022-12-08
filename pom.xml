@@ -233,6 +233,13 @@
         </dependency>
         <!--swagger- end-->
 
+        <!--prometheus start-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <!--prometheus start-->
+
     </dependencies>
 
     <build>
