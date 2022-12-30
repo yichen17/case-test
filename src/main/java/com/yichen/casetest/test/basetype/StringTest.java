@@ -24,11 +24,15 @@ public class StringTest {
     }
 
     private static void splitTest(){
-        String s = "hello|name";
+        String s = "2022-12-29 13:55:00;2022-12-29 14:00:00|2022-12-30 13:55:00;2022-12-31 14:00:00";
         int pos = s.indexOf("|");
         String[] items = s.split("\\|");
         log.info("{}", String.join(",", items));
         log.info("{}, {} {}", pos, s.substring(0, pos), s.substring(pos+1));
+
+        String t = "1234";
+        log.info("{}", t.substring(0, t.length()));
+
     }
 
 }
