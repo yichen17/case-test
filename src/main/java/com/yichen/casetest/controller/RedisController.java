@@ -2,11 +2,10 @@ package com.yichen.casetest.controller;
 
 import com.yichen.casetest.service.CacheService;
 import com.yichen.casetest.utils.TimeUtils;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class RedisController {
     private CacheService cacheService;
 
 
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public String addToRedis(String key)throws Exception{
         String end="2022-05-29 13:00:00";
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -44,7 +43,7 @@ public class RedisController {
      * @param key 查询的key
      * @return
      */
-    @RequestMapping("/validTime")
+    @PostMapping("/validTime")
     public String getKeyValidTime(String key){
         Long expire = stringRedisTemplate.getExpire(key);
         return ""+expire;
@@ -53,21 +52,29 @@ public class RedisController {
     /**
      *   ===============     测试  @cache  ===============
      */
-    @RequestMapping("/cache/get")
+    @GetMapping("/cache/get")
     public String cacheGet(@RequestParam("name") String name){
         String value=cacheService.get(name);
         return value;
     }
 
-    @RequestMapping("/cache/save")
+    @GetMapping("/cache/save")
     public String cacheSave(@RequestParam("name") String name,@RequestParam("value") String value){
         return cacheService.save(name,value);
     }
 
-    @RequestMapping("/cache/delete")
+    @GetMapping("/cache/delete")
     public void cacheDelete(@RequestParam("name") String name){
         cacheService.delete(name);
     }
+
+    @PostMapping("/cache/vary")
+    public void varyParamCache(@RequestParam("name") String name,
+                               @ApiParam(value = "变长入参，|切分") @RequestParam("value") String value){
+        cacheService.varyParamSave(name, value.split("\\|"));
+    }
+
+
 
 
 

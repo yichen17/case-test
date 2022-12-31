@@ -38,4 +38,10 @@ public class CacheService {
         return mapper.getById(Long.parseLong(name)).getName();
     }
 
+    @CachePut(value = "c10m",key = "#name", cacheManager = "serviceRedisCacheManager")
+    public String varyParamSave(String name, String... value){
+        log.info("加入缓存 key {} value {}",name,String.join(",", value));
+        return "6666";
+    };
+
 }
