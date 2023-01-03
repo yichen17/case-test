@@ -240,6 +240,15 @@
         </dependency>
         <!--prometheus start-->
 
+        <!--链路日志搜集-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <version>3.1.5</version>
+        </dependency>
+        <!--链路日志搜集 end-->
+
+
     </dependencies>
 
     <build>
