@@ -2,6 +2,7 @@ package com.yichen.casetest.test.basetype;
 
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * @author Qiuxinchao
@@ -16,11 +17,18 @@ public class StringTest {
         matchesTest();
         StringUtils.divisionLine();
         splitTest();
+        StringUtils.divisionLine();
+        escape();
     }
 
     private static void matchesTest(){
         log.info("{}", "com.yichen".matches("com.shanliang"));
         log.info("{}", "com.yichen".matches("com.yichen"));
+    }
+
+    private static void escape(){
+        String s = "{\\\"mobile\\\":\\\"15652786995\\\",\\\"registrationId\\\":\\\"170976fa8af0228f9ae\\\",\\\"userData\\\":\\\"{\\\\\\\"android_id\\\\\\\":\\\\\\\"faf1bde8b282a8f3\\\\\\\",\\\\\\\"app_name\\\\\\\":\\\\\\\"万卡\\\\\\\",\\\\\\\"battery_level\\\\\\\":\\\\\\\"59%\\\\\\\",\\\\\\\"boot_times\\\\\\\":\\\\\\\"2023-01-03 10:50:22\\\\\\\",\\\\\\\"carrier\\\\\\\":\\\\\\\"NULL\\\\\\\",\\\\\\\"devicetype\\\\\\\":\\\\\\\"android\\\\\\\",\\\\\\\"iccid\\\\\\\":\\\\\\\"NULL\\\\\\\",\\\\\\\"imei\\\\\\\":\\\\\\\"NULL\\\\\\\",\\\\\\\"imsi\\\\\\\":\\\\\\\"NULL\\\\\\\",\\\\\\\"ip\\\\\\\":\\\\\\\"10.203.0.207\\\\\\\",\\\\\\\"latitude\\\\\\\":\\\\\\\"39.915168\\\\\\\",\\\\\\\"longitude\\\\\\\":\\\\\\\"116.403875\\\\\\\",\\\\\\\"mac\\\\\\\":\\\\\\\"70:5E:55:9A:38:07\\\\\\\",\\\\\\\"nettype\\\\\\\":\\\\\\\"WIFI\\\\\\\",\\\\\\\"oaid\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"os_name\\\\\\\":\\\\\\\"android\\\\\\\",\\\\\\\"os_version\\\\\\\":\\\\\\\"11\\\\\\\",\\\\\\\"resolution\\\\\\\":\\\\\\\"1080x2208\\\\\\\",\\\\\\\"version\\\\\\\":\\\\\\\"4.1.5\\\\\\\",\\\\\\\"wifimac\\\\\\\":\\\\\\\"02:00:00:00:00:00\\\\\\\",\\\\\\\"udid\\\\\\\":\\\\\\\"13323254354\\\\\\\"}\\\",\\\"securityType\\\":\\\"owner\\\",\\\"loginType\\\":\\\"1\\\",\\\"system_environment\\\":\\\"1\\\",\\\"dataMap\\\":{},\\\"checkPrivacyPolicy\\\":\\\"1\\\",\\\"hasReadPrivacyPolicy\\\":\\\"1\\\",\\\"privacyPolicyName\\\":\\\"\\\",\\\"user\\\":\\\"15652786995\\\",\\\"pwd\\\":\\\"cXdlMTIz\\\"}";
+        log.info("{}", StringEscapeUtils.unescapeJava(s));
     }
 
     private static void splitTest(){
