@@ -2,6 +2,7 @@ package com.yichen.casetest.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.yichen.casetest.model.DataTest;
+import com.yichen.casetest.model.JacksonTest;
 import com.yichen.casetest.model.JsonDto;
 import com.yichen.casetest.service.TestService;
 import com.yichen.casetest.test.mapstruct.Person;
@@ -10,8 +11,6 @@ import com.yichen.casetest.test.mapstruct.PersonMapper;
 import com.yichen.casetest.test.service.Teacher;
 import com.yichen.casetest.test.service.reflect.impl.ReflectServiceImpl;
 import com.yichen.casetest.utils.FastJsonUtils;
-import com.yichen.casetest.utils.ReflectUtils;
-import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Qiuxinchao
@@ -190,6 +192,12 @@ public class TestController {
             log.error("reflectTest出现错误{}", e.getMessage(), e);
         }
         return "error";
+    }
+
+    @GetMapping("/jacksonPrint")
+    @ResponseBody
+    public JacksonTest jacksonPrint(){
+        return JacksonTest.builder().name("yichen").createTime(new Date()).build();
     }
 
 }
