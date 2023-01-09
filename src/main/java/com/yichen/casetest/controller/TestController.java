@@ -38,9 +38,10 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    @RequestMapping("/get")
+    @GetMapping("/get")
     @ResponseBody
     public String get(){
+        log.info("test get");
         return "test-get";
     }
 
@@ -87,7 +88,7 @@ public class TestController {
     }
 
 
-    @RequestMapping("/errorTest")
+    @GetMapping("/errorTest")
     @ResponseBody
     public String errorTest(){
         // 如果捕获的异常总仍然有错误，则不会打印错误日志，继续抛出错误
@@ -101,14 +102,14 @@ public class TestController {
         return "error";
     }
 
-    @RequestMapping("/urlTest")
+    @PostMapping("/urlTest")
     @ResponseBody
     public String urlTest(HttpServletRequest request){
         // get 为查询入参  ? 后面的内容
         return request.getQueryString();
     }
 
-    @RequestMapping("/mapStruct")
+    @GetMapping("/mapStruct")
     @ResponseBody
     public String mapStruct(){
         Person person = new Person();
@@ -121,7 +122,7 @@ public class TestController {
         return FastJsonUtils.toJson(dto);
     }
 
-    @RequestMapping("testLong")
+    @GetMapping("testLong")
     @ResponseBody
     public long longTest(){
         return 11147369423569007L;
@@ -130,7 +131,7 @@ public class TestController {
     /**
      * 测试fastjson 漏洞代码远程执行    入参   http://localhost:8088/test/remoteExec?str=mkdir%20/test/bug/11
      */
-    @RequestMapping("/remoteExec")
+    @PostMapping("/remoteExec")
     @ResponseBody
     public String remoteExec(@RequestParam String str){
         try {
@@ -198,6 +199,23 @@ public class TestController {
     @ResponseBody
     public JacksonTest jacksonPrint(){
         return JacksonTest.builder().name("yichen").createTime(new Date()).build();
+    }
+
+
+    /**
+     * 请求入参研究
+     * =>  header 中参数不区分大小写,驼峰识别为单独数据   中文请求会自动url加密
+     * @param request
+     * @return
+     */
+    @PostMapping("requestParamTest")
+    @ResponseBody
+    public String requestParamTest(HttpServletRequest request){
+        log.info("header loginInfo logininfo login-info {} {} {}",
+                request.getHeader("loginInfo"), request.getHeader("logininfo"), request.getHeader("login-info"));
+        log.info("request param {}", FastJsonUtils.toJson(request.getParameterMap()));
+        log.info("query string {}", request.getQueryString());
+        return "ok";
     }
 
 }
