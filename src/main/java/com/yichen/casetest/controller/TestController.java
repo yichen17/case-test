@@ -282,5 +282,27 @@ public class TestController {
         return testFeign.testRequestParam7(map);
     }
 
+    @PostMapping("/outRequest8")
+    @ResponseBody
+    public String outRequest8(){
+        return testFeign.testRequestParam8("奕晨");
+    }
+
+    @PostMapping("/outRequest9")
+    @ResponseBody
+    public String outRequest9(){
+        Map<String, String> map = new HashMap<>(4);
+        map.put("realName", "奕晨");
+        return testFeign.testRequestParam9(map);
+    }
+
+    @PostMapping("/outRequest10")
+    @ResponseBody
+    public String outRequest10(){
+        Map<String, String> map = new HashMap<>(4);
+        map.put("realName", "奕晨");
+        return testFeign.testRequestParam10(map);
+    }
+
 
 }

@@ -44,5 +44,14 @@ public interface TestFeign {
     @PostMapping(value = "/test/requestParamTest", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     String testRequestParam7(Map<String, String> param);
 
+    @PostMapping(value = "/test/requestParamTest")
+    String testRequestParam8(String realName);
+
+    @PostMapping(value = "/test/requestParamTest")
+    String testRequestParam9(Map<String, String> param);
+
+    @PostMapping(value = "/test/requestParamTest", consumes = MediaType.APPLICATION_JSON_VALUE)
+    String testRequestParam10(Map<String, String> param);
+
 
 }

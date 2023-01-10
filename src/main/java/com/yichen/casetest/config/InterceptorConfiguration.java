@@ -1,6 +1,15 @@
 package com.yichen.casetest.config;
 
 import com.yichen.casetest.interceptor.RequestInterceptor;
+import feign.codec.Encoder;
+import feign.form.FormEncoder;
+import feign.form.spring.SpringFormEncoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,4 +27,15 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(new RequestInterceptor()).addPathPatterns("/**").order(-1);
         WebMvcConfigurer.super.addInterceptors(registry);
     }
+
+    @Autowired
+    private ObjectFactory<HttpMessageConverters> messageConverters;
+
+    @Bean
+    @ConditionalOnMissingBean
+    public Encoder feignEncoder() {
+        return new SpringFormEncoder(new SpringEncoder(this.messageConverters));
+    }
+
+
 }
