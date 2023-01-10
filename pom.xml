@@ -17,6 +17,8 @@
         <java.version>1.8</java.version>
         <swagger.version>2.9.2</swagger.version>
     </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -247,6 +249,15 @@
             <version>3.1.5</version>
         </dependency>
         <!--链路日志搜集 end-->
+
+
+        <!-- feign 依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <!--feign依赖end -->
 
 
     </dependencies>

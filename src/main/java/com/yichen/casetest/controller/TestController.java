@@ -1,9 +1,11 @@
 package com.yichen.casetest.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.yichen.casetest.feign.TestFeign;
 import com.yichen.casetest.model.DataTest;
 import com.yichen.casetest.model.JacksonTest;
 import com.yichen.casetest.model.JsonDto;
+import com.yichen.casetest.model.dto.RequestTestDTO;
 import com.yichen.casetest.service.TestService;
 import com.yichen.casetest.test.mapstruct.Person;
 import com.yichen.casetest.test.mapstruct.PersonDTO;
@@ -208,14 +210,77 @@ public class TestController {
      * @param request
      * @return
      */
-    @PostMapping("requestParamTest")
+    @PostMapping("/requestParamTest")
     @ResponseBody
-    public String requestParamTest(HttpServletRequest request){
+    public String requestParamTest(HttpServletRequest request, @RequestParam("realName") String realName){
+//        log.info("请求入参 {} {}", FastJsonUtils.toJson(dto), realName);
+        log.info("请求入参 {}", realName);
         log.info("header loginInfo logininfo login-info {} {} {}",
                 request.getHeader("loginInfo"), request.getHeader("logininfo"), request.getHeader("login-info"));
         log.info("request param {}", FastJsonUtils.toJson(request.getParameterMap()));
         log.info("query string {}", request.getQueryString());
         return "ok";
     }
+
+    @Autowired
+    private TestFeign testFeign;
+
+    @PostMapping("/outRequest")
+    @ResponseBody
+    public String outRequest(){
+        return testFeign.testRequestParam(RequestTestDTO.builder().realName("奕晨").build());
+    }
+
+    @PostMapping("/outRequest1")
+    @ResponseBody
+    public String outRequest1(){
+        Map<String, String> map = new HashMap<>(4);
+        map.put("realName", "奕晨");
+        return testFeign.testRequestParam1(map);
+    }
+
+
+    @PostMapping("/outRequest2")
+    @ResponseBody
+    public String outRequest2(){
+        return testFeign.testRequestParam2("奕晨");
+    }
+
+    @PostMapping("/outRequest3")
+    @ResponseBody
+    public String outRequest3(){
+        return testFeign.testRequestParam3(RequestTestDTO.builder().realName("奕晨").build());
+    }
+
+    @PostMapping("/outRequest4")
+    @ResponseBody
+    public String outRequest4(){
+        return testFeign.testRequestParam4("奕晨");
+    }
+
+    @PostMapping("/outRequest5")
+    @ResponseBody
+    public String outRequest5(){
+        return testFeign.testRequestParam5("奕晨");
+    }
+
+
+    @PostMapping("/outRequest6")
+    @ResponseBody
+    public String outRequest6(){
+        Map<String, String> map = new HashMap<>(4);
+        map.put("realName", "奕晨");
+        return testFeign.testRequestParam6(map);
+    }
+
+
+    @PostMapping("/outRequest7")
+    @ResponseBody
+    public String outRequest7(){
+        Map<String, String> map = new HashMap<>(4);
+        map.put("realName", "奕晨");
+        return testFeign.testRequestParam7(map);
+    }
+
 
 }

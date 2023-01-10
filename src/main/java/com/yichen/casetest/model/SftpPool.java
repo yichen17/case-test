@@ -5,7 +5,6 @@ import com.jcraft.jsch.IO;
 import com.yichen.casetest.utils.ReflectUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.pool2.DestroyMode;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.springframework.beans.factory.annotation.Autowired;
 
