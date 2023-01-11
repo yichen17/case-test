@@ -28,14 +28,15 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 
-    @Autowired
-    private ObjectFactory<HttpMessageConverters> messageConverters;
-
-    @Bean
-    @ConditionalOnMissingBean
-    public Encoder feignEncoder() {
-        return new SpringFormEncoder(new SpringEncoder(this.messageConverters));
-    }
+//    @Autowired
+//    private ObjectFactory<HttpMessageConverters> messageConverters;
+//
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public Encoder feignEncoder() {
+//        SpringFormEncoder springFormEncoder = new SpringFormEncoder(new SpringEncoder(this.messageConverters));
+//        return springFormEncoder;
+//    }
 
 
 }

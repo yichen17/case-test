@@ -304,5 +304,44 @@ public class TestController {
         return testFeign.testRequestParam10(map);
     }
 
+    @PostMapping("/outRequest11")
+    @ResponseBody
+    public String outRequest11(){
+        Map<String, String> map = new HashMap<>(4);
+        map.put("realName", "奕晨");
+        return testFeign.testRequestParam11(map);
+    }
+
+    @PostMapping("/outRequest12")
+    @ResponseBody
+    public String outRequest12(){
+        return testFeign.testRequestParam12(RequestTestDTO.builder().realName("奕晨").build());
+    }
+
+    @PostMapping("/outRequest13")
+    @ResponseBody
+    public String outRequest13(){
+        return testFeign.testRequestParam13(RequestTestDTO.builder().realName("奕晨").build());
+    }
+
+    @PostMapping("/outRequest14")
+    @ResponseBody
+    public String outRequest14(){
+        return testFeign.testRequestParam14(RequestTestDTO.builder().realName("奕晨").build());
+    }
+
+
+    @PostMapping("/outRequest15")
+    @ResponseBody
+    public String outRequest15(){
+        return testFeign.testRequestParam15("奕晨");
+    }
+
+    @PostMapping("/outRequest16")
+    @ResponseBody
+    public String outRequest16(){
+        return testFeign.testRequestParam16("奕晨");
+    }
+
 
 }
