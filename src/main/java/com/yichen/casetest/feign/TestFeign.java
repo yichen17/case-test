@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.Map;
 
 
@@ -48,7 +49,7 @@ public interface TestFeign {
     String testRequestParam8(String realName);
 
     @PostMapping(value = "/test/requestParamTest")
-    String testRequestParam9(Map<String, String> param);
+    String testRequestParam9(Map<String, ?> param);
 
     @PostMapping(value = "/test/requestParamTest", consumes = MediaType.APPLICATION_JSON_VALUE)
     String testRequestParam10(Map<String, String> param);
@@ -73,6 +74,12 @@ public interface TestFeign {
 
     @PostMapping(value = "/test/requestParamTest")
     String testRequestParam16(@RequestBody String realName);
+
+    @PostMapping(value = "/test/requestParamTest")
+    String testRequestParam17(@RequestParam String realName, Date time);
+
+    @PostMapping(value = "/test/requestParamTest", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    String testRequestParam18(@RequestParam String realName, Date time);
 
 
 }

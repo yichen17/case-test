@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
@@ -16,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ConfigurationPropertiesScan("com.yichen.casetest.config")
 @EnableSwagger2
 @EnableFeignClients
+@EnableScheduling
 //@ServletComponentScan("com.yichen.casetest.filter.sort")
 public class CaseTestApplication {
 
