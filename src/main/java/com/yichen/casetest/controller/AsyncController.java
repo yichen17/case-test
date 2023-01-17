@@ -2,7 +2,6 @@ package com.yichen.casetest.controller;
 
 import com.yichen.casetest.service.AsyncService;
 import com.yichen.casetest.test.async.AsyncExecService;
-import com.yichen.casetest.test.async.AsyncExecServiceImpl;
 import com.yichen.casetest.test.async.AsyncExecServiceImpl2;
 import com.yichen.casetest.test.async.AsyncExecServiceImpl3;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +81,16 @@ public class AsyncController {
     @Async("async-2")
     public void printExec() {
         log.info("async exec");
+    }
+
+
+    /**
+     * 测试异步线程池执行是否有traceId   =>  如果有了sleuth-core依赖，它里面有个aop会添加
+     */
+    @GetMapping("/asyncExecTraceId")
+    public void asyncExecTraceId(){
+        log.warn("asyncExecTraceId");
+        asyncService.printMessage();
     }
 
 }

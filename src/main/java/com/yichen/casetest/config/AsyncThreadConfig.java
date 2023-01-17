@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @version 1.0
  * @date 2021/12/29 10:30
  * @describe 异步线程池配置
+ *  线程池自带 traceId  =>   https://www.baeldung.com/spring-cloud-sleuth-single-application
  */
 @EnableAsync
 @Configuration

@@ -291,8 +291,9 @@ public class TestController {
     @PostMapping("/outRequest9")
     @ResponseBody
     public String outRequest9(){
-        Map<String, String> map = new HashMap<>(4);
+        Map<String, Object> map = new HashMap<>(4);
         map.put("realName", "奕晨");
+        map.put("time", new Date());
         return testFeign.testRequestParam9(map);
     }
 
@@ -341,6 +342,20 @@ public class TestController {
     @ResponseBody
     public String outRequest16(){
         return testFeign.testRequestParam16("奕晨");
+    }
+
+
+    @PostMapping("/outRequest17")
+    @ResponseBody
+    public String outRequest17(){
+        return testFeign.testRequestParam17("奕晨", new Date());
+    }
+
+
+    @PostMapping("/outRequest18")
+    @ResponseBody
+    public String outRequest18(){
+        return testFeign.testRequestParam18("奕晨", new Date());
     }
 
 
