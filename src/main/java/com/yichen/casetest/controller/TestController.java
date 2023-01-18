@@ -13,6 +13,7 @@ import com.yichen.casetest.test.mapstruct.PersonMapper;
 import com.yichen.casetest.test.service.Teacher;
 import com.yichen.casetest.test.service.reflect.impl.ReflectServiceImpl;
 import com.yichen.casetest.utils.FastJsonUtils;
+import feign.Request;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Qiuxinchao
@@ -357,6 +359,48 @@ public class TestController {
     public String outRequest18(){
         return testFeign.testRequestParam18("奕晨", new Date());
     }
+
+    @PostMapping("/outRequest19")
+    @ResponseBody
+    public String outRequest19(){
+        Map<String, String> header = new HashMap<>(4);
+        header.put("version", "1.0.0");
+        header.put("deviceType", "android");
+        return testFeign.testRequestParam19("奕晨", new Date(), header, "/path");
+    }
+
+
+    @PostMapping("/outRequest20")
+    @ResponseBody
+    public String outRequest20(){
+        Map<String, String> header = new HashMap<>(4);
+        header.put("version", "1.0.0");
+        header.put("deviceType", "android");
+        return testFeign.testRequestParam20("奕晨", header);
+    }
+
+
+    @PostMapping("/outRequest21")
+    @ResponseBody
+    public String outRequest21(){
+        Map<String, Object> header = new HashMap<>(4);
+        header.put("version", "1.0.0");
+        header.put("deviceType", "android");
+        Request.Options options = new Request.Options(1000, TimeUnit.MILLISECONDS, 1000, TimeUnit.MILLISECONDS, false);
+        header.put("options", options);
+        return testFeign.testRequestParam21("奕晨", header);
+    }
+
+    @PostMapping("/outRequest22")
+    @ResponseBody
+    public String outRequest22(){
+        Map<String, Object> header = new HashMap<>(4);
+        header.put("version", "1.0.0");
+        header.put("deviceType", "android");
+        Request.Options options = new Request.Options(1000, TimeUnit.MILLISECONDS, 1000, TimeUnit.MILLISECONDS, false);
+        return testFeign.testRequestParam22("奕晨", header, options);
+    }
+
 
 
 }
