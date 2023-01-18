@@ -18,6 +18,12 @@ public class StringRegexTest {
         test1();
         StringUtils.divisionLine();
         test();
+        StringUtils.divisionLine();
+        test2();
+        StringUtils.divisionLine();
+        test3();
+        StringUtils.divisionLine();
+        test4();
     }
 
     private static void test1() {
@@ -41,5 +47,31 @@ public class StringRegexTest {
         Matcher matcher = compile.matcher(s);
         log.info("matcher {}", matcher.find());
     }
+
+    private static void test2() throws Exception{
+        Pattern compile = Pattern.compile("(123|456){2}");
+        String s = "456123";
+        Matcher matcher = compile.matcher(s);
+        log.info("matcher {}", matcher.find());
+    }
+
+    private static void test3() throws Exception{
+        Pattern compile = Pattern.compile("a{1,3}");
+        String s = "aaaa";
+        Matcher matcher = compile.matcher(s);
+        log.info("matcher {} {} {}", matcher.find(), matcher.start(), matcher.groupCount());
+    }
+
+
+    private static void test4() throws Exception {
+        log.info("{}", "aaa".matches("a{1,3}"));
+        //    引用的语法是\数字，数字代表引用前面第几个捕获分组，注意非捕获分组不能被引用   匹配 XML
+        log.info("{}", "<span></span>".matches("<([a-z]+)><\\/\\1>"));
+        // 忽略大小写
+        log.info("{} {}", "asd".matches("(?i)ASD"), "asd".matches("Asd"));
+    }
+
+
+
 
 }
