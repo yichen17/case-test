@@ -10,4 +10,9 @@
   <select id="getById" resultMap="BaseResultMap" >
     select * from json_test where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <insert id="insert" parameterType="com.yichen.casetest.model.JsonTestDTO">
+    insert into json_test(create_time, name) values (#{createTime}, #{name})
+  </insert>
+
 </mapper>

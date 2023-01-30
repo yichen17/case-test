@@ -15,4 +15,6 @@ public interface JsonTestMapper {
 
     JsonTestDTO getById(@Param("id") Long id);
 
+    void insert(JsonTestDTO jsonTestDTO);
+
 }
