@@ -44,10 +44,22 @@ public class ListTest {
         stringFormat();
         com.yichen.casetest.utils.StringUtils.divisionLine();
         addAllTest();
+        com.yichen.casetest.utils.StringUtils.divisionLine();
+        listRemove();
+    }
+
+
+    private static void listRemove(){
+        List<String> list = new ArrayList<>(8);
+        list.add("333");
+        list.add("666");
+        list.remove(list.size() - 1);
+        log.info("==> listRemove {}", String.join(",", list));
     }
 
     private static void  listToArray(){
-        List<String> list = Arrays.asList("111", "222");
+        List<String> list = Arrays.asList("111", "222", "333", "444");
+//        list.remove(list.size()-1);
         String[] data = list.toArray(new String[0]);
         log.info(String.join(",", data));
     }
