@@ -93,4 +93,12 @@ public class AsyncController {
         asyncService.printMessage();
     }
 
+
+    @GetMapping("/overSize")
+    @Async("async-3")
+    public String overSize() throws Exception{
+        asyncService.overSize();
+        return "ok";
+    }
+
 }

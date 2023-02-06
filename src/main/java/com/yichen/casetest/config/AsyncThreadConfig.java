@@ -63,4 +63,22 @@ public class AsyncThreadConfig {
         return executor;
     }
 
+    @Bean("async-3")
+    @Lazy
+    public ThreadPoolTaskExecutor threadPoolAsync3(){
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+//        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+//        executor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() * 2);
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(3);
+        executor.setKeepAliveSeconds(300);
+        executor.setThreadNamePrefix("async-3-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(60);
+        executor.initialize();
+        return executor;
+    }
+
 }
