@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Qiuxinchao
@@ -62,6 +63,13 @@ public class ListTest {
 //        list.remove(list.size()-1);
         String[] data = list.toArray(new String[0]);
         log.info(String.join(",", data));
+
+        List<Integer> tt = new ArrayList<>();
+        tt.add(11);
+        tt.add(22);
+        Integer[] integerArray = tt.toArray(new Integer[0]);
+        log.info(Stream.of(integerArray).map(String::valueOf).collect(Collectors.joining(",")));
+
     }
 
     /**
