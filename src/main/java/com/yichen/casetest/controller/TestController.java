@@ -230,7 +230,10 @@ public class TestController {
     @PostMapping("/outRequest")
     @ResponseBody
     public String outRequest(){
-        return testFeign.testRequestParam(RequestTestDTO.builder().realName("奕晨").build());
+//        MDC.put("traceId", "123456789");
+        log.info("outRequest");
+        return "ok";
+//        return testFeign.testRequestParam(RequestTestDTO.builder().realName("奕晨").build());
     }
 
     @PostMapping("/outRequest1")

@@ -94,8 +94,13 @@ public class AsyncController {
     }
 
 
+    /**
+     * 异步线程池满了后的拒绝策略测试
+     * @return
+     * @throws Exception
+     */
     @GetMapping("/overSize")
-    @Async("async-3")
+//    @Async("async-3")
     public String overSize() throws Exception{
         asyncService.overSize();
         return "ok";

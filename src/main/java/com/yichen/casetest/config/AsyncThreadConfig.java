@@ -1,5 +1,6 @@
 package com.yichen.casetest.config;
 
+import com.yichen.casetest.config.customize.CustomizeRejectedExecutionHandler;
 import com.yichen.casetest.model.AsyncThreadConfigProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,10 +72,10 @@ public class AsyncThreadConfig {
 //        executor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() * 2);
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(3);
+        executor.setQueueCapacity(2);
         executor.setKeepAliveSeconds(300);
         executor.setThreadNamePrefix("async-3-");
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setRejectedExecutionHandler(new CustomizeRejectedExecutionHandler.CustomizeDiscardOldestPolicy());
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(60);
         executor.initialize();
