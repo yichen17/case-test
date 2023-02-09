@@ -1,6 +1,7 @@
 package com.yichen.casetest.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.yichen.casetest.annotation.Log;
 import com.yichen.casetest.feign.TestFeign;
 import com.yichen.casetest.model.DataTest;
 import com.yichen.casetest.model.JacksonTest;
@@ -44,6 +45,7 @@ public class TestController {
 
     @GetMapping("/get")
     @ResponseBody
+    @Log(title = "测试get方法")
     public String get(){
         log.info("test get");
         return "test-get";
