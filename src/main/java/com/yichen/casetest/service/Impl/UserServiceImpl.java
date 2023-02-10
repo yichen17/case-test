@@ -8,8 +8,10 @@ import com.yichen.casetest.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Qiuxinchao
@@ -31,5 +33,18 @@ public class UserServiceImpl implements UserService {
         List<User> users = mapper.selectByExample(example);
         log.info("查询结果 {}", JSON.toJSONString(users));
         return users;
+    }
+
+    @Override
+    @Transactional
+    public int save(User user) {
+        if (Objects.isNull(user)){
+            return 0;
+        }
+//        return mapper.insert(user);
+
+        mapper.insert(user);
+        throw new RuntimeException("执行异常");
+
     }
 }

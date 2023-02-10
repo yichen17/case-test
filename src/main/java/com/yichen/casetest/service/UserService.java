@@ -14,4 +14,6 @@ public interface UserService {
 
     List<User> getUserByName(String name);
 
+    int save(User user);
+
 }
