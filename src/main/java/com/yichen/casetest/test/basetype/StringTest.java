@@ -21,6 +21,16 @@ public class StringTest {
         escape();
         StringUtils.divisionLine();
         byteToStream();
+        StringUtils.divisionLine();
+        buildTest();
+    }
+
+
+    private static void buildTest(){
+        StringBuilder builder = new StringBuilder();
+        builder.insert('a', 0);
+        builder.insert('b', 0);
+        log.info("builder {}", builder);
     }
 
     private static void matchesTest(){
