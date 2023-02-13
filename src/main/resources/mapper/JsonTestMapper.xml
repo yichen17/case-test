@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
   </resultMap>
 
   <select id="getById" resultMap="BaseResultMap" >
@@ -12,7 +13,7 @@
   </select>
 
   <insert id="insert" parameterType="com.yichen.casetest.model.JsonTestDTO">
-    insert into json_test(create_time, name) values (#{createTime}, #{name})
+    insert into json_test(create_time, name, sex) values (#{createTime}, #{name}, #{sex,jdbcType=VARCHAR})
   </insert>
 
 </mapper>

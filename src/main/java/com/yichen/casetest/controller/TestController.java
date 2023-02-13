@@ -6,8 +6,10 @@ import com.yichen.casetest.feign.TestFeign;
 import com.yichen.casetest.model.DataTest;
 import com.yichen.casetest.model.JacksonTest;
 import com.yichen.casetest.model.JsonDto;
+import com.yichen.casetest.model.User;
 import com.yichen.casetest.model.dto.RequestTestDTO;
 import com.yichen.casetest.service.TestService;
+import com.yichen.casetest.service.UserService;
 import com.yichen.casetest.test.mapstruct.Person;
 import com.yichen.casetest.test.mapstruct.PersonDTO;
 import com.yichen.casetest.test.mapstruct.PersonMapper;
@@ -42,6 +44,17 @@ public class TestController {
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/transactionTest")
+    @ResponseBody
+    public String transactionTest(){
+        userService.save(User.builder().name("yichen").age(18).build());
+        return "ok";
+    }
+
 
     @GetMapping("/get")
     @ResponseBody

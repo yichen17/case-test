@@ -17,6 +17,8 @@ public interface PersonMapper {
 
     @Mapping(target = "personName", source = "name")
     @Mapping(target = "id", ignore = true) // 忽略id，不进行映射
+    @Mapping(target = "addressName", source = "address.name")
+    @Mapping(target = "runName", source = "address.runName")
     PersonDTO convert(Person person);
 
 }

@@ -2,6 +2,7 @@ package com.yichen.casetest.controller;
 
 import com.yichen.casetest.dao.JsonTestMapper;
 import com.yichen.casetest.model.JsonTestDTO;
+import com.yichen.casetest.test.mapstruct.SexEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,7 +51,7 @@ public class JsonController {
 //        JsonTestDTO jsonTestDTO = JsonTestDTO.builder()
 //                .createTime(new Date()).name("yichen").build();
         JsonTestDTO jsonTestDTO = JsonTestDTO.builder()
-                .createTime(new Timestamp(System.currentTimeMillis())).name("yichen").build();
+                .createTime(new Timestamp(System.currentTimeMillis())).name("yichen").sex(SexEnum.BOY).build();
         mapper.insert(jsonTestDTO);
         return "ok";
     }

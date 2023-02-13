@@ -1,12 +1,13 @@
 package com.yichen.casetest.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yichen.casetest.test.mapstruct.SexEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author Qiuxinchao
@@ -28,5 +29,12 @@ public class JsonTestDTO {
 
     private Long id;
 
+    private SexEnum sex;
 
+    public String getSex() {
+        if (Objects.isNull(sex)){
+            return null;
+        }
+        return "sex," + sex.name();
+    }
 }

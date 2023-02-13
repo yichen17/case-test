@@ -1,9 +1,6 @@
 package com.yichen.casetest.test.mapstruct;
 
 import lombok.Data;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,6 +27,10 @@ public class Person {
     private double height;
 
     private Date createTime;
+
+    private SexEnum sex;
+
+    private Address address;
 
 }
 

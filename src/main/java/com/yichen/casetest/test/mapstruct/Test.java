@@ -1,5 +1,7 @@
 package com.yichen.casetest.test.mapstruct;
 
+import com.yichen.casetest.utils.FastJsonUtils;
+
 import java.math.BigDecimal;
 
 /**
@@ -17,10 +19,12 @@ public class Test {
         person.setName("张三");
         person.setHeight(170.5);
         person.setSource(new BigDecimal("100"));
+        person.setSex(SexEnum.BOY);
+        person.setAddress(Address.builder().name("shanghai").latitude("120").longitude("74").build());
 
         PersonDTO dto = PersonMapper.INSTANCT.convert(person);
 
-        System.out.println(dto);
+        System.out.println(FastJsonUtils.toJson(dto));
     }
 
 }

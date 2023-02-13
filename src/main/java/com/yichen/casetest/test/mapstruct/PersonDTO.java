@@ -22,5 +22,8 @@ public class PersonDTO {
     private String source;
 
     private String height;
+    private String sex;
+    private String addressName;
+    private String runName;
 
 }
