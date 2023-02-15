@@ -16,4 +16,11 @@
     insert into json_test(create_time, name, sex) values (#{createTime}, #{name}, #{sex,jdbcType=VARCHAR})
   </insert>
 
+  <select id="getByIds" resultMap="BaseResultMap" >
+    select * from json_test where id in
+    <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+  </select>
+
 </mapper>

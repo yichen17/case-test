@@ -25,5 +25,6 @@ public class PersonDTO {
     private String sex;
     private String addressName;
     private String runName;
+    private String rainDayDesc;
 
 }

@@ -32,6 +32,11 @@ public class Person {
 
     private Address address;
 
+    private boolean rainDay;
+
+    public String getRainDay() {
+        return rainDay ? "雨天" : "不是雨天";
+    }
 }
 
 

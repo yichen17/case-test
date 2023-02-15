@@ -2,11 +2,14 @@ package com.yichen.casetest.controller;
 
 import com.yichen.casetest.dao.JsonTestMapper;
 import com.yichen.casetest.model.JsonTestDTO;
+import com.yichen.casetest.service.mapStruct.MapStructService;
 import com.yichen.casetest.test.mapstruct.SexEnum;
+import com.yichen.casetest.utils.FastJsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
@@ -54,6 +57,19 @@ public class JsonController {
                 .createTime(new Timestamp(System.currentTimeMillis())).name("yichen").sex(SexEnum.BOY).build();
         mapper.insert(jsonTestDTO);
         return "ok";
+    }
+
+    @Autowired
+    private MapStructService mapStructService;
+
+    @PostMapping("/mapStructTest")
+    public String mapStructTest(@RequestParam Long id){
+        return FastJsonUtils.toJson(mapStructService.getById(id));
+    }
+
+    @PostMapping("/mapStructListTest")
+    public String mapStructTest(@RequestParam Long[] id){
+        return FastJsonUtils.toJson(mapStructService.listConvert(id));
     }
 
 
