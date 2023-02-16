@@ -27,13 +27,15 @@ public class MapStructService {
      */
     public JsonTestDto getById(Long id){
         JsonTestDTO jsonTestDTO = jsonTestMapper.getById(id);
-        JsonTestDto convert = this.convert.convert(jsonTestDTO);
+//        JsonTestDto convert = this.convert.convert(jsonTestDTO);
+        JsonTestDto convert = this.convert.convert(jsonTestDTO, "66666");
         return convert;
     }
 
     public List<JsonTestDto> listConvert(Long[] ids){
         List<JsonTestDTO> results = jsonTestMapper.getByIds(ids);
-        return this.convert.convert(results, "描述");
+        return this.convert.convert(results);
+//        return this.convert.convert(results, "描述");
     }
 
 }
