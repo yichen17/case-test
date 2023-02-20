@@ -16,6 +16,27 @@
     insert into json_test(create_time, name, sex) values (#{createTime}, #{name}, #{sex,jdbcType=VARCHAR})
   </insert>
 
+  <select id="getByEnum" resultMap="BaseResultMap">
+    select * from json_test where id =#{id,jdbcType=BIGINT} and #{timeDimensionEnum.timeLimit}
+  </select>
+
+  <select id="getByEnum1" resultMap="BaseResultMap">
+    select * from json_test where  #{timeDimensionEnum.timeLimit}
+  </select>
+
+  <select id="getByEnum2" resultMap="BaseResultMap">
+    select * from json_test where #{timeDimensionEnum.timeLimit}
+  </select>
+
+  <select id="getByEnum3" resultMap="BaseResultMap">
+    select * from json_test where ${timeDimensionEnum.timeLimit}
+  </select>
+
+  <select id="getByEnum4" resultMap="BaseResultMap">
+    select * from json_test where #{timeDimensionEnum.timeLimit,jdbcType=VARCHAR}
+  </select>
+
+
   <select id="getByIds" resultMap="BaseResultMap" >
     select * from json_test where id in
     <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
