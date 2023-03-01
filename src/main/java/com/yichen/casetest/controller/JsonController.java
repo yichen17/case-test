@@ -72,6 +72,11 @@ public class JsonController {
         return FastJsonUtils.toJson(mapStructService.listConvert(id));
     }
 
+    @PostMapping("/zeroTest")
+    public String zeroTest(@RequestParam Long id){
+        return FastJsonUtils.toJson(mapper.testZero(id));
+    }
+
 
 
 }

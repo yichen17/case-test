@@ -32,5 +32,7 @@ public interface JsonTestMapper {
 
     List<JsonTestDTO> getByEnum4(TimeDimensionEnum timeDimensionEnum);
 
+    JsonTestDTO testZero(@Param("id")Long id);
+
 
 }

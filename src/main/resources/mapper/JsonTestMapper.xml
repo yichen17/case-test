@@ -44,4 +44,15 @@
     </foreach>
   </select>
 
+  <select id="testZero" resultMap="BaseResultMap">
+    select * from json_test where <choose>
+    <when test="id != null and id != ''">
+      id = 35
+    </when>
+<otherwise>
+  id = 36
+</otherwise>
+  </choose>
+  </select>
+
 </mapper>

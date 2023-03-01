@@ -23,13 +23,15 @@ public class StringTest {
         byteToStream();
         StringUtils.divisionLine();
         buildTest();
+        StringUtils.divisionLine();
+        forceTransform();
     }
 
 
     private static void buildTest(){
         StringBuilder builder = new StringBuilder();
-        builder.insert('a', 0);
-        builder.insert('b', 0);
+        builder.insert(0, 'a');
+        builder.insert(0, 'b' );
         log.info("builder {}", builder);
     }
 
@@ -58,6 +60,11 @@ public class StringTest {
     private static void byteToStream(){
         byte[] bytes = new byte[]{39, 50, 48, 50, 51, 45, 48, 49, 45, 51, 48, 32, 48, 55, 58, 53, 54, 58, 48, 53, 46, 55, 49, 55, 39};
         log.info("{}", new String(bytes));
+    }
+
+    private static void forceTransform(){
+        Object s = "6";
+        log.info("force transform {}", (double)(Character)s);
     }
 
 }
