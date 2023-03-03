@@ -3,6 +3,7 @@ package com.yichen.casetest.controller;
 import com.yichen.casetest.service.CacheService;
 import com.yichen.casetest.utils.TimeUtils;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/redis")
+@Slf4j
 public class RedisController {
 
     @Autowired
@@ -25,6 +27,8 @@ public class RedisController {
 
     @Autowired
     private CacheService cacheService;
+
+    private static final String concurrentIncrKey = "concurrent_incr_key";
 
 
     @PostMapping("/add")
@@ -36,6 +40,18 @@ public class RedisController {
         stringRedisTemplate.expireAt(key,endDate);
         Long between = TimeUtils.getTimestampBetweenTwoDays(sdf.format(new Date()), end);
         return "ok ===>   "+between;
+    }
+
+
+    /**
+     * 不存在并发问题，因为redis内部是单线程的
+     * @return
+     */
+    @PostMapping("concurrentIncr")
+    public String concurrentIncr(){
+        Long increment = stringRedisTemplate.opsForValue().increment(concurrentIncrKey);
+        log.info("concurrentIncr {}", increment);
+        return String.valueOf(increment);
     }
 
     /**
