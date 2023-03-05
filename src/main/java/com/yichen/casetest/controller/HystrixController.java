@@ -1,6 +1,9 @@
 package com.yichen.casetest.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("hystrix相关测试")
 public class HystrixController {
 
-    @HystrixCommand
+    @HystrixCommand(commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "60000")})
     @PostMapping("/test")
     public String test(){
         return "hystrix test ok";
+    }
+
+    @PostMapping("/sentinelTest")
+    @SentinelResource(value = "sentinelTest")
+    public String sentinelTest(){
+        return null;
     }
 
 }
