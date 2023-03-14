@@ -15,6 +15,8 @@ public class NumberTest {
         toHex();
         StringUtils.divisionLine();
         objectToStringPrint();
+        StringUtils.divisionLine();
+        calculateTest();
     }
 
     public static void toHex(){
@@ -29,6 +31,15 @@ public class NumberTest {
         log.info("{}", String.format("%08d", 1234));
         log.info("{}", String.format("%8d", 1234));
         log.info("{}", String.format("%8d", 123456789));
+    }
+
+    public static void calculateTest(){
+        int a = 10, b = 6, c = 2;
+        int result = ++a*2+c--*4+b/3;
+        log.info("{} {} {} {}", result, a, b, c);
+        log.info("{}",++a*2);
+        int d = 1, e = 1;
+        log.info("{} {}", d++*2, ++e*2);
     }
 
 
