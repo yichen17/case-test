@@ -1,6 +1,7 @@
 package com.yichen.casetest.problem.circleReference.simpleCase;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ public class AService {
     @Resource
     private BService bService;
 
-//    @Async("async-2")
+    @Async("async-2")
     public void exec(){
         log.info("aService exec");
     }

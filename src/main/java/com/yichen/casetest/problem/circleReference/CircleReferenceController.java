@@ -35,11 +35,11 @@ public class CircleReferenceController {
     @Autowired
     private BusinessService businessService;
 
-    @Autowired
-    private AService aService;
-
-    @Autowired
-    private BService bService;
+//    @Autowired
+//    private AService aService;
+//
+//    @Autowired
+//    private BService bService;
 
     @PostMapping("/test")
     public String test(){
@@ -48,16 +48,16 @@ public class CircleReferenceController {
         return "ok";
     }
 
-    @GetMapping("/aService")
-    public String aService(){
-        aService.exec();
-        return "ok";
-    }
-
-    @GetMapping("/bService")
-    public String bService(){
-        bService.exec();
-        return "ok";
-    }
+//    @GetMapping("/aService")
+//    public String aService(){
+//        aService.exec();
+//        return "ok";
+//    }
+//
+//    @GetMapping("/bService")
+//    public String bService(){
+//        bService.exec();
+//        return "ok";
+//    }
 
 }
