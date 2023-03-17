@@ -1,0 +1,5 @@
+order无法指定bean的加载顺序
+
+springboot默认加载顺序机制？
+1、类名称、目录
+2、在同一个类中@Autowired时的顺序(上下位置)

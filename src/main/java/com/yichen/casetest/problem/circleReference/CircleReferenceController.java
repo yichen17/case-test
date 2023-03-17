@@ -1,11 +1,8 @@
 package com.yichen.casetest.problem.circleReference;
 
-import com.yichen.casetest.problem.circleReference.simpleCase.AService;
-import com.yichen.casetest.problem.circleReference.simpleCase.BService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,10 +33,10 @@ public class CircleReferenceController {
     private BusinessService businessService;
 
 //    @Autowired
-//    private AService aService;
-//
-//    @Autowired
 //    private BService bService;
+
+//    @Autowired
+//    private AService aService;
 
     @PostMapping("/test")
     public String test(){
@@ -54,6 +51,11 @@ public class CircleReferenceController {
 //        return "ok";
 //    }
 //
+//    @GetMapping("a2bService")
+//    public String a2bService(){
+//        return aService.a2bService();
+//    }
+
 //    @GetMapping("/bService")
 //    public String bService(){
 //        bService.exec();

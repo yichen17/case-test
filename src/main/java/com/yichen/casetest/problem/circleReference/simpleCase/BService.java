@@ -1,7 +1,6 @@
 package com.yichen.casetest.problem.circleReference.simpleCase;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -9,11 +8,12 @@ import javax.annotation.Resource;
 /**
  * @author Qiuxinchao
  * @date 2023/3/15 15:35
- * @describe
+ * @describe    @DependsOn 强制指定加载顺序
  */
 @Service
 @Slf4j
-@DependsOn(value = "AService")
+//@Lazy
+//@DependsOn(value = "AService")
 public class BService {
 
     static {
@@ -23,9 +23,13 @@ public class BService {
     @Resource
     private AService aService;
 
+    public String get(){
+        return "BService 666";
+    }
+
 //    @Async("async-2")
     public void exec(){
-        log.info("aService exec");
+        log.info("BService exec");
     }
 
 }
