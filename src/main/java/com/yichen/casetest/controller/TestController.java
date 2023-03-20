@@ -55,6 +55,22 @@ public class TestController {
         return "ok";
     }
 
+    /**
+     * 内部没有catch住，还是会被全局异常捕获的
+     * @return
+     */
+    @GetMapping("/tryCatchFinallyPriority")
+    @ResponseBody
+    public String tryCatchFinallyPriority(){
+        try {
+            int i = 1/0;
+        }
+        finally {
+            log.info("tryCatchFinallyPriority");
+        }
+        return "tryCatchFinallyPriority 666";
+    }
+
 
     @GetMapping("/get")
     @ResponseBody
