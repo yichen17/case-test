@@ -103,6 +103,15 @@ public class TestController {
         return "nginx b";
     }
 
+    @GetMapping("/concurrentRequest")
+    @ResponseBody
+    public String concurrentRequest(@RequestParam Integer i) throws Exception{
+        Thread.sleep(300);
+        log.info("concurrentRequest => {}", i);
+        return String.valueOf(i);
+    }
+
+
 
     @GetMapping("/date")
     @ResponseBody

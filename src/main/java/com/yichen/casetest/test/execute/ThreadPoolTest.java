@@ -1,12 +1,14 @@
 package com.yichen.casetest.test.execute;
 
 
+import cn.hutool.http.HttpGlobalConfig;
 import cn.hutool.http.HttpUtil;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author qiuXinChao
@@ -17,14 +19,15 @@ public class ThreadPoolTest {
 
     private static Logger logger = LoggerFactory.getLogger(ThreadPoolTest.class);
 
-    private static ExecutorService poolExecutor = new ThreadPoolExecutor(30, 30,
+    private static ExecutorService poolExecutor = new ThreadPoolExecutor(100, 100,
             0L, TimeUnit.MILLISECONDS,
             new ArrayBlockingQueue<>(1024),
             new NamedThreadFactory("DingTalk"));
 
     public static void main(String[] args) throws Exception {
         try {
-            testConcurrentIncr();
+//            testConcurrentIncr();
+            testConcurrentRequest();
         }
         catch (Exception e){
             logger.error("执行出错 {}", e.getMessage(), e);
@@ -33,6 +36,33 @@ public class ThreadPoolTest {
             poolExecutor.shutdown();
         }
     }
+
+    private static void testConcurrentRequest() throws Exception{
+        int count = 200;
+        CountDownLatch countDownLatch = new CountDownLatch(count);
+        AtomicInteger i = new AtomicInteger(0);
+        HttpGlobalConfig.setTimeout(2000);
+        for (int t=0; t<count; t++){
+            poolExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+//                        String result = HttpUtil.get(String.format("http://localhost:8088/test/concurrentRequest?i=%s", i.getAndIncrement()));
+                        String result = HttpUtil.get(String.format("http://localhost:9015/test/concurrentRequest?i=%s", i.getAndIncrement()));
+                        logger.info("==> {}", result);
+                    }
+                    catch (Exception e){
+                        logger.info("==> error =================>");
+                    }
+                    finally {
+                        countDownLatch.countDown();
+                    }
+                }
+            });
+        }
+        countDownLatch.await();
+    }
+
 
     /**
      * 测试多线程下 redis  incr 是否存在并发问题
