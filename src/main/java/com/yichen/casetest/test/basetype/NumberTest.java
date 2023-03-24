@@ -17,6 +17,20 @@ public class NumberTest {
         objectToStringPrint();
         StringUtils.divisionLine();
         calculateTest();
+        StringUtils.divisionLine();
+        int2long();
+    }
+
+    /**
+     * 强制转换 数据变换
+     * 长度超限，截取后面一部分
+     */
+    public static void int2long(){
+        int n = 1000*1000*1000*10;
+        long r = 1000*1000*1000*10L;
+        int m = 1410065408;
+        log.info("{} {}", n, Long.toBinaryString(r));
+        log.info("{} {} {}", (long)n, Integer.MAX_VALUE, Integer.toBinaryString(m));
     }
 
     public static void toHex(){
