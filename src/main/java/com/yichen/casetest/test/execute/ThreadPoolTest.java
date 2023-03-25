@@ -19,15 +19,16 @@ public class ThreadPoolTest {
 
     private static Logger logger = LoggerFactory.getLogger(ThreadPoolTest.class);
 
-    private static ExecutorService poolExecutor = new ThreadPoolExecutor(100, 100,
+    private static ExecutorService poolExecutor = new ThreadPoolExecutor(30, 30,
             0L, TimeUnit.MILLISECONDS,
             new ArrayBlockingQueue<>(1024),
             new NamedThreadFactory("DingTalk"));
 
     public static void main(String[] args) throws Exception {
         try {
+            test();
 //            testConcurrentIncr();
-            testConcurrentRequest();
+//            testConcurrentRequest();
         }
         catch (Exception e){
             logger.error("执行出错 {}", e.getMessage(), e);
@@ -38,12 +39,12 @@ public class ThreadPoolTest {
     }
 
     private static void testConcurrentRequest() throws Exception{
-        int count = 200;
+        int count = 30;
         CountDownLatch countDownLatch = new CountDownLatch(count);
         AtomicInteger i = new AtomicInteger(0);
-        HttpGlobalConfig.setTimeout(2000);
+        HttpGlobalConfig.setTimeout(10000);
         for (int t=0; t<count; t++){
-            poolExecutor.execute(new Runnable() {
+            poolExecutor.submit(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -52,7 +53,8 @@ public class ThreadPoolTest {
                         logger.info("==> {}", result);
                     }
                     catch (Exception e){
-                        logger.info("==> error =================>");
+                        logger.info("==> error =================> {}", e.getMessage());
+//                        logger.error("{}", e.getMessage(), e);
                     }
                     finally {
                         countDownLatch.countDown();
@@ -87,12 +89,19 @@ public class ThreadPoolTest {
 
     private static void test() throws Exception{
         int count = 10;
+        AtomicInteger limit = new AtomicInteger(1);
         CountDownLatch countDownLatch = new CountDownLatch(count);
         for (int i=0; i<10; i++){
             int finalI = i;
             poolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
+                    try {
+                        Thread.sleep(1000 * limit.getAndIncrement() * 20L);
+                    }
+                    catch (Exception e){
+                        logger.error("{}", e.getMessage(), e);
+                    }
                     System.out.println(Thread.currentThread().getName() + " => " + finalI);
                     countDownLatch.countDown();
 //                    logger.warn(finalI + "");
@@ -100,6 +109,7 @@ public class ThreadPoolTest {
             });
         }
         countDownLatch.await();
+        logger.info("test end");
     }
 
 

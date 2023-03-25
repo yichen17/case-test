@@ -1,5 +1,7 @@
 package com.yichen.casetest.test.basetype;
 
+import com.yichen.casetest.utils.FastJsonUtils;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -15,5 +17,6 @@ public class DateTest {
         System.out.println(date);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         System.out.println(timestamp);
+        System.out.println(FastJsonUtils.toJson(date));
     }
 }
