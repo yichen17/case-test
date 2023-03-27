@@ -2,6 +2,7 @@ package com.yichen.casetest.test.lock;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -13,7 +14,74 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLockTest {
 
     public static void main(String[] args)throws Exception {
-        reentryTest();
+//        reentryTest();
+        conditionTest();
+    }
+
+    private static void conditionTest() throws Exception {
+        ReentrantLock lock = new ReentrantLock(true);
+        Condition condition = lock.newCondition();
+
+
+        // 有则消费，无责等待      怎么判断有没有
+//        BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
+//        queue.offer(22);
+//        queue.put(11);
+//        queue.poll();
+//        queue.take();
+
+        Thread producer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+//                lock.tryLock();
+                lock.lock();
+                try {
+                    log.info("producer wait");
+                    Thread.sleep(1000 * 10);
+                    condition.signalAll();
+                    log.info("producer end");
+                }
+                catch (Exception e){
+                    log.error("producer error {}", e.getMessage(), e);
+                }
+                finally {
+                    lock.unlock();
+                }
+            }
+        });
+
+        Thread consumer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lock.lock();
+                try {
+                    log.info("consumer start wait");
+                    condition.await();
+                    log.info("consumer data");
+                }
+                catch (Exception e){
+                    log.error("consumer errror {}", e.getMessage(), e);
+                }
+                finally {
+                    lock.unlock();
+                }
+            }
+        });
+
+
+        consumer.start();
+        // 确保 consumer先执行
+        Thread.sleep(500);
+        producer.start();
+
+//        while (true){
+//            Scanner scanner =new Scanner(System.in);
+//            String s = scanner.nextLine();
+//            if ("quit".equals(s)){
+//                break;
+//            }
+//        }
+
     }
 
     /**
