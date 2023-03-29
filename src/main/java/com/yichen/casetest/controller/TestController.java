@@ -10,6 +10,9 @@ import com.yichen.casetest.model.User;
 import com.yichen.casetest.model.dto.RequestTestDTO;
 import com.yichen.casetest.service.TestService;
 import com.yichen.casetest.service.UserService;
+import com.yichen.casetest.test.chainOfResponsibility.DefaultSignUpValidationService;
+import com.yichen.casetest.test.chainOfResponsibility.SignUpCommand;
+import com.yichen.casetest.test.chainOfResponsibility.ValidationResult;
 import com.yichen.casetest.test.mapstruct.Person;
 import com.yichen.casetest.test.mapstruct.PersonDTO;
 import com.yichen.casetest.test.mapstruct.PersonMapper;
@@ -48,11 +51,22 @@ public class TestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DefaultSignUpValidationService defaultSignUpValidationService;
+
     @GetMapping("/transactionTest")
     @ResponseBody
     public String transactionTest(){
         userService.save(User.builder().name("yichen").age(18).build());
         return "ok";
+    }
+
+    @PostMapping("/chainOfResponsibility")
+    @ResponseBody
+    public String transactionTest(@RequestBody SignUpCommand signUpCommand){
+        log.info("chainOfResponsibility 入参{}", FastJsonUtils.toJson(signUpCommand));
+        ValidationResult result = defaultSignUpValidationService.validate(signUpCommand);
+        return FastJsonUtils.toJson(result);
     }
 
     /**
