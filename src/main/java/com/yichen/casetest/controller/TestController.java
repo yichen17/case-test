@@ -23,6 +23,7 @@ import feign.Request;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +60,13 @@ public class TestController {
     public String transactionTest(){
         userService.save(User.builder().name("yichen").age(18).build());
         return "ok";
+    }
+
+    @PostMapping("/validateTest")
+    @ResponseBody
+    public String validateTest(@RequestBody @Validated SignUpCommand signUpCommand){
+        log.info("validateTest {}", FastJsonUtils.toJson(signUpCommand));
+        return FastJsonUtils.toJson(signUpCommand);
     }
 
     @PostMapping("/chainOfResponsibility")

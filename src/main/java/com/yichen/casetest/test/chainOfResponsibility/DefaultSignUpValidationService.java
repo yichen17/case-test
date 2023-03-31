@@ -19,7 +19,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class DefaultSignUpValidationService implements SignUpValidationService {
 
-
     @Override
     public ValidationResult validate(SignUpCommand command) {
         return new CommandConstraintsValidationStep()

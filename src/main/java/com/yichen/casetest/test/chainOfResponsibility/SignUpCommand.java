@@ -22,8 +22,8 @@ public class SignUpCommand {
     @NotBlank
     private final String lastName;
 
-    @Size(min = 2, max = 40)
-    @NotBlank
+    @Size(min = 2, max = 40, message = "用户名长度不符合要求")
+    @NotBlank(message = "用户名不能为空")
     private final String username;
 
     @NotBlank
