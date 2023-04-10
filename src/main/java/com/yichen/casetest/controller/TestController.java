@@ -103,6 +103,40 @@ public class TestController {
     }
 
     /**
+     * telnet 127.0.0.1 8089
+     *
+     * POST /test/telnetTest HTTP/1.0
+     * token:123456
+     * name:yichen
+     * Content-type:application/x-www-form-urlencoded
+     * Content-length:10
+     *
+     * name=banyu
+     *
+     *
+     * telnet 127.0.0.1 8089
+     *
+     * POST /test/telnetTest HTTP/2.0
+     * token:123456
+     * name:yichen
+     * Content-type:application/x-www-form-urlencoded
+     * Content-length:10
+     *
+     * name=banyu
+     */
+    @PostMapping("/telnetTest")
+    @ResponseBody
+    public String telnetTest(HttpServletRequest request, @RequestParam(required = false) String name){
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements())    {
+            String s = headerNames.nextElement();
+            log.info("{} => {}", s, request.getHeader(s));
+        }
+        log.info("telnetTest {}", name);
+        return "telnet test";
+    }
+
+    /**
      * 测试是否能从数据库中读取 decimal 类型的null 值  =>  可以
      * @param id
      * @return
