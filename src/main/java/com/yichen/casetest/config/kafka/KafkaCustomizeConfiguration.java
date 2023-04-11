@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 /**
  * @author Qiuxinchao
  * @date 2023/4/7 9:45
- * @describe 自定义异常 handler
+ * @describe 自定义异常 handler   目前不能生效
  */
 @Configuration
 @Slf4j

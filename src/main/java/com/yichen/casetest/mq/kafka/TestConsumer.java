@@ -23,6 +23,10 @@ public class TestConsumer {
      * 缺陷，如果有后面的数据进来，且成功，则这次抛异常或者没有提交的数据也会确认。  ==> 不区分backOff实现，满次数执行后面的如果提交了就会覆盖
      * partition内是有序的，前一个一直在重试，后一个会阻塞！！！  如果延迟执行可能会导致消息积压问题
      * demo {@link KafkaCustomizeConfiguration#seekToCurrentErrorHandler()}
+     *
+     * 如果ack没确认，后续数据进来成功会直接提交偏移量，前面的数据就丢失了   不包含重试，直接取下一个数据
+     * https://stackoverflow.com/questions/62413270/kafka-what-is-the-point-of-using-acknowledgment-nack-if-i-can-simply-not-ack/62414203#62414203
+     *
      * @param record
      */
     @KafkaListener(topics = {"yichen.test"}, containerFactory = "serviceKafkaListenerContainerFactory")
@@ -35,6 +39,9 @@ public class TestConsumer {
         }
         else if ("shanliang".equals(testDTO.getName())){
             log.info("test不确认消费");
+            // 阻塞指定时长后再次poll数据   一直卡死，直到处理
+//            ack.nack(2000);
+            // ack.acknowledge();
             return;
         }
         log.info("test确认消费");
