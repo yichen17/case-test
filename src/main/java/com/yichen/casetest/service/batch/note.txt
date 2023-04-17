@@ -1,0 +1,5 @@
+batch sql
+D:\maven\maven-reposity\org\springframework\batch\spring-batch-core\4.3.3\spring-batch-core-4.3.3.jar!\org\springframework\batch\core\schema-mysql.sql
+
+参考文章：
+https://mp.weixin.qq.com/s/-PHp32oNyQLCNbC_kczSOA

@@ -355,6 +355,13 @@
         </dependency>
         <!--hasor dataway end-->
 
+        <!-- spring batch start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-batch</artifactId>
+        </dependency>
+        <!-- spring batch end -->
+
 
     </dependencies>
 

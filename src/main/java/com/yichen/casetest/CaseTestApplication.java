@@ -3,6 +3,7 @@ package com.yichen.casetest;
 import com.yichen.casetest.config.position.LocationPropertiesListener;
 import net.hasor.spring.boot.EnableHasor;
 import net.hasor.spring.boot.EnableHasorWeb;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,6 +32,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableAspectJAutoProxy(exposeProxy = true)
 @EnableHasor()
 @EnableHasorWeb()
+@EnableBatchProcessing
 public class CaseTestApplication {
 
     private static String[] args;
