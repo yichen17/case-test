@@ -1,0 +1,1 @@
+nohup java -Dserver.port=8748   -Dcsp.sentinel.dashboard.server=localhost:8748 -Dproject.name=sentinel-dashboard -jar -Xms256m -Xmx256m -XX:PermSize=256M -XX:MaxPermSize=256m sentinel-dashboard-1.8.6.jar  > log.log 2>&1  &

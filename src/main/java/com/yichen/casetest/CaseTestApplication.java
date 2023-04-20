@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,7 +26,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients
 @EnableScheduling
 //@ServletComponentScan("com.yichen.casetest.filter.sort")
-@EnableHystrix
+//@EnableHystrix
 @EnableWebMvc
 //@EnableAspectJAutoProxy(exposeProxy = true)
 @EnableHasor()
@@ -39,6 +38,9 @@ public class CaseTestApplication {
     private static ConfigurableApplicationContext context;
 
     public static void main(String[] args) {
+
+//        System.setProperty(TransportConfig.HEARTBEAT_CLIENT_IP, "127.0.0.1");
+
         // 手动重启容器
         // https://stackoverflow.com/questions/39386168/programmatically-restart-spring-boot-application-refresh-spring-context
         SpringApplication application = new SpringApplication(CaseTestApplication.class);
