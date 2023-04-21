@@ -23,8 +23,10 @@ public class StringTest {
         byteToStream();
         StringUtils.divisionLine();
         buildTest();
+//        StringUtils.divisionLine();
+//        forceTransform();
         StringUtils.divisionLine();
-        forceTransform();
+        indexSubstring();
     }
 
 
@@ -65,6 +67,13 @@ public class StringTest {
     private static void forceTransform(){
         Object s = "6";
         log.info("force transform {}", (double)(Character)s);
+    }
+
+
+    private static void indexSubstring(){
+        String s = "111T1H22";
+        int pos = s.indexOf("H");
+        log.info("{}", s.substring(0, pos +  1));
     }
 
 }
