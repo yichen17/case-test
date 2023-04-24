@@ -20,6 +20,8 @@ import com.yichen.casetest.test.service.Teacher;
 import com.yichen.casetest.test.service.reflect.impl.ReflectServiceImpl;
 import com.yichen.casetest.utils.FastJsonUtils;
 import feign.Request;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,6 +45,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Controller
 @RequestMapping("/test")
+@Api(value = "测试入口", tags = "测试入口")
 @Slf4j
 public class TestController {
 
@@ -171,8 +174,9 @@ public class TestController {
 
     @GetMapping("/date")
     @ResponseBody
-    public JsonDto date(){
-        return new JsonDto(null,null,null,new Date(),0,null);
+    @ApiOperation(value = "实体测试")
+    public JsonDto date(@RequestParam String price){
+        return new JsonDto(null,null,null,new Date(),0,null, new BigDecimal(price));
     }
 
     @PostMapping("/nginxTest")
