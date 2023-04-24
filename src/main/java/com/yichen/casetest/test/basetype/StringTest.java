@@ -27,6 +27,8 @@ public class StringTest {
 //        forceTransform();
         StringUtils.divisionLine();
         indexSubstring();
+        StringUtils.divisionLine();
+        indexTest();
     }
 
 
@@ -74,6 +76,13 @@ public class StringTest {
         String s = "111T1H22";
         int pos = s.indexOf("H");
         log.info("{}", s.substring(0, pos +  1));
+    }
+
+
+    private static void indexTest(){
+        String s = "a=1&b=2";
+        log.info(" {} {} {} {}", s.indexOf("&"),  s.indexOf("&", 2),
+                s.indexOf("&", 3), s.indexOf("&", 4));
     }
 
 }

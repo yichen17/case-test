@@ -3,6 +3,7 @@ package com.yichen.casetest.controller;
 import com.yichen.casetest.dao.JsonTestMapper;
 import com.yichen.casetest.model.CountDownLatchDTO;
 import com.yichen.casetest.model.JsonTestDTO;
+import com.yichen.casetest.service.threadPool.ThreadPooShutdownService;
 import com.yichen.casetest.test.execute.MoreExecutorsOptimize;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
@@ -11,7 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.Objects;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Qiuxinchao
@@ -46,6 +51,22 @@ public class ThreadPoolController implements DisposableBean {
             moreExecutorsOptimize.executeOptimize();
         }
         return "ok";
+    }
+
+    private ThreadPooShutdownService threadPooShutdownService;
+
+    @GetMapping("/threadRunWhenShutdown")
+    public void threadRunWhenShutdown() throws Exception{
+        threadPooShutdownService = new ThreadPooShutdownService();
+        threadPooShutdownService.threadRunWhenShutdown();
+    }
+
+    @GetMapping("/threadRunWhenShutdownInfo")
+    public String threadRunWhenShutdownInfo() throws Exception{
+        if (Objects.isNull(threadPooShutdownService)){
+            return "threadPooShutdownService do not init";
+        }
+        return String.format("threadPooShutdownService状态%s", threadPooShutdownService.executorService.isTerminated());
     }
 
     private final ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 10,1L,
@@ -98,6 +119,13 @@ public class ThreadPoolController implements DisposableBean {
 //        }
         log.info("6666");
         return jsonTestList;
+    }
+
+
+    @GetMapping("/destroy")
+    public void destroyThreadPool() throws Exception{
+        pool.shutdown();
+        log.info("destroyThreadPool");
     }
 
 
