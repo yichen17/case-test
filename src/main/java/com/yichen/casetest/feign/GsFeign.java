@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @FeignClient(name = "gs", url = "http://orderservice-test.sc.9f.cn")
 public interface GsFeign {
 
-    @SentinelResource("/testHealth")
-    @GetMapping("/test/health")
+    @SentinelResource(value = "testHealth")
+    @GetMapping("/test/testHealth")
     String testHealth();
 
 }
