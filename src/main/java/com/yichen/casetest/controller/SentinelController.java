@@ -81,6 +81,29 @@ public class SentinelController {
         return gsFeign.testHealth();
     }
 
+    /**
+     * 理论上
+     *      blockHandler是熔断降级方法
+     *      fallback是异常降级方法   => 如果方法执行异常，都会让fallback指定的方法去处理，并返回结果。
+     */
+    @GetMapping("/allTest")
+    @SentinelResource(value = "allTest", blockHandler = "blockHandler",
+//            fallback = "fallback"
+            fallback = "fallbackNoError"
+    )
+    public String allTest(){
+        log.info("allTest");
+        if (Math.random() > 0.5f){
+            throw new RuntimeException();
+        }
+        return "all test ok";
+    }
+
+    /**
+     * 必须同参数加一个 {@linkplain BlockException }
+     * @param blockException
+     * @return
+     */
     public String blockHandler(BlockException blockException){
         log.warn("touch blockHandler");
         return "blockHandler";
@@ -91,8 +114,18 @@ public class SentinelController {
         return param + "blockHandler";
     }
 
-    public String fallback(){
-        log.warn("touch fallback");
+    /**
+     * 同参数或者同参数后面多一个 {@linkplain Throwable}
+     * @param throwable
+     * @return
+     */
+    public String fallback(Throwable throwable){
+        log.warn("touch fallback {}", throwable.getMessage());
+        return "fallback";
+    }
+
+    public String fallbackNoError(){
+        log.warn("touch fallbackNoError");
         return "fallback";
     }
 

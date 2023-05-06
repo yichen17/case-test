@@ -1,17 +1,17 @@
 package com.yichen.casetest.test.basetype;
 
-import com.google.common.collect.Lists;
 import com.yichen.casetest.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,6 +37,7 @@ public class ListTest {
 
     public static void main(String[] args) {
         testIndexOutOfBoundsException();
+        com.yichen.casetest.utils.StringUtils.divisionLine();
         testListStreamRemove();
         System.out.println(UUID.randomUUID().toString().replace("-",""));
         com.yichen.casetest.utils.StringUtils.divisionLine();
