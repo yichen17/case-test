@@ -1,6 +1,5 @@
 package com.yichen.casetest.feign;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @FeignClient(name = "gs", url = "http://orderservice-test.sc.9f.cn")
 public interface GsFeign {
 
-    @SentinelResource(value = "testHealth")
+//    @SentinelResource(value = "testHealth")
     @GetMapping("/test/testHealth")
     String testHealth();
 

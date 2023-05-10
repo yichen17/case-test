@@ -100,8 +100,9 @@ public class TestController {
     @GetMapping("/get")
     @ResponseBody
     @Log(title = "测试get方法")
-    public String get(){
+    public String get() throws Exception{
         log.info("test get");
+        Thread.sleep(1000*60L);
         return "test-get";
     }
 
