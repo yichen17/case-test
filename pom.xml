@@ -244,12 +244,14 @@
         </dependency>
         <!-- end -->
 
+        <!-- 表达式引擎 start -->
         <dependency>
             <groupId>com.googlecode.aviator</groupId>
             <artifactId>aviator</artifactId>
             <version>4.2.3</version>
             <scope>compile</scope>
         </dependency>
+        <!-- 表达式引擎 end -->
 
         <!--swagger start-->
         <dependency>

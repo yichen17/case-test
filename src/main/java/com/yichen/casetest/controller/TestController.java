@@ -1,6 +1,7 @@
 package com.yichen.casetest.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.googlecode.aviator.AviatorEvaluator;
 import com.yichen.casetest.annotation.Log;
 import com.yichen.casetest.feign.TestFeign;
 import com.yichen.casetest.model.DataTest;
@@ -63,6 +64,21 @@ public class TestController {
     public String transactionTest(){
         userService.save(User.builder().name("yichen").age(18).build());
         return "ok";
+    }
+
+    /**
+     * 默认cache为false，会导致反复创建类。
+     * https://www.cnblogs.com/wchaos/p/14868351.html
+     * @param age
+     * @return
+     */
+    @GetMapping("/aviatorTest")
+    @ResponseBody
+    public Object aviatorTest(@RequestParam Integer age){
+//        Object execute = AviatorEvaluator.execute("string.contains(\"abc\",\"a\")");
+        Map<String, Object> params = new HashMap<>(4);
+        params.put("age", age);
+        return AviatorEvaluator.execute("age == 18", params);
     }
 
     @PostMapping("/validateTest")
