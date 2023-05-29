@@ -81,6 +81,13 @@ public class TestController {
         return AviatorEvaluator.execute("age == 18", params);
     }
 
+    @GetMapping("/manualGc")
+    @ResponseBody
+    public String manualGc(){
+        System.gc();
+        return "manual gc success";
+    }
+
     @PostMapping("/validateTest")
     @ResponseBody
     public String validateTest(@RequestBody @Validated SignUpCommand signUpCommand){

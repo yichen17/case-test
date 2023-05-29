@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public String exceptionHandler(Exception e, HttpServletRequest request){
-        log.error("捕获 Exception {}",e.getMessage(),e);
+        log.error("捕获 Exception {}", e.getMessage(), e);
         return e.getMessage();
     }
 
