@@ -21,7 +21,7 @@ public class RequestInterceptor implements HandlerInterceptor {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
             // 打印请求头
-            printRequestHeader(request);
+//            printRequestHeader(request);
             return true;
         }
 

@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 
 import java.lang.reflect.Type;
@@ -16,7 +14,7 @@ import java.lang.reflect.Type;
  * @date 2023/5/20 16:14
  * @describe
  */
-@ControllerAdvice
+//@ControllerAdvice
 @Slf4j
 public class AppLogRequestBodyAdvice extends RequestBodyAdviceAdapter {
 

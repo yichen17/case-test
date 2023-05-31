@@ -370,6 +370,14 @@
         </dependency>
         <!-- spring batch end -->
 
+        <!-- dbbbo 研究 start-->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <!-- dubbo end-->
+
 
     </dependencies>
 

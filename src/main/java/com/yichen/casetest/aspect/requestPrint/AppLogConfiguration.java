@@ -1,7 +1,6 @@
 package com.yichen.casetest.aspect.requestPrint;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -11,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2023/5/20 16:08
  * @describe
  */
-@Configuration
+//@Configuration
 public class AppLogConfiguration {
 
     @Bean

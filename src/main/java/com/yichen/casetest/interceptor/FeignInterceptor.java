@@ -3,10 +3,8 @@ package com.yichen.casetest.interceptor;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
@@ -17,7 +15,7 @@ import java.util.Objects;
  * @describe
  */
 @Slf4j
-@Component
+//@Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class FeignInterceptor implements RequestInterceptor {
     @Override
