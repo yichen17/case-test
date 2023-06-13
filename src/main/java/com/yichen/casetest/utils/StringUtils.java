@@ -120,4 +120,9 @@ public class StringUtils {
         return address.matches(ADDRESS_CHECK);
     }
 
+
+    public static boolean containsEmpty(String ...param){
+        return Arrays.stream(param).anyMatch(StringUtils::isEmpty);
+    }
+
 }

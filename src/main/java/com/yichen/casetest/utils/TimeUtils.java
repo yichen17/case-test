@@ -16,13 +16,37 @@ import java.util.Date;
  */
 public class TimeUtils {
 
+    private static final String BASIC_TIME_PATTERN_12="yyyy-MM-dd hh:mm:ss";
+
+    /**
+     * 24小时制展示时间
+     */
+    private static final String BASIC_TIME_PATTERN_24 = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 日期转时间戳
+     * @param time  yyyy-MM-dd hh:mm:ss 格式日期
+     * @return 时间戳
+     */
+    public static String dateToTimestamp(String time){
+        try{
+            SimpleDateFormat sdf=new SimpleDateFormat(BASIC_TIME_PATTERN_24);
+            Date parse = sdf.parse(time);
+            return String.valueOf(parse.getTime());
+        }
+        catch (ParseException e){
+            log.error("转换日期出错，日期数据 {}，转换格式 {}",time,BASIC_TIME_PATTERN_24);
+            return null;
+        }
+    }
+
     /**
      * 将给定的时间戳转换成 年月日形式的格式
      * @param timestamp  待转化的时间戳
      * @return  年月日形式的日期格式
      */
-    public static String timeStampToDate(String timestamp){
-        return timeStampToDate(timestamp, CommonConstants.DATE_FORMAT);
+    public static String timestampToDate(String timestamp){
+        return timestampToDate(timestamp, CommonConstants.DATE_FORMAT);
     }
 
     /**
@@ -31,7 +55,7 @@ public class TimeUtils {
      * @param format  自定义的日期格式
      * @return  年月日形式的日期格式
      */
-    public static String timeStampToDate(String timestamp,String format){
+    public static String timestampToDate(String timestamp, String format){
         SimpleDateFormat sdf=new SimpleDateFormat(format);
         return sdf.format(new Date(Long.parseLong(timestamp)));
     }

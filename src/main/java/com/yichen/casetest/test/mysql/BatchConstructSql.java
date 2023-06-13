@@ -3,7 +3,9 @@ package com.yichen.casetest.test.mysql;
 import com.yichen.casetest.utils.StringUtils;
 import com.yichen.casetest.utils.TimeUtils;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 
 /**
  * @author Qiuxinchao
@@ -44,7 +46,7 @@ public class BatchConstructSql {
             // 月份
             for (int k = 0; k<300; k++){
                 for (int j=0; j<10000; j++){
-                    String createTime = TimeUtils.timeStampToDate(String.valueOf((long)(Math.random() * internalTime) + startDate) , "yyyy-MM-dd HH:mm:ss");
+                    String createTime = TimeUtils.timestampToDate(String.valueOf((long)(Math.random() * internalTime) + startDate) , "yyyy-MM-dd HH:mm:ss");
                     int aps = appStatus[(int)(Math.random() * appStatus.length)];
                     int rps = repayStatus[(int)(Math.random() * repayStatus.length)];
                     String remark = "i = " + i + ", pos = " + 10000*(k-1)+j;
