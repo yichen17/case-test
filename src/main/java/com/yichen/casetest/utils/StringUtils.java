@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,7 +123,35 @@ public class StringUtils {
 
 
     public static boolean containsEmpty(String ...param){
-        return Arrays.stream(param).anyMatch(StringUtils::isEmpty);
+        return Arrays.stream(param).anyMatch(org.apache.commons.lang.StringUtils::isEmpty);
+    }
+
+    /**
+     * 随机长度字符串
+     * @param length
+     * @return
+     */
+    public static String getRandomString(int length) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(3);
+            long result = 0;
+            switch (number) {
+                case 0:
+                    result = Math.round(Math.random() * 25 + 65);
+                    sb.append((char) result);
+                    break;
+                case 1:
+                    result = Math.round(Math.random() * 25 + 97);
+                    sb.append((char) result);
+                    break;
+                case 2:
+                    sb.append(new Random().nextInt(10));
+                    break;
+            }
+        }
+        return sb.toString();
     }
 
 }

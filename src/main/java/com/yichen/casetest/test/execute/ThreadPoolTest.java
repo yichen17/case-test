@@ -3,6 +3,7 @@ package com.yichen.casetest.test.execute;
 
 import cn.hutool.http.HttpGlobalConfig;
 import cn.hutool.http.HttpUtil;
+import com.yichen.casetest.utils.StringUtils;
 import io.micrometer.core.instrument.util.NamedThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +22,15 @@ public class ThreadPoolTest {
 
     private static ExecutorService poolExecutor = new ThreadPoolExecutor(30, 30,
             0L, TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<>(1024),
+            new ArrayBlockingQueue<>(10240),
             new NamedThreadFactory("DingTalk"));
 
     public static void main(String[] args) throws Exception {
         try {
-            test();
+//            test();
 //            testConcurrentIncr();
 //            testConcurrentRequest();
+            testMultiplyStaticRequest();
         }
         catch (Exception e){
             logger.error("执行出错 {}", e.getMessage(), e);
@@ -36,6 +38,22 @@ public class ThreadPoolTest {
         finally {
             poolExecutor.shutdown();
         }
+    }
+
+
+    private static void testMultiplyStaticRequest() throws Exception{
+        int n = 200;
+        CountDownLatch countDownLatch = new CountDownLatch(n);
+        for (int i=0; i<n; i++){
+            poolExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(StringUtils.getRandomString(5));
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
     }
 
     private static void testConcurrentRequest() throws Exception{
@@ -88,23 +106,24 @@ public class ThreadPoolTest {
 
 
     private static void test() throws Exception{
-        int count = 10;
+        int count = 10000;
         AtomicInteger limit = new AtomicInteger(1);
         CountDownLatch countDownLatch = new CountDownLatch(count);
-        for (int i=0; i<10; i++){
+        for (int i=0; i<count; i++){
             int finalI = i;
             poolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        Thread.sleep(1000 * limit.getAndIncrement() * 20L);
-                    }
-                    catch (Exception e){
-                        logger.error("{}", e.getMessage(), e);
-                    }
-                    System.out.println(Thread.currentThread().getName() + " => " + finalI);
+                    HttpUtil.get("http://localhost:8088/test/aviatorTest?age=10");
+//                    try {
+//                        Thread.sleep(1000 * limit.getAndIncrement() * 20L);
+//                    }
+//                    catch (Exception e){
+//                        logger.error("{}", e.getMessage(), e);
+//                    }
+//                    System.out.println(Thread.currentThread().getName() + " => " + finalI);
                     countDownLatch.countDown();
-//                    logger.warn(finalI + "");
+                    logger.warn(finalI + "");
                 }
             });
         }

@@ -1,6 +1,7 @@
 package com.yichen.casetest.utils;
 
 import com.yichen.casetest.constants.CommonConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @date 2021/10/25 9:24
  * @describe
  */
+@Slf4j
 public class TimeUtils {
 
     private static final String BASIC_TIME_PATTERN_12="yyyy-MM-dd hh:mm:ss";
