@@ -1,11 +1,14 @@
 package com.yichen.casetest.test.basetype;
 
 import com.alibaba.fastjson.JSON;
-import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Qiuxinchao
@@ -18,9 +21,49 @@ public class URITest {
 
     public static void main(String[] args) {
 
-        urlFieldTest();
-        StringUtils.divisionLine();
+//        urlFieldTest();
+//        StringUtils.divisionLine();
+        variableReplace();
 
+    }
+
+
+    private static void variableReplace(){
+        log.info("replaceMacrosFromConfig => {}", replaceMacrosFromConfig("${name} => ${age} => ${sex}",
+                new HashMap<String, String>(){
+            {
+                put("name", "yichen");
+                put("age", "18");
+                put("sex", "boy");
+            }
+        }));
+    }
+
+    /**
+     *   区别点：
+     *      .*    贪婪匹配，到底
+     *      .*?   非贪婪匹配，只匹配一次
+     *      .*+   不能用
+     *
+     *      .   用来匹配出换行符\n以外的任意字符
+     *      *   用来匹配前面的子表达式任意次
+     *      +   用来匹配前面的子表达式一次或多次(大于等于1次）
+     *      ?   用来匹配前面的子表达式零次或一次
+     *
+     */
+    private static final Pattern VAR_PATTERN = Pattern.compile("\\$\\{(.*?)\\}");
+    private static String replaceMacrosFromConfig(String macro, Map<String, String> dictionary) {
+        String result = macro;
+        Matcher matcher = VAR_PATTERN.matcher(result);
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            String value = dictionary.get(key);
+            if (value != null) {
+                result = result.replaceAll("\\$\\{" + key + "\\}", value);
+                matcher = VAR_PATTERN.matcher(result);
+            }
+        }
+        return result.trim();
     }
 
 
