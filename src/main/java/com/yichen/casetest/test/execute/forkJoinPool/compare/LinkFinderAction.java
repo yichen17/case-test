@@ -15,7 +15,7 @@ import java.util.concurrent.RecursiveAction;
  * @date 2023/6/19 16:37
  * @describe
  */
-public class LinkFinderAction extends RecursiveAction {
+ class LinkFinderAction extends RecursiveAction {
 
     private String url;
     private LinkHandler cr;

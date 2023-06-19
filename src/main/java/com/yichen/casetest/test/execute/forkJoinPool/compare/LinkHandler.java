@@ -5,7 +5,7 @@ package com.yichen.casetest.test.execute.forkJoinPool.compare;
  * @date 2023/6/19 16:38
  * @describe
  */
-public interface LinkHandler {
+ interface LinkHandler {
 
     /**
      * Places the link in the queue

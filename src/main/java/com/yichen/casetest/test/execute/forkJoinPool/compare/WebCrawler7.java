@@ -10,7 +10,7 @@ import java.util.concurrent.ForkJoinPool;
  * @date 2023/6/19 16:39
  * @describe
  */
-public class WebCrawler7 implements LinkHandler {
+ class WebCrawler7 implements LinkHandler {
 
     private final Collection<String> visitedLinks = Collections.synchronizedSet(new HashSet<String>());
     //    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<>());

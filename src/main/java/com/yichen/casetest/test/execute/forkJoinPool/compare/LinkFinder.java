@@ -1,5 +1,6 @@
 package com.yichen.casetest.test.execute.forkJoinPool.compare;
 
+import lombok.extern.slf4j.Slf4j;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.NodeClassFilter;
 import org.htmlparser.tags.LinkTag;
@@ -14,19 +15,23 @@ import java.util.List;
  * @date 2023/6/19 16:38
  * @describe
  */
-public class LinkFinder implements Runnable {
+@Slf4j
+ class LinkFinder implements Runnable {
 
     private String url;
     private LinkHandler linkHandler;
+    private boolean parent;
     /**
      * Used fot statistics
      */
-    private static final long t0 = System.nanoTime();
+    private static long t0 = System.nanoTime();
 
-    public LinkFinder(String url, LinkHandler handler) {
+    public LinkFinder(String url, LinkHandler handler, boolean parent) {
         this.url = url;
         this.linkHandler = handler;
+        this.parent = parent;
     }
+
 
     @Override
     public void run() {
@@ -52,11 +57,17 @@ public class LinkFinder implements Runnable {
                     }
 
                 }
+                log.info("now url num {} {}", urls.size(), linkHandler.size());
                 //we visited this url
                 linkHandler.addVisited(url);
 
                 if (linkHandler.size() == 1500) {
-                    System.out.println("Time to visit 1500 distinct links = " + (System.nanoTime() - t0));
+                    Long cost = System.nanoTime() - t0;
+                    log.info(String.format("Time to visit 1500 distinct links = %s, now %s", cost, linkHandler.size()));
+//                    if (WebCrawler6.cal){
+//                        WebCrawler6.result.add(cost);
+//                    }
+                    return;
                 }
 
                 for (String l : urls) {
@@ -64,7 +75,12 @@ public class LinkFinder implements Runnable {
                 }
 
             } catch (Exception e) {
-                //ignore all errors for now
+//                log.error("link finder error {}", e.getMessage(), e);
+            }
+            finally {
+//                if (parent){
+//                    WebCrawler6.countDownLatch.countDown();
+//                }
             }
         }
     }
