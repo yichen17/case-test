@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Qiuxinchao
@@ -153,5 +154,58 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+
+    private static Random random = new Random();
+    public static Integer[] randomIntArray(int length, int low, int high){
+        if (length <= 0 ){
+            return new Integer[0];
+        }
+        if (high < low){
+            return new Integer[0];
+        }
+        Integer[] result = new Integer[length];
+        int width = high - low;
+        for (int i=0; i<length; i++){
+            result[i] = random.nextInt(width) + low;
+        }
+        if (log.isDebugEnabled()){
+            log.info("randomIntArray生成数据结果{}", Arrays.stream(result)
+                    .map(String::valueOf).collect(Collectors.joining(",")));
+        }
+        return result;
+    }
+
+    public static Double[]  randomDoubleArray(int length){
+        if (length <= 0){
+            return new Double[0];
+        }
+        Double[] result = new Double[length];
+        for (int i=0; i<length; i++){
+            result[i] = random.nextDouble();
+        }
+        return result;
+    }
+
+
+
+
+
+    public static <T> String printArray(T[] array){
+        return printArray(array, ",", "", "");
+    }
+
+    public static <T> String printArray(T[] array, String delimiter, String prefix, String suffix){
+        StringBuilder builder = new StringBuilder();
+        builder.append(prefix);
+        for (Object o  : array){
+            builder.append(String.valueOf(o)).append(delimiter);
+        }
+        builder.deleteCharAt(builder.length()-1);
+        builder.append(suffix);
+        return builder.toString();
+    }
+
+
 
 }
