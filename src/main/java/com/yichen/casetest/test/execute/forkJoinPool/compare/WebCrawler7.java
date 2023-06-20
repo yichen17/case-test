@@ -16,13 +16,23 @@ import java.util.concurrent.ForkJoinPool;
     //    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<>());
     private String url;
     private ForkJoinPool mainPool;
+    private String desc;
 
-    public WebCrawler7(String startingURL, int maxThreads) {
+    public String getDesc() {
+        return desc;
+    }
+
+    @Override
+    public void saveResult(String result) {
+        this.desc = result;
+    }
+
+    protected WebCrawler7(String startingURL, int maxThreads) {
         this.url = startingURL;
         mainPool = new ForkJoinPool(maxThreads);
     }
 
-    private void startCrawling() {
+    protected void startCrawling() {
         mainPool.invoke(new LinkFinderAction(this.url, this));
     }
 
@@ -50,6 +60,7 @@ import java.util.concurrent.ForkJoinPool;
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        new WebCrawler7("http://www.javaworld.com", 64).startCrawling();
+        LinkFinderAction.t0 = System.nanoTime();
+        new WebCrawler7("https://www.infoworld.com/category/java/", 64).startCrawling();
     }
 }

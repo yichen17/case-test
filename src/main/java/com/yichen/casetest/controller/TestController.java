@@ -103,6 +103,13 @@ public class TestController {
         return FastJsonUtils.toJson(result);
     }
 
+    @PostMapping("/throwError")
+    @ResponseBody
+    @ApiOperation(value = "抛出异常测试")
+    public void throwError(){
+        int i = 1/0;
+    }
+
     /**
      * 内部没有catch住，还是会被全局异常捕获的
      * @return

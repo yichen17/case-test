@@ -8,7 +8,6 @@ import org.springframework.scheduling.TriggerContext;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.PeriodicTrigger;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -19,7 +18,7 @@ import java.util.Date;
  * @describe
  */
 @Slf4j
-@Service
+//@Service
 @Setter
 public class DynamicsExecService implements SchedulingConfigurer {
 
