@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
+import java.util.stream.Stream;
 
 /**
  * @author Qiuxinchao
@@ -15,7 +16,7 @@ import java.util.concurrent.RecursiveTask;
  * @describe 执行计算有结果值
  */
 @Slf4j
- class CustomRecursiveTask extends RecursiveTask<Long> {
+ class CustomRecursiveTask extends RecursiveTask<Integer> {
     private Integer[] arr;
 
     private static final int THRESHOLD = 20;
@@ -25,12 +26,12 @@ import java.util.concurrent.RecursiveTask;
     }
 
     @Override
-    protected Long compute() {
+    protected Integer compute() {
         if (arr.length > THRESHOLD) {
             return ForkJoinTask.invokeAll(createSubtasks())
                     .stream()
-                    .mapToLong(ForkJoinTask::join)
-                    .count();
+                    .mapToInt(ForkJoinTask::join)
+                    .reduce(0, Integer::sum);
         } else {
             return processing(arr);
         }
@@ -45,12 +46,16 @@ import java.util.concurrent.RecursiveTask;
         return dividedTasks;
     }
 
-    private Long processing(Integer[] arr) {
-        long val = Arrays.stream(arr)
-                .filter(a -> a > 10 && a < 27)
-                .map(a -> a * 10)
-                .count();
-        log.info("{}执行结果{}", Thread.currentThread().getName(), val);
-        return val;
+    private Integer processing(Integer[] arr) {
+//        int val = Arrays.stream(arr)
+//                .filter(a -> a > 10 && a < 27)
+//                .map(a -> a * 10)
+//                .reduce(0, Integer::sum);
+//        log.info("{}执行结果{}", Thread.currentThread().getName(), val);
+//        return val;
+
+        return Stream.of(arr)
+                .filter(p -> p % 15 > 7)
+                .reduce(0, Integer::sum);
     }
 }

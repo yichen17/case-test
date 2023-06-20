@@ -4,6 +4,7 @@ import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * @author Qiuxinchao
@@ -14,6 +15,31 @@ import java.util.Arrays;
 public class ForkJoinPoolTest {
 
     public static void main(String[] args) {
+        sumArray();
+    }
+
+
+
+
+
+    /**
+     * 简单计算总和单线程处理有优势
+     */
+    private static void sumArray(){
+        Integer[] params = StringUtils.randomIntArray(1000000000, 0, 2);
+        long start = System.nanoTime();
+        CustomRecursiveTask customRecursiveTask = new CustomRecursiveTask(params);
+        Integer compute = customRecursiveTask.compute();
+        log.info("执行耗时 {} {}", System.nanoTime() - start, compute);
+        System.gc();
+        start = System.nanoTime();
+        int result = Stream.of(params)
+                .filter(p -> p % 15 > 7)
+                .reduce(0, Integer::sum);
+        log.info("执行耗时 {} {}", System.nanoTime() - start, result);
+    }
+
+    private static void demoTest(){
         String str = "kuangshayitiaojie123456789" ;
         CustomRecursiveAction customRecursiveAction = new CustomRecursiveAction(str);
         customRecursiveAction.compute();
