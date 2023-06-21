@@ -29,7 +29,12 @@ import java.util.concurrent.RecursiveTask;
 
     @Override
     protected Integer compute() {
-        if (left - right + 1 > THRESHOLD) {
+        if (left > right){
+            return 0;
+        }
+        left = Math.max(left, 0);
+        right = Math.min(right, arr.length-1);
+        if (right - left + 1 > THRESHOLD) {
             return ForkJoinTask.invokeAll(createSubtasks())
                     .stream()
                     .mapToInt(ForkJoinTask::join)
@@ -41,15 +46,12 @@ import java.util.concurrent.RecursiveTask;
 
     private Collection<SimpleRecursiveTask> createSubtasks() {
         List<SimpleRecursiveTask> dividedTasks = new ArrayList<>();
-        dividedTasks.add(new SimpleRecursiveTask(0, (left + right) >> 1));
-        dividedTasks.add(new SimpleRecursiveTask((left + right) >> 1 + 1, right));
+        dividedTasks.add(new SimpleRecursiveTask(left, (left + right) >> 1));
+        dividedTasks.add(new SimpleRecursiveTask(((left + right) >> 1) + 1, right));
         return dividedTasks;
     }
 
     private Integer processing() {
-        if (left > right){
-            return 0;
-        }
         int result = 0;
         for (int i=left; i<=right; i++){
 //            if (arr[i] % 15 > 7){
