@@ -24,7 +24,12 @@ import java.util.concurrent.Executors;
     public static volatile List<Long> result = Collections.synchronizedList(new ArrayList<>());
     public static CountDownLatch countDownLatch;
 
-    public WebCrawler6(String startingURL, int maxThreads) {
+    @Override
+    public void saveResult(String result) {
+
+    }
+
+    protected WebCrawler6(String startingURL, int maxThreads) {
         this.url = startingURL;
         execService = Executors.newFixedThreadPool(maxThreads);
     }
@@ -53,7 +58,7 @@ import java.util.concurrent.Executors;
         execService.execute(new LinkFinder(link, this, parent));
     }
 
-    private void startCrawling() throws Exception {
+    protected void startCrawling() throws Exception {
         startNewThread(this.url, true);
     }
 
@@ -83,7 +88,8 @@ import java.util.concurrent.Executors;
 //        log.info("average => {}", result.stream().reduce(Long::sum).orElse(0L) / result.size());
 //        webCrawler6.execService.shutdown();
 
-        new WebCrawler6("http://www.baidu.com", 64).startCrawling();
+//        new WebCrawler6("http://www.baidu.com", 64).startCrawling();
+        new WebCrawler6("https://www.infoworld.com/category/java/", 64).startCrawling();
 
     }
 }

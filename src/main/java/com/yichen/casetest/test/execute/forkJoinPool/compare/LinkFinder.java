@@ -9,6 +9,7 @@ import org.htmlparser.util.NodeList;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Qiuxinchao
@@ -21,10 +22,11 @@ import java.util.List;
     private String url;
     private LinkHandler linkHandler;
     private boolean parent;
+    public  AtomicBoolean end = new AtomicBoolean(false);
     /**
      * Used fot statistics
      */
-    private static long t0 = System.nanoTime();
+    protected static long t0 = System.nanoTime();
 
     public LinkFinder(String url, LinkHandler handler, boolean parent) {
         this.url = url;
@@ -39,6 +41,12 @@ import java.util.List;
     }
 
     private void getSimpleLinks(String url) {
+
+        // 已经到指定次数了，停止
+        if (end.get()){
+            return;
+        }
+
         //if not already visited
         if (!linkHandler.visited(url)) {
             try {
@@ -62,11 +70,14 @@ import java.util.List;
                 linkHandler.addVisited(url);
 
                 if (linkHandler.size() == 1500) {
-                    Long cost = System.nanoTime() - t0;
-                    log.info(String.format("Time to visit 1500 distinct links = %s, now %s", cost, linkHandler.size()));
+                    // 到指定次数停止
+                    if (end.compareAndSet(false, true)){
+                        Long cost = System.nanoTime() - t0;
+                        log.info(String.format("Time to visit 1500 distinct links = %s, now %s", cost, linkHandler.size()));
 //                    if (WebCrawler6.cal){
 //                        WebCrawler6.result.add(cost);
 //                    }
+                    }
                     return;
                 }
 

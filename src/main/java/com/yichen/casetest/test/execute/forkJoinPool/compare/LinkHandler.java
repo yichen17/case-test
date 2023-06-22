@@ -32,4 +32,7 @@ package com.yichen.casetest.test.execute.forkJoinPool.compare;
      * @param link
      */
     void addVisited(String link);
+
+    void saveResult(String result);
+
 }
