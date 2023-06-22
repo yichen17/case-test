@@ -1,11 +1,10 @@
 package com.yichen.casetest.utils;
 
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -185,6 +184,48 @@ public class StringUtils {
             result[i] = random.nextDouble();
         }
         return result;
+    }
+
+    public  static <T extends Number> boolean checkOrder(T[] nums, boolean ascendOrder){
+        if (Objects.isNull(nums) || nums.length < 2)return true;
+        // 升序
+        if (ascendOrder){
+            for (int i=0; i<nums.length-1; i++){
+                if (!checkGreaterEqualsThan(nums[i+1], nums[i])){
+                    return false;
+                }
+            }
+            return true;
+        }
+        // 降序
+        for (int i=0; i<nums.length-1; i++){
+            if (!checkGreaterEqualsThan(nums[i], nums[i+1])){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean checkGreaterEqualsThan(Number a, Number b){
+        if (a instanceof Integer){
+            return (Integer)a - (Integer) b >= 0;
+        }
+        else if (a instanceof Long){
+            return (Long)a - (Long) b >= 0;
+        }
+
+        throw  new RuntimeException("比较泛型Number未配置规则");
+    }
+
+    private static boolean checkGreaterThan(Number a, Number b){
+        if (a instanceof Integer){
+            return (Integer)a - (Integer) b > 0;
+        }
+        else if (a instanceof Long){
+            return (Long)a - (Long) b > 0;
+        }
+
+        throw  new RuntimeException("比较泛型Number未配置规则");
     }
 
 
