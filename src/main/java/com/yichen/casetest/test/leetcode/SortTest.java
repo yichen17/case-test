@@ -1,12 +1,14 @@
 package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
+import javafx.util.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
@@ -25,12 +27,12 @@ import java.util.function.Consumer;
 public class SortTest {
 
     public static void main(String[] args) {
-//        ChainExec chainExec = buildChainExec(1, 999, 100);
+//        ChainExec chainExec = Ø(1, 999, 100);
 //        chainExec.exec();
 
-        Integer[] array = StringUtils.randomIntArray(999, 0 ,100);
-//        Integer[] array = new Integer[]{3,4,2,5,1,6};
-        heapSort(array);
+        Integer[] array = StringUtils.randomIntArray(20, 0 ,100);
+//        Integer[] array = new Integer[]{4,3};
+        bucketSort(array);
         System.out.println(StringUtils.printArray(array));
         System.out.println(StringUtils.checkOrder(array, true));
     }
@@ -45,8 +47,11 @@ public class SortTest {
         if (Objects.isNull(data) || data.length < 2){
             return;
         }
-        Integer max = Arrays.stream(data).max(Integer::compare).get();
-        Integer min = Arrays.stream(data).min(Integer::compare).get();
+//        Integer max = Arrays.stream(data).max(Integer::compare).get();
+//        Integer min = Arrays.stream(data).min(Integer::compare).get();
+        Pair<Integer, Integer> maxAndMin = getMaxAndMin(data);
+        Integer max = maxAndMin.getKey();
+        Integer min = maxAndMin.getValue();
         int[] f = new int[max-min+1];
         // 遍历填充
         for(Integer item : data){
@@ -67,8 +72,47 @@ public class SortTest {
 
     // 桶排序
 
+    /**
+     * 桶排序是计数排序的升级版本，可以自定义跨度以节省存储空间
+     * @param data
+     */
     private static void bucketSort(Integer[] data){
-
+        if (Objects.isNull(data) || data.length < 2){
+            return;
+        }
+        int interval = 10;
+        Pair<Integer, Integer> maxAndMin = getMaxAndMin(data);
+        Integer max = maxAndMin.getKey();
+        Integer min = maxAndMin.getValue();
+        // 去整麻烦，直接 多一个
+        int len = (max - min)/ interval + 2;
+        ArrayList<Integer>[] bucket = new ArrayList[len];
+        // 对应桶计数
+        int pos,i,temp,val;
+        for (int item : data){
+            pos = (item - min) / interval;
+            ArrayList<Integer> lists = bucket[pos];
+            if (Objects.isNull(lists)){
+                lists = new ArrayList<>();
+                bucket[pos] = lists;
+            }
+            i = lists.size() - 1;
+            // 执行插入排序
+            while (i>=0 && lists.get(i) > item){
+                i--;
+            }
+            lists.add(i+1, item);
+        }
+        // 单次遍历构建
+        pos = 0;
+        for (i=0; i<bucket.length; i++){
+            if (Objects.isNull(bucket[i]) || bucket[i].size() == 0){
+                continue;
+            }
+            for (int j=0; j<bucket[i].size(); j++){
+                data[pos++] = bucket[i].get(j);
+            }
+        }
     }
 
     // 基数排序
@@ -93,56 +137,7 @@ public class SortTest {
         }
     }
 
-    private static void rebuild(Integer[] data, int limit){
-//        int parent = 0, left, right, max;
-//        while (parent * 2 + 1 <= limit){
-//            left = 2 * parent + 1;
-//            // 如果只有左子树，且子树比父节点大，交换结束
-//            if (left + 1 > limit && data[left] > data[parent]){
-//                swap(data, left, parent);
-//            }
-//            // 左右都存在 先获取左右子树的最大值，然后和父节点比对
-//            else if (left+1 <= limit){
-//                right = left+ 1;
-//                if (data[left] > data[right]){
-//                    max = left;
-//                }
-//                else {
-//                    max = right;
-//                }
-//                if (data[max] > data[parent]){
-//                    swap(data, max, parent);
-//                    parent = max;
-//                    continue;
-//                }
-//            }
-//            // 都不存在，或者只有左子树且小于父节点
-//            // 或者都存在，但是最大值小于父节点
-//            break;
-//        }
 
-//        while (parent * 2 + 1 <= limit){
-//            max = parent;
-//            left = 2*parent+1;
-//            right = 2*parent+2;
-//            if (left <= limit && data[left] > data[parent]){
-//                max = left;
-//            }
-//            if (right <= limit && data[right] > data[parent]){
-//                max = right;
-//            }
-//            if (parent != max){
-//                swap(data, parent, max);
-//                parent = max;
-//            }
-//            else {
-//                break;
-//            }
-//        }
-
-        rebuild(data, 0 ,limit);
-
-    }
 
     /**
      * 构造成最大堆
@@ -153,21 +148,9 @@ public class SortTest {
             return;
         }
         int len = data.length, j;
-        // 注意，从0开始构建堆的，父节点为x，左子树为2x+1,右子树为2x+2   => 多计算了
-//        for (int i=len-1; i>0; i--){
-//            j = i;
-//            while (j > 0 && data[j] > data[(j-1)/2]){
-//                swap(data, j, (j-1)/2);
-//                j = (j-1)/2;
-//            }
-//        }
-
         for (int i=Math.floorDiv(len, 2); i>=0; i--){
             rebuild(data, i, len);
         }
-
-
-
     }
 
     private static void rebuild(Integer[] data, int start, int limit){
@@ -401,6 +384,22 @@ public class SortTest {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
+    }
+
+    private static Pair<Integer, Integer> getMaxAndMin(Integer[] data){
+        if (Objects.isNull(data) || data.length == 0){
+            return null;
+        }
+        int max = data[0], min = data[0];
+        for (int i=1; i<data.length; i++){
+            if (max < data[i]){
+                max = data[i];
+            }
+            if (min > data[i]){
+                min = data[i];
+            }
+        }
+        return new Pair<>(max, min);
     }
 
 
