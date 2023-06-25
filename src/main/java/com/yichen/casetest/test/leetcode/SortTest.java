@@ -25,8 +25,14 @@ import java.util.function.Consumer;
 public class SortTest {
 
     public static void main(String[] args) {
-        ChainExec chainExec = buildChainExec(1, 999, 100);
-        chainExec.exec();
+//        ChainExec chainExec = buildChainExec(1, 999, 100);
+//        chainExec.exec();
+
+        Integer[] array = StringUtils.randomIntArray(999, 0 ,100);
+//        Integer[] array = new Integer[]{3,4,2,5,1,6};
+        heapSort(array);
+        System.out.println(StringUtils.printArray(array));
+        System.out.println(StringUtils.checkOrder(array, true));
     }
 
 
@@ -78,15 +84,63 @@ public class SortTest {
             return;
         }
         transformBigHeap(data);
+        // 每次确定最大的数
         for (int i=data.length-1; i>0; i--){
             // 确定结果保存
             swap(data, 0, i);
             // 再次重建
-            rebuild(data, i);
+            rebuild(data, 0, i);
         }
     }
 
     private static void rebuild(Integer[] data, int limit){
+//        int parent = 0, left, right, max;
+//        while (parent * 2 + 1 <= limit){
+//            left = 2 * parent + 1;
+//            // 如果只有左子树，且子树比父节点大，交换结束
+//            if (left + 1 > limit && data[left] > data[parent]){
+//                swap(data, left, parent);
+//            }
+//            // 左右都存在 先获取左右子树的最大值，然后和父节点比对
+//            else if (left+1 <= limit){
+//                right = left+ 1;
+//                if (data[left] > data[right]){
+//                    max = left;
+//                }
+//                else {
+//                    max = right;
+//                }
+//                if (data[max] > data[parent]){
+//                    swap(data, max, parent);
+//                    parent = max;
+//                    continue;
+//                }
+//            }
+//            // 都不存在，或者只有左子树且小于父节点
+//            // 或者都存在，但是最大值小于父节点
+//            break;
+//        }
+
+//        while (parent * 2 + 1 <= limit){
+//            max = parent;
+//            left = 2*parent+1;
+//            right = 2*parent+2;
+//            if (left <= limit && data[left] > data[parent]){
+//                max = left;
+//            }
+//            if (right <= limit && data[right] > data[parent]){
+//                max = right;
+//            }
+//            if (parent != max){
+//                swap(data, parent, max);
+//                parent = max;
+//            }
+//            else {
+//                break;
+//            }
+//        }
+
+        rebuild(data, 0 ,limit);
 
     }
 
@@ -99,12 +153,36 @@ public class SortTest {
             return;
         }
         int len = data.length, j;
-        for (int i=len-1; i>=0; i--){
-            j = i;
-            while (j/2 > 0 && data[j] > data[j/2]){
-                swap(data, j, j/2);
-                j = j/2;
-            }
+        // 注意，从0开始构建堆的，父节点为x，左子树为2x+1,右子树为2x+2   => 多计算了
+//        for (int i=len-1; i>0; i--){
+//            j = i;
+//            while (j > 0 && data[j] > data[(j-1)/2]){
+//                swap(data, j, (j-1)/2);
+//                j = (j-1)/2;
+//            }
+//        }
+
+        for (int i=Math.floorDiv(len, 2); i>=0; i--){
+            rebuild(data, i, len);
+        }
+
+
+
+    }
+
+    private static void rebuild(Integer[] data, int start, int limit){
+        int left = start * 2 + 1;
+        int right = start * 2 + 2;
+        int max = start;
+        if (left < limit && data[left] > data[max]){
+            max = left;
+        }
+        if (right < limit && data[right] > data[max]){
+            max = right;
+        }
+        if (start != max){
+            swap(data, start, max);
+            rebuild(data, max, limit);
         }
     }
 
@@ -335,7 +413,7 @@ public class SortTest {
                 .appendTail(ChainItem.builder().desc("shell sort").consumer(SortTest::shellSort).build())
                 .appendTail(ChainItem.builder().desc("count sort").consumer(SortTest::countingSort).build())
                 .appendTail(ChainItem.builder().desc("bubble sort").consumer(SortTest::bubbleSort).build())
-//                .appendTail(ChainItem.builder().desc("heap sort").consumer(SortTest::heapSort).build())
+                .appendTail(ChainItem.builder().desc("heap sort").consumer(SortTest::heapSort).build())
 //                .appendTail(ChainItem.builder().desc("bucket sort").consumer(SortTest::bucketSort).build())
 //                .appendTail(ChainItem.builder().desc("radix sort").consumer(SortTest::radixSort).build())
         ;
