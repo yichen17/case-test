@@ -25,55 +25,8 @@ import java.util.function.Consumer;
 public class SortTest {
 
     public static void main(String[] args) {
-        // 快排实现
-        Integer[] array = StringUtils.randomIntArray(999, 0, 100);
-        quickSort(array);
-        log.info("quick result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
-        // 归并排序
-        array = StringUtils.randomIntArray(999, 0, 100);
-        LinkedListNode root = LinkedListNode.buildListedList(array);
-        log.info("linked list node old path {}", LinkedListNode.printPath(root));
-        linkedListMergeSort(root);
-        log.info("linked list node sort path {}", LinkedListNode.printPath(root));
-        StringUtils.divisionLine();
-        // 冒泡排序
-        array = StringUtils.randomIntArray(999, 0, 100);
-        bubbleSort(array);
-        log.info("bubble sort result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
-        // 简单选择排序
-        array = StringUtils.randomIntArray(999, 0, 100);
-        simpleSelectionSort(array);
-        log.info("simple select sort result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
-        // 插入排序
-        array = StringUtils.randomIntArray(999, 0, 100);
-        insertionSort(array);
-        log.info("insert sort result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
-        // 插入排序 实现优化
-        array = StringUtils.randomIntArray(999, 0, 100);
-        insertionSortOptimize(array);
-        log.info("insert sort optimize result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
-        // 计数排序
-        array = StringUtils.randomIntArray(9999, 0, 100);
-        countingSort(array);
-        log.info("count sort result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
-        // 希尔排序
-        array = StringUtils.randomIntArray(999, 0, 100);
-        shellSort(array);
-        log.info("shell sort result {} \n{}", StringUtils.printArray(array),
-                StringUtils.checkOrder(array, true));
-        StringUtils.divisionLine();
+        ChainExec chainExec = buildChainExec(1, 999, 100);
+        chainExec.exec();
     }
 
 
@@ -121,8 +74,41 @@ public class SortTest {
     // 堆排序
 
     private static void heapSort(Integer[] data){
+        if (Objects.isNull(data) || data.length < 2){
+            return;
+        }
+        transformBigHeap(data);
+        for (int i=data.length-1; i>0; i--){
+            // 确定结果保存
+            swap(data, 0, i);
+            // 再次重建
+            rebuild(data, i);
+        }
+    }
+
+    private static void rebuild(Integer[] data, int limit){
 
     }
+
+    /**
+     * 构造成最大堆
+     * @param data
+     */
+    private static void transformBigHeap(Integer[] data){
+        if (Objects.isNull(data) || data.length < 2){
+            return;
+        }
+        int len = data.length, j;
+        for (int i=len-1; i>=0; i--){
+            j = i;
+            while (j/2 > 0 && data[j] > data[j/2]){
+                swap(data, j, j/2);
+                j = j/2;
+            }
+        }
+    }
+
+
 
     // 希尔排序   简单插入排序的优化版本
 
@@ -340,8 +326,8 @@ public class SortTest {
     }
 
 
-    private static ChainExec buildChainExec(int times){
-        ChainExec chainExec = new ChainExec(times);
+    private static ChainExec buildChainExec(int times, int len, int limit){
+        ChainExec chainExec = new ChainExec(times, len, limit);
         chainExec.initRoot(ChainItem.builder().desc("quick sort").consumer(SortTest::quickSort).build());
         // 归并忽略   不同的demo
         chainExec.appendTail(ChainItem.builder().desc("insert sort").consumer(SortTest::insertionSort).build())
@@ -375,11 +361,15 @@ public class SortTest {
         private ChainItem root;
         private Integer[] array;
         private ChainItem tail;
-        private int times;
+        private final int times;
+        private final int len;
+        private final int limit;
 
 
-        public ChainExec(int times) {
+        public ChainExec(int times, int len, int limit) {
             this.times = times;
+            this.len = len;
+            this.limit = limit;
         }
 
 
@@ -399,12 +389,17 @@ public class SortTest {
             long start;
             int result = 0;
             while (pos != null){
-                Integer[] newItem = Arrays.copyOf(array, array.length);
+                Integer[] newItem = Arrays.copyOf(this.array, this.array.length);
                 start = System.nanoTime();
                 pos.getConsumer().accept(newItem);
                 log.info("执行耗时 {} => {}",System.nanoTime() - start, pos.getDesc());
                 boolean flag = StringUtils.checkOrder(newItem, true);
-                log.info("是否有序 {}", flag);
+                if (!flag){
+                    log.info("{} {} 排序实现异常", pos.getDesc(), StringUtils.printArray(this.array));
+                }
+                if (log.isDebugEnabled()){
+                    log.debug("排序后数据 {}", StringUtils.printArray(newItem));
+                }
                 result += flag ? 0 : 1;
                 pos = pos.next;
             }
@@ -414,7 +409,7 @@ public class SortTest {
         public boolean exec(){
             for (int i=0; i<times; i++){
                 // 一次轮换变更数据源
-                this.array = StringUtils.randomIntArray(999, 0, 100);
+                this.array = StringUtils.randomIntArray(this.len, 0, this.limit);
                 int failTimes = this.execSingle();
                 if (failTimes > 0){
                     return true;
@@ -422,8 +417,6 @@ public class SortTest {
             }
             return false;
         }
-
-
     }
 
 
