@@ -24,7 +24,8 @@ public class StringUtils {
     }
 
     public static void divisionLine(String desc){
-        log.info("======================================{}============================================", desc);
+        log.warn(
+                "======================================{}============================================", desc);
     }
 
     public static void print(Object object){

@@ -544,11 +544,10 @@ public class SortTest {
         private ChainItem tail;
         private ChainInfo chainInfo;
 
-        private Random random;
+
 
         public ChainExec(ChainInfo chainInfo) {
             this.chainInfo = chainInfo;
-            this.random = new Random();
         }
 
 
@@ -604,8 +603,8 @@ public class SortTest {
         public boolean exec(){
             for (int i=0; i<chainInfo.getTimes(); i++){
                 // 一次轮换变更数据源
-                int len = chainInfo.isRandomLen() ? random.nextInt(chainInfo.getLen()) : chainInfo.getLen();
-                int limit = chainInfo.isRandomLimit() ? random.nextInt(chainInfo.getLimit()) : chainInfo.getLimit();
+                int len = chainInfo.isRandomLen() ? (int) (Math.random() * chainInfo.getLen()) : chainInfo.getLen();
+                int limit = chainInfo.isRandomLimit() ? (int) (Math.random() * chainInfo.getLimit()) : chainInfo.getLimit();
                 StringUtils.divisionLine(String.format("  len:%s, limit:%s", len, limit));
                 this.array = StringUtils.randomIntArray(len, 0, limit);
                 int failTimes = this.execSingle();
