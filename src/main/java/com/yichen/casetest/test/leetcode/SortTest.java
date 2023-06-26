@@ -33,12 +33,21 @@ public class SortTest {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         List<Logger> loggerList = loggerContext.getLoggerList();
         loggerList.forEach(logger -> {
-            logger.setLevel(Level.INFO);
+            logger.setLevel(Level.WARN);
         });
 
-
-        ChainExec chainExec = buildChainExec(10, 100000, 10000);
+        ChainInfo chainInfo = ChainInfo.builder().len(10000).limit(10000).times(10000)
+                .randomLen(true)
+                .randomLimit(true)
+                .build();
+        ChainExec chainExec = buildChainExec(chainInfo);
         chainExec.exec();
+
+//        Integer[] array = StringUtils.randomIntArray(100, 0 ,100);
+//        mergeSort(array);
+//        System.out.println(StringUtils.printArray(array));
+//        System.out.println(StringUtils.checkOrder(array, true));
+
     }
 
 
@@ -319,6 +328,51 @@ public class SortTest {
         }
     }
 
+    //  归并排序
+
+    private static void mergeSort(Integer[] data){
+        if (Objects.isNull(data) || data.length < 2){
+            return;
+        }
+        mergeSort(data, 0, data.length-1);
+    }
+
+    private static void mergeSort(Integer[] data, int left, int right){
+        if (left == right){
+            return;
+        }
+        int mid = (left + right) >> 1;
+        mergeSort(data, left, mid);
+        mergeSort(data, mid+1, right);
+        merge(data, left, mid, mid+1, right);
+    }
+
+    private static void merge(Integer[] data, int l1, int r1, int l2, int r2){
+        Integer[] temp = Arrays.copyOfRange(data, l1, r2+1);
+        int limit = l1;
+        int pos = l1;
+        while (l1 <= r1 && l2 <= r2){
+            if (temp[l1-limit] > temp[l2-limit]){
+                data[pos++] = temp[l2-limit];
+                l2++;
+            }
+            else {
+                data[pos++] = temp[l1-limit];
+                l1++;
+            }
+        }
+        while (l1 <= r1){
+            data[pos++] = temp[l1-limit];
+            l1++;
+        }
+        while (l2 <= r2){
+            data[pos++] = temp[l2-limit];
+            l2++;
+        }
+    }
+
+
+
 
     //=============  归并排序  链表
 
@@ -452,10 +506,9 @@ public class SortTest {
     }
 
 
-    private static ChainExec buildChainExec(int times, int len, int limit){
-        ChainExec chainExec = new ChainExec(times, len, limit);
+    private static ChainExec buildChainExec(ChainInfo chainInfo){
+        ChainExec chainExec = new ChainExec(chainInfo);
         chainExec.initRoot(ChainItem.builder().desc("quick sort").consumer(SortTest::quickSort).build());
-        // 归并忽略   不同的demo
         chainExec.appendTail(ChainItem.builder().desc("insert sort").consumer(SortTest::insertionSort).build())
                 .appendTail(ChainItem.builder().desc("simple select sort").consumer(SortTest::simpleSelectionSort).build())
                 .appendTail(ChainItem.builder().desc("shell sort").consumer(SortTest::shellSort).build())
@@ -464,6 +517,7 @@ public class SortTest {
                 .appendTail(ChainItem.builder().desc("heap sort").consumer(SortTest::heapSort).build())
                 .appendTail(ChainItem.builder().desc("bucket sort").consumer(SortTest::bucketSort).build())
                 .appendTail(ChainItem.builder().desc("radix sort").consumer(SortTest::radixSort).build())
+                .appendTail(ChainItem.builder().desc("merge sort").consumer(SortTest::mergeSort).build())
         ;
         return chainExec;
     }
@@ -487,15 +541,13 @@ public class SortTest {
         private ChainItem root;
         private Integer[] array;
         private ChainItem tail;
-        private final int times;
-        private final int len;
-        private final int limit;
+        private ChainInfo chainInfo;
 
+        private Random random;
 
-        public ChainExec(int times, int len, int limit) {
-            this.times = times;
-            this.len = len;
-            this.limit = limit;
+        public ChainExec(ChainInfo chainInfo) {
+            this.chainInfo = chainInfo;
+            this.random = new Random();
         }
 
 
@@ -528,7 +580,7 @@ public class SortTest {
                 log.info("执行耗时 {} => {}", cost, pos.getDesc());
                 boolean flag = StringUtils.checkOrder(newItem, true);
                 if (!flag){
-                    log.info("{} {} 排序实现异常", pos.getDesc(), StringUtils.printArray(this.array));
+                    log.warn("{} {} 排序实现异常", pos.getDesc(), StringUtils.printArray(this.array));
                 }
                 if (log.isDebugEnabled()){
                     log.debug("排序后数据 {}", StringUtils.printArray(newItem));
@@ -548,9 +600,12 @@ public class SortTest {
         }
 
         public boolean exec(){
-            for (int i=0; i<times; i++){
+            for (int i=0; i<chainInfo.getTimes(); i++){
                 // 一次轮换变更数据源
-                this.array = StringUtils.randomIntArray(this.len, 0, this.limit);
+                int len = chainInfo.isRandomLen() ? random.nextInt(chainInfo.getLen()) : chainInfo.getLen();
+                int limit = chainInfo.isRandomLimit() ? random.nextInt(chainInfo.getLimit()) : chainInfo.getLimit();
+                StringUtils.divisionLine(String.format("  len:%s, limit:%s", len, limit));
+                this.array = StringUtils.randomIntArray(len, 0, limit);
                 int failTimes = this.execSingle();
                 if (failTimes > 0){
                     return true;
@@ -558,6 +613,35 @@ public class SortTest {
             }
             return false;
         }
+    }
+
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class ChainInfo{
+        /**
+         * 执行次数
+         */
+        private int times;
+        /**
+         * 数据量 长度
+         */
+        private int len;
+        /**
+         * 数据范围
+         */
+        private int limit;
+        /**
+         * 随机长度限定  true表示在 0-len内随机
+         */
+        private boolean randomLen;
+        /**
+         * 随机范围限定  true 表示在 0-limit内随机
+         */
+        private boolean randomLimit;
+
+
     }
 
 

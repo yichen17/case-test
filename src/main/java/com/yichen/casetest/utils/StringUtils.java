@@ -1,6 +1,7 @@
 package com.yichen.casetest.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -243,6 +244,10 @@ public class StringUtils {
         builder.deleteCharAt(builder.length()-1);
         builder.append(suffix);
         return builder.toString();
+    }
+
+    public static void printTree(T[] array, int width){
+
     }
 
 
