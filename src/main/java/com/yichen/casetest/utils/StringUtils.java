@@ -191,6 +191,7 @@ public class StringUtils {
         if (ascendOrder){
             for (int i=0; i<nums.length-1; i++){
                 if (!checkGreaterEqualsThan(nums[i+1], nums[i])){
+                    log.warn("{}不符合条件{} {}", "升序", nums[i], nums[i+1]);
                     return false;
                 }
             }
@@ -199,6 +200,7 @@ public class StringUtils {
         // 降序
         for (int i=0; i<nums.length-1; i++){
             if (!checkGreaterEqualsThan(nums[i], nums[i+1])){
+                log.warn("{}不符合条件{} {}", "降序", nums[i], nums[i+1]);
                 return false;
             }
         }
