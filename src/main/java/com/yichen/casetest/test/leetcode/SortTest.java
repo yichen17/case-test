@@ -1,5 +1,8 @@
 package com.yichen.casetest.test.leetcode;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import com.yichen.casetest.utils.StringUtils;
 import javafx.util.Pair;
 import lombok.AllArgsConstructor;
@@ -7,11 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -27,7 +28,16 @@ import java.util.function.Consumer;
 public class SortTest {
 
     public static void main(String[] args) {
-        ChainExec chainExec = buildChainExec(1, 999, 100);
+
+        //设置main方法日志级别   => 可用
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        List<Logger> loggerList = loggerContext.getLoggerList();
+        loggerList.forEach(logger -> {
+            logger.setLevel(Level.INFO);
+        });
+
+
+        ChainExec chainExec = buildChainExec(10, 100000, 10000);
         chainExec.exec();
     }
 
@@ -504,11 +514,18 @@ public class SortTest {
             ChainItem pos = root;
             long start;
             int result = 0;
+            String sortName = "";
+            Long cost, costMin = null;
             while (pos != null){
                 Integer[] newItem = Arrays.copyOf(this.array, this.array.length);
+
+                // 手动gc，避免期间gc
+                System.gc();
+
                 start = System.nanoTime();
                 pos.getConsumer().accept(newItem);
-                log.info("执行耗时 {} => {}",System.nanoTime() - start, pos.getDesc());
+                cost = System.nanoTime() - start;
+                log.info("执行耗时 {} => {}", cost, pos.getDesc());
                 boolean flag = StringUtils.checkOrder(newItem, true);
                 if (!flag){
                     log.info("{} {} 排序实现异常", pos.getDesc(), StringUtils.printArray(this.array));
@@ -516,9 +533,17 @@ public class SortTest {
                 if (log.isDebugEnabled()){
                     log.debug("排序后数据 {}", StringUtils.printArray(newItem));
                 }
+
+                if (Objects.isNull(costMin) || costMin > cost){
+                    costMin = cost;
+                    sortName = pos.getDesc();
+                }
+
                 result += flag ? 0 : 1;
                 pos = pos.next;
             }
+            log.info("当次排序最快的为{}，耗时 {}", sortName, costMin);
+            StringUtils.divisionLine("next round");
             return result;
         }
 

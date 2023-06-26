@@ -1,8 +1,6 @@
 package com.yichen.casetest.utils;
 
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -169,7 +167,7 @@ public class StringUtils {
             result[i] = random.nextInt(width) + low;
         }
         if (log.isDebugEnabled()){
-            log.info("randomIntArray生成数据结果{}", Arrays.stream(result)
+            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
                     .map(String::valueOf).collect(Collectors.joining(",")));
         }
         return result;
