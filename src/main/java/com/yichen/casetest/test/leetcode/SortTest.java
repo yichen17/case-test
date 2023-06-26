@@ -27,14 +27,8 @@ import java.util.function.Consumer;
 public class SortTest {
 
     public static void main(String[] args) {
-//        ChainExec chainExec = Ø(1, 999, 100);
-//        chainExec.exec();
-
-        Integer[] array = StringUtils.randomIntArray(20, 0 ,100);
-//        Integer[] array = new Integer[]{4,3};
-        bucketSort(array);
-        System.out.println(StringUtils.printArray(array));
-        System.out.println(StringUtils.checkOrder(array, true));
+        ChainExec chainExec = buildChainExec(1, 999, 100);
+        chainExec.exec();
     }
 
 
@@ -117,8 +111,53 @@ public class SortTest {
 
     // 基数排序
 
+    /**
+     * 个、十、百、千 每一位都排序比较
+     * @param data
+     */
     private static void radixSort(Integer[] data){
-
+        if (Objects.isNull(data) || data.length < 2){
+            return;
+        }
+        int interval = 10;
+        Pair<Integer, Integer> maxAndMin = getMaxAndMin(data);
+        Integer max = maxAndMin.getKey();
+        // 计算最大位数
+        int times = 1;
+        while (interval < max){
+            times++;
+            interval *= 10;
+        }
+        int mod = 10, dev = 1, i, j, k;
+        ArrayList<Integer>[] buckets;
+        for (i=0; i<times; i++, dev *= 10, mod *= 10){
+            buckets = new ArrayList[10];
+            // 桶置入
+            for (j=0; j<data.length; j++){
+                int pos = data[j] % mod / dev;
+                ArrayList<Integer> item = buckets[pos];
+                if (Objects.isNull(item)){
+                    item = new ArrayList<>();
+                }
+                buckets[pos] = item;
+                // 插入排序
+                k = item.size() - 1;
+                while (k >=0 && item.get(k) > data[j]){
+                    k--;
+                }
+                item.add(k+1, data[j]);
+            }
+            // 逐位排序
+            j = 0;
+            for (k=0; k<buckets.length; k++){
+                if (Objects.isNull(buckets[k]) || buckets[k].size() == 0){
+                    continue;
+                }
+                for (int item : buckets[k]){
+                    data[j++] = item;
+                }
+            }
+        }
     }
 
     // 堆排序
@@ -413,8 +452,8 @@ public class SortTest {
                 .appendTail(ChainItem.builder().desc("count sort").consumer(SortTest::countingSort).build())
                 .appendTail(ChainItem.builder().desc("bubble sort").consumer(SortTest::bubbleSort).build())
                 .appendTail(ChainItem.builder().desc("heap sort").consumer(SortTest::heapSort).build())
-//                .appendTail(ChainItem.builder().desc("bucket sort").consumer(SortTest::bucketSort).build())
-//                .appendTail(ChainItem.builder().desc("radix sort").consumer(SortTest::radixSort).build())
+                .appendTail(ChainItem.builder().desc("bucket sort").consumer(SortTest::bucketSort).build())
+                .appendTail(ChainItem.builder().desc("radix sort").consumer(SortTest::radixSort).build())
         ;
         return chainExec;
     }
