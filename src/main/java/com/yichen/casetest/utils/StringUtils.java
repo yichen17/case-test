@@ -1,7 +1,6 @@
 package com.yichen.casetest.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -187,7 +186,9 @@ public class StringUtils {
     }
 
     public  static <T extends Number> boolean checkOrder(T[] nums, boolean ascendOrder){
-        if (Objects.isNull(nums) || nums.length < 2)return true;
+        if (Objects.isNull(nums) || nums.length < 2){
+            return true;
+        }
         // 升序
         if (ascendOrder){
             for (int i=0; i<nums.length-1; i++){
@@ -249,9 +250,186 @@ public class StringUtils {
         return builder.toString();
     }
 
-    public static void printTree(T[] array, int width){
+
+    public static final String  LEFT_BR = "/";
+    public static final String RIGHT_BR  = "\\";
+    public static final Character WHITE = ' ';
+
+    /**
+     * 全二叉树打印，样式如下
+     *                                1
+     *                              /   \
+     *                           2001  3001
+     *                         /          \
+     *                       20            40
+     *
+     *     处理逻辑，  / \  顶部对称，底部根据宽度做自适应处理
+     *
+     * @param array 全二叉树元素
+     * @param width 数据最大宽度
+     */
+    public static <T extends Number> void printTree(T[] array, int width){
+        // 左右宽度计算  右边可以多一个
+        int left = width >> 1;
+        int right = width >> 1 + width % 2;
+        right = Math.max(right - 1, 0);
+        String leftFill = constructStr(left, WHITE);
+        String rightFill = constructStr(right, WHITE);
+        String pattern = "%0" + width + "d";
+        // 计算深度
+        int depth = NumberUtils.getDepth(array.length);
+        // 结果构建  每个中间穿插 / \
+        StringBuilder[] results = new StringBuilder[depth * 2 -1];
+        for (int i=0; i<results.length; i++){
+            results[i] = new StringBuilder();
+        }
+        // 中序遍历处理 填充数据
+        fullBinaryTreeBuild(array, 0, results, leftFill, rightFill,0,  width, pattern);
+        for (StringBuilder item : results){
+            log.info("|><|   {}", item);
+        }
+    }
+
+    /**
+     * 全二叉树形构造
+     *  只有在最左侧才会没满， 结果集可以从右往左依次填充
+     *  处理逻辑
+     *      节点等长，节点间隔1个空格
+     *      左节点可以直接拼接，右节点怎么办呢
+     *      构造逻辑 分支直接连接数值，在数值范围内，数值的长度肯定是大于0的，必然能覆盖住
+     * @param array 数据源
+     * @param results 结果集
+     * @param pos 当前下标
+     * @param <T> 数据集合
+     */
+    private static <T extends Number> void fullBinaryTreeBuild(T[] array, int pos,
+          StringBuilder[] results, String leftFill, String rightFill, int depth,  int width, String pattern){
+        if (pos >= array.length){
+//            forwardAppend(results, pos * 2 -1, constructStr(width+1, WHITE));
+            return;
+        }
+        int left = 2 * pos + 1, right = 2 * pos + 2;
+        // 左边处理
+        if (left < array.length){
+            fullBinaryTreeBuild(array, left, results, leftFill, rightFill, depth+1,  width, pattern);
+        }
+
+        // 右边处理
+        if (right < array.length){
+            fullBinaryTreeBuild(array, right, results, leftFill, rightFill, depth+1, width, pattern);
+        }
+
+        if (depth != 0){
+            forwardAppend(results, depth * 2, constructStr(1, WHITE));
+        }
+
+        // 打印逻辑  link 为链接符号， data为实际节点
+        StringBuilder link =  null, data;
+        if (depth != 0){
+            link = results[depth * 2 -1];
+        }
+        data = results[depth * 2];
+        // 先填充数据节点，然后填充树枝
+        if (pos % 2 == 1){
+            forwardAppend(results, depth * 2 -1, constructStr(width, WHITE));
+            data.append(array[pos]);
+            if (Objects.nonNull(link)){
+                link.append(LEFT_BR);
+            }
+        }
+        else if (depth == 0){
+            data.append(WHITE).append(array[pos]);
+        }
+        else {
+            backwardAppend(results, depth * 2 -1, width);
+            data.append(array[pos]);
+            if (Objects.nonNull(link)){
+                link.append(RIGHT_BR);
+            }
+        }
+
 
     }
+
+    private static void backwardAppend(StringBuilder[] results, int pos, int baseLen){
+        if (pos < 0 || pos >= results.length){
+            return;
+        }
+        int i = 0, len;
+        while (pos < results.length){
+            len = i * 2 + baseLen;
+            i++;
+            results[pos++].append(constructStr(len, WHITE));
+        }
+    }
+
+    private static void forwardAppend(StringBuilder[] results, int pos, String fillData){
+        if (pos < 0 || pos >= results.length){
+            return;
+        }
+        while (pos >= 0){
+            results[pos--].append(fillData);
+        }
+    }
+
+    /**
+     * 构造指定长度字符串，内容都是字符c
+     */
+    private static String constructStr(int size, char c){
+        StringBuilder builder = new StringBuilder();
+        while (size > 0){
+            size--;
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
+
+    public static void main(String[] args) {
+        int num = 16;
+        Integer[] data = new Integer[num];
+        for (int i=1; i<= num; i++){
+            data[i-1] = i;
+        }
+        printTree(data, getBitCount(num));
+
+//        int num = 8;
+//        String pattern = "%0" + num + "d%n";
+//        System.out.printf(pattern, 20);
+    }
+
+    public static int getBitCount(int n){
+        int result = 1;
+        while (n >= 10){
+            result++;
+            n /= 10;
+        }
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
