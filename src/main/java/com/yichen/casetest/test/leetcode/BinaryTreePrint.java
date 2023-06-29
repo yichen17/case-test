@@ -14,8 +14,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BinaryTreePrint {
 
-    public static void main(String[] args) {
+    private static final String left = "┍";
+    private static final String right =  "┑";
+    private static final String link = "-";
 
+    public static void main(String[] args) {
+        System.out.println(left + " 1 " + right);
+        System.out.println("2   3");
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

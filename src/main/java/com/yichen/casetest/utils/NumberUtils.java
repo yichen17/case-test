@@ -1,5 +1,7 @@
 package com.yichen.casetest.utils;
 
+import javafx.util.Pair;
+
 /**
  * @author Qiuxinchao
  * @version 1.0
@@ -22,10 +24,28 @@ public class NumberUtils {
         return depth;
     }
 
+    /**
+     * 获取深度和最底层叶子节点个数
+     * @param num 全二叉树总数
+     * @return
+     */
+    public static Pair<Integer, Integer> getDepthAndBottomNum(int num){
+        int count = 2;
+        int depth = 1;
+        while (count - 1 < num){
+            depth++;
+            count *= 2;
+        }
+        return new Pair<>(num - count/2 + 1, depth);
+    }
+
     public static void main(String[] args) {
-        System.out.println(getDepth(11));
-        System.out.println(getDepth(31));
-        System.out.println(getDepth(1));
+        System.out.println(getDepthAndBottomNum(15));
+        System.out.println(getDepthAndBottomNum(6));
+        System.out.println(getDepthAndBottomNum(1));
+        System.out.println(getDepthAndBottomNum(2));
+        System.out.println(getDepthAndBottomNum(28));
+        System.out.println(getDepthAndBottomNum(50));
     }
 
 }

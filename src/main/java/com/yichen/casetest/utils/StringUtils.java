@@ -255,7 +255,7 @@ public class StringUtils {
     /**
      * 构造指定长度字符串，内容都是字符c
      */
-    private static String constructStr(int size, char c){
+    public static String constructStr(int size, char c){
         StringBuilder builder = new StringBuilder();
         while (size > 0){
             size--;
