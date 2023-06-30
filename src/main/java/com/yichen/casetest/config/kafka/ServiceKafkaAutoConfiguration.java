@@ -55,8 +55,8 @@ public class ServiceKafkaAutoConfiguration {
     public ConcurrentKafkaListenerContainerFactory<?, ?> serviceKafkaListenerContainerFactory(
             ConcurrentKafkaListenerContainerFactoryConfigurer serviceKafkaListenerContainerFactoryConfigurer,
             ConsumerFactory<Object, Object> serviceKafkaConsumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<Object, Object> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
+        CustomizeConcurrentKafkaListenerContainerFactory<Object, Object> factory =
+                new CustomizeConcurrentKafkaListenerContainerFactory<>();
         serviceKafkaListenerContainerFactoryConfigurer.configure(factory, serviceKafkaConsumerFactory);
         return factory;
     }

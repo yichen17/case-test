@@ -3,6 +3,7 @@ package com.yichen.casetest.controller;
 import com.alibaba.fastjson.JSON;
 import com.googlecode.aviator.AviatorEvaluator;
 import com.yichen.casetest.annotation.Log;
+import com.yichen.casetest.config.kafka.CustomizeConcurrentKafkaListenerContainerFactory;
 import com.yichen.casetest.feign.TestFeign;
 import com.yichen.casetest.model.DataTest;
 import com.yichen.casetest.model.JacksonTest;
@@ -25,6 +26,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,6 +59,27 @@ public class TestController {
 
     @Autowired
     private DefaultSignUpValidationService defaultSignUpValidationService;
+
+    @Qualifier("serviceKafkaListenerContainerFactory")
+    @Autowired
+    private ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory;
+
+    @PostMapping("/kafkaDeal")
+    @ResponseBody
+    public String kafkaDeal(@RequestParam boolean start){
+        Collection<ConcurrentMessageListenerContainer> values = (((CustomizeConcurrentKafkaListenerContainerFactory)
+                concurrentKafkaListenerContainerFactory).getConsumersMap().values());
+
+        for (ConcurrentMessageListenerContainer container : values) {
+            if (start){
+                container.start();
+            }
+            else {
+                container.stop();
+            }
+        }
+        return "kafka deal ok";
+    }
 
     @GetMapping("/transactionTest")
     @ResponseBody
