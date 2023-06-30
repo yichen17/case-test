@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/dynamics")
 public class DynamicsController {
 
-    @Autowired
+    @Autowired(required = false)
     private DynamicsExecService dynamicsExecService;
 
     @PostMapping("/changeCorn")
