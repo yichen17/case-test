@@ -403,6 +403,14 @@
         </dependency>
         <!-- xxl-job end -->
 
+        <!-- jdk jar包   参考：https://codeantenna.com/a/cJ3ahy4v2Z    -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>javafx</artifactId>
+            <version>2.0</version>
+            <scope>system</scope>
+            <systemPath>${java.home}\lib\ext\jfxrt.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
@@ -422,6 +430,31 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!-- 本地jar包用于打包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <!--配置本地jar包在项目的存放路径-->
+                    <compilerArguments>
+                        <extdirs>${project.basedir}/src/main/resources/jar</extdirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            <!-- jdk 插件引入 参考：https://codeantenna.com/a/cJ3ahy4v2Z    -->
+<!--            <plugin>-->
+<!--                <groupId>com.zenjava</groupId>-->
+<!--                <artifactId>javafx-maven-plugin</artifactId>-->
+<!--                <version>8.8.3</version>-->
+<!--                <configuration>-->
+<!--                    <mainClass>com.yichen.casetest.CaseTestApplication</mainClass>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
+
         </plugins>
     </build>
 

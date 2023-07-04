@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Qiuxinchao
@@ -16,7 +18,13 @@ public class CodeTest {
 
     public static void main(String[] args) {
         test();
+        mapTest();
+    }
 
+    private static void mapTest(){
+        Map<String, String> map = new HashMap<>();
+        map.put("11", null);
+        System.out.println(map.getOrDefault("11", "2322").toString());
     }
 
     private static void test(){
