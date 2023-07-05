@@ -43,7 +43,7 @@ public class CustomizeRejectedExecutionHandler {
     public static class CustomizeCallerRunsPolicy extends ThreadPoolExecutor.CallerRunsPolicy {
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
-            log.warn("执行丢弃最老拒绝策略");
+            log.warn("执行主线程调用策略");
             super.rejectedExecution(r, e);
         }
     }

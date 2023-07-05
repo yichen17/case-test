@@ -11,10 +11,15 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Qiuxinchao
@@ -27,13 +32,28 @@ import java.util.List;
 @Api(tags = "关闭服务处理")
 public class ShutdownController {
 
+    // 异步线程池处理
+
     @Autowired
-    private DiscoveryClient client;
+    private Map<String, ThreadPoolTaskExecutor> threadPoolTaskExecutorMap;
+
+    @PostMapping("/asyncThreadPoolDeal")
+    public String asyncThreadPoolDeal(){
+        for (Map.Entry<String, ThreadPoolTaskExecutor> item : threadPoolTaskExecutorMap.entrySet()) {
+            log.info("异步线程池{}开始销毁", item.getKey());
+            item.getValue().shutdown();
+        }
+        return "async thread pool deal";
+    }
+
+
+
+
+
 
     // 内部异步线程池，守护线程做处理
 
     @PostMapping("threadPoolDeal")
-    @ResponseBody
     public String threadPoolDeal(){
 
         return "thread pool deal";
@@ -43,7 +63,6 @@ public class ShutdownController {
     // 参考文章  https://www.jianshu.com/p/27e2105ed12e
 
     @PostMapping("/xxlJobDeal")
-    @ResponseBody
     public String xxlJobDeal(){
 
         return "xxl-job stop ok";
@@ -53,8 +72,10 @@ public class ShutdownController {
     // 参考文档
     // https://blog.csdn.net/jiuyuemo1/article/details/128410207
 
+    @Autowired
+    private DiscoveryClient client;
+
     @PostMapping("/eurekaInfo")
-    @ResponseBody
     public String eurekaInfo(@RequestParam String serviceName){
         List<ServiceInstance> instances = client.getInstances(serviceName);
         return FastJsonUtils.toJson(instances);
@@ -62,7 +83,6 @@ public class ShutdownController {
 
 
     @PostMapping("/eurekaDeal")
-    @ResponseBody
     public String eurekaDeal(){
         DiscoveryManager.getInstance().shutdownComponent();
         return "ok";
@@ -75,7 +95,6 @@ public class ShutdownController {
     private ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory;
 
     @PostMapping("/kafkaDeal")
-    @ResponseBody
     public String kafkaDeal(@RequestParam boolean start){
         Collection<ConcurrentMessageListenerContainer> values = (((CustomizeConcurrentKafkaListenerContainerFactory)
                 concurrentKafkaListenerContainerFactory).getConsumersMap().values());

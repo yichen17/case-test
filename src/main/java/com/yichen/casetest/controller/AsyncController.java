@@ -4,6 +4,7 @@ import com.yichen.casetest.service.AsyncService;
 import com.yichen.casetest.test.async.AsyncExecService;
 import com.yichen.casetest.test.async.AsyncExecServiceImpl2;
 import com.yichen.casetest.test.async.AsyncExecServiceImpl3;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/async")
 @Slf4j
+@Api(tags = "异步入口")
 public class AsyncController {
 
 

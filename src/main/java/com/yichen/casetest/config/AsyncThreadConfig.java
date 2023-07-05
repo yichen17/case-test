@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.Resource;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author Qiuxinchao
@@ -36,7 +35,7 @@ public class AsyncThreadConfig {
         executor.setKeepAliveSeconds(properties.getKeepAliveSeconds1());
         executor.setQueueCapacity(properties.getQueueCapacity1());
         executor.setThreadNamePrefix(properties.getThreadNamePrefix1());
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setRejectedExecutionHandler(new CustomizeRejectedExecutionHandler.CustomizeCallerRunsPolicy());
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(properties.getAwaitTerminationSeconds1());
         executor.initialize();
@@ -55,7 +54,7 @@ public class AsyncThreadConfig {
         executor.setKeepAliveSeconds(properties.getKeepAliveSeconds2());
         executor.setQueueCapacity(properties.getQueueCapacity2());
         executor.setThreadNamePrefix(properties.getThreadNamePrefix2());
-        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setRejectedExecutionHandler(new CustomizeRejectedExecutionHandler.CustomizeCallerRunsPolicy());
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(properties.getAwaitTerminationSeconds2());
 
