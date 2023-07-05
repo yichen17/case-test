@@ -1,6 +1,7 @@
 package com.yichen.casetest.config.peaceShutdown;
 
 import com.netflix.discovery.DiscoveryManager;
+import com.yichen.casetest.CaseTestApplication;
 import com.yichen.casetest.config.kafka.CustomizeConcurrentKafkaListenerContainerFactory;
 import com.yichen.casetest.utils.FastJsonUtils;
 import io.swagger.annotations.Api;
@@ -32,6 +33,41 @@ import java.util.Map;
 @Api(tags = "关闭服务处理")
 public class ShutdownController {
 
+
+    // 应用销毁
+
+    @PostMapping("/all")
+    public String allDestroy(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // 异步线程池销毁
+                    for (Map.Entry<String, ThreadPoolTaskExecutor> item : threadPoolTaskExecutorMap.entrySet()) {
+                        log.info("异步线程池{}开始销毁", item.getKey());
+                        item.getValue().shutdown();
+                    }
+                    // kafka暂停消费
+                    Collection<ConcurrentMessageListenerContainer> values = (((CustomizeConcurrentKafkaListenerContainerFactory)
+                            concurrentKafkaListenerContainerFactory).getConsumersMap().values());
+                    for (ConcurrentMessageListenerContainer container : values) {
+                        container.stop();
+                    }
+                    // 睡眠3秒，等待处理
+                    Thread.sleep(3000);
+                    // eureka下线
+                    DiscoveryManager.getInstance().shutdownComponent();
+                    // 应用关闭
+                    CaseTestApplication.close();
+                }
+                catch (Exception e){
+                    log.error("shutdown all {}", e.getMessage(), e);
+                }
+            }
+        }).start();
+        return "ok";
+    }
+
     // 异步线程池处理
 
     @Autowired
@@ -46,18 +82,6 @@ public class ShutdownController {
         return "async thread pool deal";
     }
 
-
-
-
-
-
-    // 内部异步线程池，守护线程做处理
-
-    @PostMapping("threadPoolDeal")
-    public String threadPoolDeal(){
-
-        return "thread pool deal";
-    }
 
     // xxl-job 关闭
     // 参考文章  https://www.jianshu.com/p/27e2105ed12e

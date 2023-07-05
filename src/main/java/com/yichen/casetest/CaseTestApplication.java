@@ -56,6 +56,10 @@ public class CaseTestApplication {
         CaseTestApplication.context = application.run(args);
     }
 
+    public static void close(){
+        context.close();
+    }
+
     /**
      * 重启 spring context
      */
