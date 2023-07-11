@@ -19,6 +19,9 @@ import java.util.Map;
 @FeignClient(name = "test", url = "http://localhost:8088")
 public interface TestFeign {
 
+    @PostMapping(value = "/test/requestParamTest")
+    String timeoutTest(@RequestParam Map<String, Object> params, Request.Options options);
+
     @PostMapping(value = "/test/requestParamTest", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     String testRequestParam(RequestTestDTO requestTestDTO);
 

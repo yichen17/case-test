@@ -346,7 +346,8 @@ public class TestController {
      */
     @PostMapping("/requestParamTest")
     @ResponseBody
-    public String requestParamTest(HttpServletRequest request, @RequestParam("realName") String realName){
+    public String requestParamTest(HttpServletRequest request, @RequestParam(value = "realName", required = false) String realName) throws Exception{
+        Thread.sleep(3500);
 //        log.info("请求入参 {} {}", FastJsonUtils.toJson(dto), realName);
         log.info("请求入参 {}", realName);
         log.info("header loginInfo logininfo login-info {} {} {}",
@@ -358,6 +359,19 @@ public class TestController {
 
     @Autowired
     private TestFeign testFeign;
+
+    @PostMapping("/timeoutTest")
+    @ResponseBody
+    public String timeoutTest(@RequestParam Integer tt){
+        Map<String, Object> map = new HashMap<>(4);
+//        map.put("socketTimeout", tt);
+        map.put("keep-alive", "timeout=" + tt);
+
+        Request.Options options = new Request.Options(2, TimeUnit.SECONDS, tt, TimeUnit.SECONDS, false);
+
+        log.info("timeoutTest {}", testFeign.timeoutTest(map, options));
+        return "ok";
+    }
 
     @PostMapping("/outRequest")
     @ResponseBody
