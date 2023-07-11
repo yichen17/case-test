@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -28,7 +29,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@ServletComponentScan("com.yichen.casetest.filter.sort")
 //@EnableHystrix
 @EnableWebMvc
-//@EnableAspectJAutoProxy(exposeProxy = true)
+@EnableAspectJAutoProxy(exposeProxy = true)
 @EnableHasor()
 @EnableHasorWeb()
 @EnableBatchProcessing
