@@ -1,5 +1,6 @@
 package com.yichen.casetest.utils;
 
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -273,6 +274,34 @@ public class StringUtils {
         return result;
     }
 
+
+    public static String batchReplaceBracket(String s, String[] oldBracket, String[] newBracket){
+        if (Objects.isNull(oldBracket) || Objects.isNull(newBracket) || oldBracket.length != newBracket.length){
+            log.warn("batchReplaceBracket 替换入参不符合条件");
+            return s;
+        }
+        for (int i=0; i<oldBracket.length; i++){
+            s = s.replace(oldBracket[i], newBracket[i]);
+        }
+        return s;
+    }
+
+    public static void arrayTwoDimensionPrint(int[][] array){
+        for (int[] item : array){
+            StringBuilder s = new StringBuilder();
+            s.append("[");
+            for (int tt : item){
+                s.append(tt).append(",");
+            }
+            s.insert(s.length()-1, "]");
+            log.info("{}", s);
+        }
+    }
+
+    public static void main(String[] args) {
+        String s = "[[[[()]";
+        System.out.println(batchReplaceBracket(s, new String[]{"[", "("}, new String[]{"{", "{"}));
+    }
 
 
 
