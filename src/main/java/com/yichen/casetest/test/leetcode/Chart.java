@@ -45,9 +45,239 @@ public class Chart {
         }
         builder.replace(builder.length()-1, builder.length(), "]");
         System.out.println(builder);
-
+        StringUtils.divisionLine();
+        System.out.println(chart.longestIncreasingPath(new int[][]{{9,9,6},{6,6,8},{2,1,1}}));
+        StringUtils.divisionLine();
+        System.out.println(chart.alienOrder(new String[]{"wrt","wrf","er","ett","rftt"}));
+//        System.out.println(chart.sequenceReconstruction(new int[]{1,2,3}, new int[][]{{1,2},{1,3},{2,3}}));
+        System.out.println(chart.sequenceReconstruction(new int[]{1,2,3,4}, new int[][]{{1,2,3},{1,2,4},{3,4}}));
+        StringUtils.divisionLine();
+        System.out.println(chart.findCircleNum(new int[][]{{1,1,1},{1,1,1},{1,1,1}}));
 
     }
+
+    // 省份数量
+
+    public int findCircleNum(int[][] isConnected) {
+        int len = isConnected.length;
+        int[] dp = new int[len];
+        Arrays.fill(dp, -1);
+        for(int i=0; i<len; i++){
+            for(int j=0; j<i; j++){
+                if (isConnected[i][j] == 0)continue;
+                int p = i, q = j;
+                while(dp[p] != -1){
+                    p = dp[p];
+                }
+                while(dp[q] != -1){
+                    q = dp[q];
+                }
+                if(p == q)continue;
+                dp[q] = p;
+            }
+        }
+        int result = 0;
+        for(int i=0; i<len; i++){
+            if (dp[i] == -1)result++;
+        }
+        return result;
+    }
+
+    // 重建序列
+
+    public boolean sequenceReconstruction(int[] nums, int[][] sequences) {
+        Map<Integer, Set<Integer>> dp = new HashMap<>();
+        Map<Integer, Integer> inDegrees = new HashMap<>();
+        List<Integer> result = new ArrayList<>();
+        for(int[] item : sequences){
+            int i;
+            for(i=0; i<item.length-1; i++){
+                fill(dp, inDegrees, item[i], item[i+1]);
+            }
+            inDegrees.putIfAbsent(item[i], 0);
+        }
+        if (nums.length != inDegrees.size())return false;
+        Queue<Integer> queue = new LinkedList<>();
+        for(Map.Entry<Integer, Integer> entry : inDegrees.entrySet()){
+            if (entry.getValue() == 0){
+                queue.offer(entry.getKey());
+            }
+        }
+        while(!queue.isEmpty()){
+            if (queue.size() != 1)return false;
+            int item = queue.poll();
+            result.add(item);
+            if (dp.get(item) == null){
+                continue;
+            }
+            for(int tt : dp.get(item)){
+                int v = inDegrees.get(tt);
+                v--;
+                if (v==0){
+                    queue.offer(tt);
+                }
+                else {
+                    inDegrees.put(tt, v);
+                }
+            }
+        }
+        if (result.size() != nums.length)return false;
+        for(int i=0; i<nums.length; i++){
+            if (nums[i] != result.get(i))return false;
+        }
+        return true;
+    }
+
+    public void fill(Map<Integer, Set<Integer>> dp, Map<Integer, Integer> inDegrees, int a, int b){
+        Set<Integer> out = dp.getOrDefault(a, new HashSet<>());
+        inDegrees.putIfAbsent(a, 0);
+        if (out.add(b)){
+            int v =inDegrees.getOrDefault(b, 0);
+            v++;
+            inDegrees.put(b, v);
+        }
+        dp.put(a, out);
+    }
+
+    // 外星文字典
+
+    public String alienOrder(String[] words) {
+        if(words.length == 1){
+            return words[0];
+        }
+        Set<Integer>[] dp = new Set[26];
+        int[] indegree = new int[26];
+        for (int i=0; i<26; i++){
+            indegree[i] = -1;
+        }
+        int total = build(dp, indegree, words);
+        if (total == -1)return "";
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i=0; i<26; i++){
+            if (indegree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        StringBuilder result = new StringBuilder();
+        while(!queue.isEmpty()){
+            int c = queue.poll();
+            result.append((char)(c + 'a'));
+            if (dp[c] == null)continue;
+            for(int item : dp[c]){
+                indegree[item]--;
+                if (indegree[item] == 0){
+                    queue.offer(item);
+                }
+            }
+        }
+        if (result.length() == total)return result.toString();
+        return "";
+    }
+
+    public int build(Set<Integer>[] dp, int[] indegree, String[] words){
+        boolean[] visit = new boolean[26];
+        for(String word : words){
+            fill(word, visit, indegree);
+        }
+        // 单词之间比较
+        for(int i=0; i<words.length; i++){
+            for(int j=i+1; j<words.length; j++){
+                int pos = check(words[i], words[j]);
+                if (pos == -1)return -1;
+                if (pos != -2){
+                    int a = words[i].charAt(pos) - 'a';
+                    int b = words[j].charAt(pos) - 'a';
+                    if (dp[a] == null){
+                        dp[a] = new HashSet<>();
+                    }
+                    if (dp[a].add(b)){
+                        indegree[b]++;
+                    }
+                }
+            }
+        }
+        int count = 0;
+        for (boolean b : visit) {
+            if (b) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void fill(String a, boolean[] visit, int[] indegree){
+        for(int i=0; i<a.length(); i++){
+            int pos = a.charAt(i) - 'a';
+            visit[pos] = true;
+            if (indegree[pos] == -1){
+                indegree[pos] = 0;
+            }
+        }
+    }
+
+    public int check(String a, String b){
+        int len = Math.min(a.length(), b.length());
+        for(int i=0; i<len; i++){
+            if (a.charAt(i) != b.charAt(i)){
+                return i;
+            }
+        }
+        return a.length() > b.length() ? -1 : -2;
+    }
+
+    // 最长递增路径  visit 可以移除，无用功。。
+
+    int[][] direct = new int[][]{{-1,0}, {1,0}, {0, -1}, {0, 1}};
+
+    public int longestIncreasingPath(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        Set<Integer> visit = new HashSet<>();
+        int[][] bp = new int[row][col];
+        int max = -1;
+        for (int i=0; i<row; i++){
+            for(int j=0; j<col; j++){
+                bp[i][j]= -1;
+            }
+        }
+        for (int i=0; i<row; i++){
+            for (int j=0; j<col; j++){
+                visit.add(calTT(i, j));
+                max = Math.max(max, dfs(matrix, i, j, visit, 1, bp));
+                visit.remove(calTT(i, j));
+            }
+        }
+        return max;
+    }
+
+    public int dfs(int[][] matrix, int x, int y, Set<Integer> visit, int count, int[][]bp){
+        int p,q;
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int max = count, result;
+        for(int[] directItem : direct){
+            p = x + directItem[0];
+            q = y + directItem[1];
+            if (p>=0 && p<row && q >=0 && q < col && matrix[p][q] > matrix[x][y] && visit.add(calTT(p, q))){
+                if (bp[p][q] != -1){
+                    result = count + bp[p][q];
+                }
+                else {
+                    result = dfs(matrix, p, q, visit, count+1, bp);
+                    bp[p][q] = result - count;
+                }
+                max = Math.max(result, max);
+                visit.remove(calTT(p, q));
+            }
+        }
+        return max;
+    }
+
+    public int calTT(int x, int y){
+        return (x<<8) | y;
+    }
+
+
 
     // 计算除法
 
