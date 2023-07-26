@@ -53,8 +53,84 @@ public class Chart {
         System.out.println(chart.sequenceReconstruction(new int[]{1,2,3,4}, new int[][]{{1,2,3},{1,2,4},{3,4}}));
         StringUtils.divisionLine();
         System.out.println(chart.findCircleNum(new int[][]{{1,1,1},{1,1,1},{1,1,1}}));
-
+        StringUtils.divisionLine();
+        System.out.println(chart.longestConsecutive(new int[]{100,4,200,1,3,2}));
+        StringUtils.divisionLine();
+        System.out.println(chart.numSimilarGroups(new String[]{"tars","rats","arts","star"}));
     }
+
+    // 相似的字符串
+
+    public int numSimilarGroups(String[] strs) {
+        List<Set<String>> list = new LinkedList<>();
+        for(String str : strs){
+            if (list.size() == 0){
+                Set<String> set = new HashSet<>();
+                set.add(str);
+                list.add(set);
+                continue;
+            }
+            Set<String> cc = new HashSet<>();
+            Iterator<Set<String>> iter = list.iterator();
+            while(iter.hasNext()){
+                Set<String> item = iter.next();
+                boolean match = false;
+                for(String s : item){
+                    if (like(s, str)){
+                        match = true;
+                        break;
+                    }
+                }
+                if (match){
+                    cc.addAll(item);
+                    iter.remove();
+                }
+            }
+            cc.add(str);
+            list.add(cc);
+        }
+        return list.size();
+    }
+
+    public boolean like(String a, String b){
+        int count = 0;
+        for(int i=0; i<a.length(); i++){
+            if (a.charAt(i) != b.charAt(i)){
+                count ++;
+            }
+        }
+        return count == 2 || count == 0;
+    }
+
+    // 最长连续序列
+
+    public int longestConsecutive(int[] nums) {
+        int max = 0;
+        Arrays.sort(nums);
+        int count = 1, i=1, pre=nums[0];
+        while (i < nums.length){
+            if (pre == nums[i]){
+                i++;
+                continue;
+            }
+            if (pre+1 == nums[i]){
+                pre = nums[i];
+                i++;
+                count++;
+            }
+            else {
+                max = Math.max(max, count);
+                count = 1;
+                pre = nums[i];
+                i++;
+            }
+        }
+        if (count != 1){
+            max = Math.max(max, count);
+        }
+        return max;
+    }
+
 
     // 省份数量
 

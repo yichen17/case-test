@@ -246,8 +246,7 @@ public class StringUtils {
         for (Object o  : array){
             builder.append(String.valueOf(o)).append(delimiter);
         }
-        builder.deleteCharAt(builder.length()-1);
-        builder.append(suffix);
+        builder.replace(builder.length()-delimiter.length(), builder.length(), suffix);
         return builder.toString();
     }
 
@@ -298,9 +297,40 @@ public class StringUtils {
         }
     }
 
+    /**
+     * 随机字母异位词
+     */
+    public static String[] randomAnagram(String s, int size){
+        String[] result = new String[size];
+        char[] chars = s.toCharArray();
+        int times;
+        for(int i=0; i<size; i++){
+            times = random.nextInt(500);
+            while (times>0){
+                times--;
+                randomSwapCharArray(chars);
+            }
+            result[i] = new String(chars);
+        }
+        return result;
+    }
+
+    private static void randomSwapCharArray(char[] chars){
+        int a,b,len=chars.length;
+        char temp;
+        a = random.nextInt(len);
+        b = random.nextInt(len);
+        temp = chars[a];
+        chars[a]= chars[b];
+        chars[b] = temp;
+    }
+
     public static void main(String[] args) {
         String s = "[[[[()]";
         System.out.println(batchReplaceBracket(s, new String[]{"[", "("}, new String[]{"{", "{"}));
+        divisionLine();
+//        System.out.println(printArray(randomAnagram("abcdefghijklmnopqrstuvwxyz", 250), "\",\"", "\"", "\""));
+        System.out.println(printArray(randomAnagram("ksytj", 40), "\",\"", "\"", "\""));
     }
 
 
