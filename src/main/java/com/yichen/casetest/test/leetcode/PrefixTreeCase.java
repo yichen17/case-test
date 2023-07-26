@@ -15,7 +15,6 @@ public class PrefixTreeCase {
 
     public static void main(String[] args) {
 
-
     }
     static class PrefixTreeNode{
         public boolean end;
