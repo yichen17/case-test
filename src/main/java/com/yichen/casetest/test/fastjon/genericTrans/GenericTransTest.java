@@ -2,8 +2,11 @@ package com.yichen.casetest.test.fastjon.genericTrans;
 
 import com.alibaba.fastjson.TypeReference;
 import com.yichen.casetest.utils.FastJsonUtils;
+import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,6 +19,22 @@ import java.util.List;
  *  资料
  *      http://en.wikipedia.org/wiki/Generics_in_Java#Type_erasure
  *      http://gafter.blogspot.com/2006/12/super-type-tokens.html
+ *      https://docs.oracle.com/javase/tutorial/java/generics/bounded.html
+ *
+ *  概念准则：
+ *  1、上边界和下边界划分  https://docs.oracle.com/javase/tutorial/java/generics/wildcardGuidelines.html
+ *      1） in 读取数据，也就是拷贝数据源用 extends
+ *      2） out 写数据，也就是存储数据 super
+ *      3）同时在 in out 中是，不推荐使用通配符
+ *
+ *   特殊场景：
+ *   1、List<?> 只能插入 null 值
+ *   2、List<Integer>  不是  List<Number> 的子类
+ *   3、
+ *
+ *   思考问题：
+ *   1、https://docs.oracle.com/javase/tutorial/java/generics/restrictions.html
+ *   2、
  *
  */
 @Slf4j
@@ -33,6 +52,22 @@ public class GenericTransTest {
 
 //        Man.GoodsInfo goodsInfo = FastJsonUtils.fromJson(sss, new TypeReference<Man.GoodsInfo>() {
 //        });
+
+        // 泛型单纯测试
+        print(1);
+        print(1.0);
+        printList(Arrays.asList(1, "2", "5", "2", 1.0));
+        StringUtils.divisionLine();
+        printListGeneric(Arrays.asList(1, "2", "5", "2", 1.0));
+        List<?> list = new ArrayList<>();
+        list.add(null);
+
+        StringUtils.divisionLine();
+
+//        List<EvenNumber> le = new ArrayList<>();
+//        List<? extends NaturalNumber> ln = le;
+//        ln.add(new NaturalNumber(35));  // compile-time error
+
 
 
         log.info("999");
@@ -60,6 +95,49 @@ public class GenericTransTest {
         });
 
         log.info("end end end");
+    }
+
+    private static <T extends Number> void print(T number){
+        log.info("print => {}", number);
+    }
+
+    /**
+     * 这种只能指定 List<Object> , List<Integer>之类的编译不通过
+     * @param list
+     */
+    private static void printList(List<Object> list){
+        for (Object object : list){
+            System.out.println(object);
+        }
+    }
+
+    private static void printListGeneric(List<?> list){
+        for (Object object : list){
+            System.out.println(object);
+        }
+    }
+
+    // 牛逼案例   https://docs.oracle.com/javase/tutorial/java/generics/capture.html
+
+    private static void foo(List<?> i){
+//        i.set(0, i.get(0));
+//        fooHelper(i);
+    }
+
+    private static <T> void fooHelper(List<T> l){
+        l.set(0, l.get(0));
+    }
+
+    static class NaturalNumber {
+
+        private int i;
+
+        public NaturalNumber(int i) { this.i = i; }
+    }
+
+    static class EvenNumber extends NaturalNumber {
+
+        public EvenNumber(int i) { super(i); }
     }
 
 
