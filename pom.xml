@@ -383,6 +383,14 @@
         </dependency>
         <!--hasor dataway end-->
 
+        <!-- 手动引入ognl -->
+<!--        <dependency>-->
+<!--            <groupId>ognl</groupId>-->
+<!--            <artifactId>ognl</artifactId>-->
+<!--            <version>3.4.1</version>-->
+<!--        </dependency>-->
+        <!-- ognl end -->
+
         <!-- spring batch start-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

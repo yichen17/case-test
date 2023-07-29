@@ -7,6 +7,8 @@ package com.yichen.casetest.constants;
  * @describe
  */
 public class CommonConstants {
-    public static String DATE_FORMAT="yyyy-MM-dd hh:mm:ss";
+    public static final String DATE_FORMAT="yyyy-MM-dd hh:mm:ss";
+
+    public static final String COMMA = ",";
 
 }

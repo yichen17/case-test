@@ -59,6 +59,16 @@ public class StringTest {
         String t = "1234";
         log.info("{}", t.substring(0, t.length()));
 
+        String rr = "::boo:and:foo";
+        String[] item = rr.split(":", 2);
+        item = rr.split(":", 5);
+        item = rr.split(":", -2);
+        item = rr.split(":", 0);
+        item = rr.split("o", 5);
+        item = rr.split("o", -2);
+        item = rr.split("o", 0);
+        item = " ,".split(",");
+
     }
 
     private static void byteToStream(){

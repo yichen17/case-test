@@ -1,6 +1,9 @@
 package com.yichen.casetest.utils;
 
-import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -325,17 +328,52 @@ public class StringUtils {
         chars[b] = temp;
     }
 
-    public static void main(String[] args) {
-        String s = "[[[[()]";
-        System.out.println(batchReplaceBracket(s, new String[]{"[", "("}, new String[]{"{", "{"}));
-        divisionLine();
-//        System.out.println(printArray(randomAnagram("abcdefghijklmnopqrstuvwxyz", 250), "\",\"", "\"", "\""));
-        System.out.println(printArray(randomAnagram("ksytj", 40), "\",\"", "\"", "\""));
+    /**
+     * 标准化json字符串  有时候存在内部是个json的String，前后多了双引号，实例：
+     *      {"address":"{\"city\":\"上海市\",\"name\":\"上海\",\"province\":\"浙江省\"}","age":18}
+     * @param str
+     * @return
+     */
+    public static String normalizeJsonStr(String str){
+        str = str.replace("\"{", "{")
+                .replace("}\"", "}")
+                .replace("\"[", "[")
+                .replace("]\"", "]")
+                .replace("\\\"", "\"");
+        return str;
     }
 
 
+    public static void main(String[] args) {
+        Address address = Address.builder().name("上海").province("浙江省").city("上海市").build();
+        TestJson testJson = TestJson.builder().age(18).address(FastJsonUtils.toJson(address)).build();
+        System.out.println(FastJsonUtils.toJson(testJson));
 
+        String s = FastJsonUtils.toJson(testJson);
+        System.out.println(normalizeJsonStr(s));
 
+    }
+
+    // 测试序列化
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class TestJson{
+        private Integer age;
+        private String address;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class Address{
+        private String name;
+        private String province;
+        private String city;
+    }
 
 
 
