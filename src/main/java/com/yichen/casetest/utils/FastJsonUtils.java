@@ -2,9 +2,7 @@ package com.yichen.casetest.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.serializer.JSONLibDataFormatSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
@@ -25,8 +23,8 @@ public class FastJsonUtils {
     static {
         config = new SerializeConfig();
 //        config.propertyNamingStrategy = PropertyNamingStrategy.SnakeCase;
-        config.put(java.util.Date.class, new JSONLibDataFormatSerializer()); // 使用和json-lib兼容的日期输出格式
-        config.put(java.sql.Date.class, new JSONLibDataFormatSerializer()); // 使用和json-lib兼容的日期输出格式
+//        config.put(java.util.Date.class, new JSONLibDataFormatSerializer()); // 使用和json-lib兼容的日期输出格式
+//        config.put(java.sql.Date.class, new JSONLibDataFormatSerializer()); // 使用和json-lib兼容的日期输出格式
     }
 
     private static final SerializerFeature[] features = {SerializerFeature.WriteMapNullValue, // 输出空置字段
