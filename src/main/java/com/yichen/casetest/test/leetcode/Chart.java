@@ -57,6 +57,12 @@ public class Chart {
         System.out.println(chart.longestConsecutive(new int[]{100,4,200,1,3,2}));
         StringUtils.divisionLine();
         System.out.println(chart.numSimilarGroups(new String[]{"tars","rats","arts","star"}));
+        StringUtils.divisionLine();
+
+//        System.out.println(chart.longestConsecutive2(new int[]{1,400,2,300,3,4}));
+//        System.out.println(chart.longestConsecutive2(new int[]{4,1,3,2,5}));
+        System.out.println(chart.longestConsecutive2(new int[]{0,3,7,2,5,8,4,6,0,1}));
+//        System.out.println(StringUtils.printArray(StringUtils.randomIntArray(10000, 1, 10000), ",", "", ""));
     }
 
     // 相似的字符串
@@ -100,6 +106,77 @@ public class Chart {
             }
         }
         return count == 2 || count == 0;
+    }
+
+    // 最长连续序列 并查集版本
+
+    public static final int nolink = (1 << 30) + 1;
+    public static final int baseVal = (1 << 30) + 10;
+
+    public int longestConsecutive2(int[] nums) {
+        Map<Integer, Integer> maps = new HashMap<>();
+        int max = 1;
+        for(int num : nums){
+            if (!maps.containsKey(num)){
+                int val = fillItem(maps, num);
+                max = Math.max(max, val);
+            }
+        }
+        return max;
+    }
+
+    public int fillItem(Map<Integer, Integer> maps, int num){
+        int p=0,q=0;
+        Integer lower = search(maps, num-1);
+        if (lower == null){
+            p = 0;
+        }
+        else if (maps.get(lower) == nolink){
+            p = 1;
+            maps.put(lower, num);
+        }
+        else{
+            p = maps.get(lower) - baseVal;
+            maps.put(lower, num);
+        }
+
+
+        Integer upper = search(maps, num+1);
+        if (upper == null){
+            q = 0;
+        }
+        else if (maps.get(upper) == nolink){
+            q = 1;
+            maps.put(num, upper);
+        }
+        else{
+            q = maps.get(upper) - baseVal;
+            maps.put(num, upper);
+        }
+
+        if (q > 0){
+            maps.put(upper, p+q+1+baseVal);
+            return p+1+q;
+        }
+        else if(p > 0){
+            maps.put(num, p+1+baseVal);
+            return p+1;
+        }
+        else {
+            maps.put(num, nolink);
+            return 1;
+        }
+
+    }
+
+
+    public Integer search(Map<Integer, Integer> maps, int num){
+        Integer v = maps.get(num);
+        if (v == null)return null;
+        if (v >= nolink)return num;
+        int result = search(maps, v);
+        maps.put(num, result);
+        return maps.get(num);
     }
 
     // 最长连续序列
