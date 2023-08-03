@@ -1,7 +1,9 @@
 package com.yichen.casetest.controller;
 
 import com.yichen.casetest.service.CacheService;
+import com.yichen.casetest.utils.CacheUtils;
 import com.yichen.casetest.utils.TimeUtils;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +90,22 @@ public class RedisController {
     public void varyParamCache(@RequestParam("name") String name,
                                @ApiParam(value = "变长入参，|切分") @RequestParam("value") String value){
         cacheService.varyParamSave(name, value.split("\\|"));
+    }
+
+    public static final String INCR_KEY = "caseTest_incr";
+
+    /**
+     * 当指定过期时间后， incr不会修改过期时间
+     * @return
+     */
+    @GetMapping("/redis/incr")
+    @ApiOperation(value = "redis自增测试")
+    public String redisIncr(){
+        long result = CacheUtils.incr(INCR_KEY);
+        if (result == 1){
+            CacheUtils.expire(INCR_KEY, CacheUtils.CACHE_1H);
+        }
+        return String.valueOf(result);
     }
 
 

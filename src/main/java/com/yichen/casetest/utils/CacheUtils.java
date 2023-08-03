@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
+@Component
 public class CacheUtils {
 
     private static RedisTemplate<String, String> redisTemplate;
@@ -18,6 +20,8 @@ public class CacheUtils {
      * 一分钟 cache
      */
     public static final Integer CACHE_1M = 60;
+    public static final Integer CACHE_1H = 60*60;
+    public static final Integer CACHE_1D = 3600*24;
 
     @Autowired
     public void setRedisTemplate(RedisTemplate<String, String> redisTemplate){
