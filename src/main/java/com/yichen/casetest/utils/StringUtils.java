@@ -237,7 +237,17 @@ public class StringUtils {
 
 
 
+    public static <T> void rowPrintArray(T[] array){
+        for(T item : array){
+            log.info("{}", item);
+        }
+    }
 
+    public static <T> void rowPrintList(List<T> items){
+        for(T item : items){
+            log.info("{}", item);
+        }
+    }
 
     public static <T> String printArray(T[] array){
         return printArray(array, ",", "", "");
