@@ -3,9 +3,7 @@ package com.yichen.casetest.test.leetcode;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Qiuxinchao
@@ -27,7 +25,65 @@ public class DailyQuestion {
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
         StringUtils.divisionLine();
+        removeCommentsTest(dq);
+        StringUtils.divisionLine();
     }
+
+//    722. 删除注释
+
+    public static void removeCommentsTest(DailyQuestion dq){
+        StringUtils.rowPrintList(dq.removeComments(new String[]{"/*Test program */", "int main()", "{ ", "  // variable declaration ", "int a, b, c;", "/* This is a test", "   multiline  ", "   comment for ", "   testing */", "a = b + c;", "}"}));
+        StringUtils.rowPrintList(dq.removeComments(new String[]{"a/*comment", "line", "more_comment*/b"}));
+        StringUtils.rowPrintList(dq.removeComments(new String[]{""}));
+        StringUtils.rowPrintList(dq.removeComments(new String[]{"/**/"}));
+        StringUtils.rowPrintList(dq.removeComments(new String[]{"struct Node{", "    /*/ declare members;/**/", "    int size;", "    /**/int val;", "};"}));
+        StringUtils.rowPrintList(dq.removeComments(new String[]{"void func(int k) {", "// this function does nothing /*", "   k = k*2/4;", "   k = k/2;*/", "}"}));
+    }
+
+    public List<String> removeComments(String[] source) {
+        List<String> result = new LinkedList<>();
+        StringBuilder builder = new StringBuilder();
+        boolean flag = false;
+        for (String item : source){
+            for (int i=0; i<item.length(); i++){
+                // 块注释结束
+                if (flag){
+                    if (i+1 < item.length() && item.charAt(i) == '*' && item.charAt(i+1) == '/'){
+                        i++;
+                        flag = false;
+                    }
+                    continue;
+                }
+
+                // 非注释场景
+                if (item.charAt(i) != '/'){
+                    builder.append(item.charAt(i));
+                    continue;
+                }
+                // 可能触发注释
+                if (i+1 < item.length()){
+                    if (item.charAt(i+1) == '/'){
+                        break;
+                    }
+                    if (item.charAt(i+1) == '*'){
+                        i++;
+                        flag = true;
+                        continue;
+                    }
+                }
+                builder.append(item.charAt(i));
+            }
+            if (!flag && builder.length() != 0){
+                result.add(builder.toString());
+                builder = new StringBuilder();
+            }
+        }
+        if (builder.length() != 0){
+            result.add(builder.toString());
+        }
+        return result;
+    }
+
 
     // 822. 翻转卡片游戏    我是垃圾，告辞
 
