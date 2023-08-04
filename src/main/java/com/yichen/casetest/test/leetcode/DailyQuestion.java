@@ -21,12 +21,73 @@ public class DailyQuestion {
         fronts[b] = temp;
     }
 
+    int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
+
     public static void main(String[] args) {
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
         StringUtils.divisionLine();
         removeCommentsTest(dq);
         StringUtils.divisionLine();
+        uniquePathIIITest(dq);
+    }
+
+    // 980. 不同路径 III
+
+    public static void uniquePathIIITest(DailyQuestion dq){
+        System.out.println(dq.uniquePathsIII(new int[][]{{1,0,0,0},{0,0,0,0},{0,0,2,-1}}));
+        System.out.println(dq.uniquePathsIII(new int[][]{{1,0,0,0},{0,0,0,0},{0,0,0,2}}));
+        System.out.println(dq.uniquePathsIII(new int[][]{{1,2}}));
+        System.out.println(dq.uniquePathsIII(new int[][]{{1,-1,2}}));
+    }
+
+    int uniquePathResult;
+    int totalAvail;
+    public int uniquePathsIII(int[][] grid) {
+        int  row = grid.length, column = grid[0].length;
+        totalAvail = row * column;
+        int[] start = null, end = null;
+        for (int i=0; i<row; i++){
+            for(int j=0; j<column; j++){
+                if (grid[i][j] == 1){
+                    start = new int[]{i, j};
+                }
+                else if (grid[i][j] == 2){
+                    end = new int[]{i, j};
+                }
+                else if (grid[i][j] == -1){
+                    totalAvail--;
+                }
+            }
+        }
+        uniquePathResult = 0;
+        Set<Integer> visit = new HashSet<>();
+        visit.add(this.visitPos(start[0], start[1]));
+        dfs(grid, start, end, visit);
+        return uniquePathResult;
+    }
+
+    public void dfs(int[][] grid, int[] start, int[] end, Set<Integer> visit){
+        int  row = grid.length, column = grid[0].length;
+        if (start[0] == end[0] && start[1] == end[1]){
+            if (totalAvail == visit.size()){
+                uniquePathResult++;
+            }
+            return;
+        }
+        for(int[] item : dir){
+            int x = start[0] + item[0];
+            int y = start[1] + item[1];
+            if (x >=0 && x < row && y >=0 && y < column
+                    && grid[x][y] != -1 && visit.add(this.visitPos(x, y))){
+                dfs(grid, new int[]{x, y}, end, visit);
+                visit.remove(this.visitPos(x, y));
+            }
+        }
+    }
+
+    public int visitPos(int i, int j){
+        return i | (j << 10);
     }
 
 //    722. 删除注释
