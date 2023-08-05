@@ -30,9 +30,53 @@ public class DailyQuestion {
         removeCommentsTest(dq);
         StringUtils.divisionLine();
         uniquePathIIITest(dq);
+        StringUtils.divisionLine();
+        mergeTwoListsTest(dq);
     }
 
-    // 980. 不同路径 III
+//    21. 合并两个有序链表   简单题还是容易的呀 一次性过
+
+    public static void mergeTwoListsTest(DailyQuestion dq){
+        ListNode p = ListNode.buildListedList(new Integer[]{1,2,4});
+        ListNode q = ListNode.buildListedList(new Integer[]{1,3,4});
+        System.out.println(ListNode.printPath(dq.mergeTwoLists(p, q)));
+        p = ListNode.buildListedList(new Integer[]{});
+        q = ListNode.buildListedList(new Integer[]{});
+        System.out.println(ListNode.printPath(dq.mergeTwoLists(p, q)));
+        p = ListNode.buildListedList(new Integer[]{});
+        q = ListNode.buildListedList(new Integer[]{0});
+        System.out.println(ListNode.printPath(dq.mergeTwoLists(p, q)));
+    }
+
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(), p = dummy;
+        while (list1 != null && list2 != null){
+            if (list1.val > list2.val){
+                p.next = list2;
+                list2 = list2.next;
+            }
+            else {
+                p.next = list1;
+                list1 = list1.next;
+            }
+            p = p.next;
+        }
+        while (list1 != null){
+            p.next = list1;
+            p = p.next;
+            list1 = list1.next;
+        }
+        while (list2 != null){
+            p.next = list2;
+            list2 = list2.next;
+            p = p.next;
+        }
+        p.next = null;
+        return dummy.next;
+    }
+
+
+    // 980. 不同路径 III    边界值没考虑清楚，执行也不是最优
 
     public static void uniquePathIIITest(DailyQuestion dq){
         System.out.println(dq.uniquePathsIII(new int[][]{{1,0,0,0},{0,0,0,0},{0,0,2,-1}}));
