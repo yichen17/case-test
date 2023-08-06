@@ -1,5 +1,7 @@
 package com.yichen.casetest.test.leetcode;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Objects;
 
 /**
@@ -8,6 +10,7 @@ import java.util.Objects;
  * @date 2023/6/22 11:07
  * @describe
  */
+@Slf4j
  class ListNode {
     int val;
     ListNode next;
@@ -42,6 +45,7 @@ import java.util.Objects;
             pos = pos.next;
         }
         builder.delete(builder.length()-4, builder.length());
+        log.debug(builder.toString());
         return builder.toString();
     }
 

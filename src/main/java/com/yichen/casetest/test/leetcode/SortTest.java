@@ -377,29 +377,29 @@ public class SortTest {
 
     //=============  归并排序  链表
 
-    private static LinkedListNode linkedListMergeSort(LinkedListNode head){
-        LinkedListNode pos = getMid(head);
+    private static ListNode linkedListMergeSort(ListNode head){
+        ListNode pos = getMid(head);
         if (pos == head){
             return head;
         }
-        LinkedListNode next = pos.next;
+        ListNode next = pos.next;
         pos.next = null;
-        LinkedListNode left = linkedListMergeSort(head);
-        LinkedListNode right = linkedListMergeSort(next);
+        ListNode left = linkedListMergeSort(head);
+        ListNode right = linkedListMergeSort(next);
         return merge(left, right);
     }
 
 
-    private static LinkedListNode merge(LinkedListNode left, LinkedListNode right){
+    private static ListNode merge(ListNode left, ListNode right){
         if (left == null){
             return right;
         }
         if (right == null){
             return left;
         }
-        LinkedListNode head = new LinkedListNode();
-        LinkedListNode pos = head;
-        LinkedListNode p = left, q = right;
+        ListNode head = new ListNode();
+        ListNode pos = head;
+        ListNode p = left, q = right;
         while(p != null && q != null){
             if (p.val > q.val){
                 pos.next = q;
@@ -421,11 +421,11 @@ public class SortTest {
     }
 
 
-    private static LinkedListNode getMid(LinkedListNode root){
+    private static ListNode getMid(ListNode root){
         if (root == null || root.next == null){
             return root;
         }
-        LinkedListNode p = root, q = root;
+        ListNode p = root, q = root;
         while(q.next != null && q.next.next!= null){
             p = p.next;
             q = q.next.next;

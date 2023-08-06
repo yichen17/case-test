@@ -32,6 +32,27 @@ public class DailyQuestion {
         uniquePathIIITest(dq);
         StringUtils.divisionLine();
         mergeTwoListsTest(dq);
+        StringUtils.divisionLine("mergeTwoListsTest");
+        swapPairsTest(dq);
+    }
+
+    // 24. 两两交换链表中的节点
+
+    public static void swapPairsTest(DailyQuestion dq){
+        ListNode.printPath(dq.swapPairs(ListNode.buildListedList(new Integer[]{1,2,3,4})));
+        ListNode.printPath(dq.swapPairs(ListNode.buildListedList(new Integer[]{})));
+        ListNode.printPath(dq.swapPairs(ListNode.buildListedList(new Integer[]{1})));
+    }
+
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null){
+            return head;
+        }
+        ListNode n = head.next;
+        ListNode nn = n.next;
+        n.next = head;
+        head.next = swapPairs(nn);
+        return n;
     }
 
 //    21. 合并两个有序链表   简单题还是容易的呀 一次性过
