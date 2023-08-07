@@ -23,6 +23,8 @@ public class DailyQuestion {
 
     int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
 
+
+
     public static void main(String[] args) {
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
@@ -34,6 +36,31 @@ public class DailyQuestion {
         mergeTwoListsTest(dq);
         StringUtils.divisionLine("mergeTwoListsTest");
         swapPairsTest(dq);
+        StringUtils.divisionLine();
+        reverseStringTest(dq);
+    }
+
+    // 344. 反转字符串
+
+    public static void reverseStringTest(DailyQuestion dq){
+        char[] s = "abcd".toCharArray();
+        dq.reverseString(s);
+        System.out.println(new String(s));
+        s = "abcde".toCharArray();
+        dq.reverseString(s);
+        System.out.println(new String(s));
+    }
+
+    public void reverseString(char[] s) {
+        int l = 0, r = s.length-1;
+        char temp;
+        while (l < r){
+            temp = s[l];
+            s[l] = s[r];
+            s[r] = temp;
+            l++;
+            r--;
+        }
     }
 
     // 24. 两两交换链表中的节点
