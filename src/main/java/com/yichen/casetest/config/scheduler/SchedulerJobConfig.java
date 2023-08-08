@@ -1,12 +1,10 @@
 package com.yichen.casetest.config.scheduler;
 
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * scheduler-job config
@@ -14,10 +12,9 @@ import org.springframework.context.annotation.Configuration;
  * @author
  * @date 2018/08/26
  */
-@Configuration
-@ComponentScan(basePackages = "com.onecard.ordertask.scheduler")
+@Component
+@Slf4j
 public class SchedulerJobConfig {
-    private Logger logger = LoggerFactory.getLogger(SchedulerJobConfig.class);
 
     @Value("${scheduler.job.admin.addresses}")
     private String adminAddresses;
@@ -45,7 +42,7 @@ public class SchedulerJobConfig {
 
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor() {
-        logger.info(">>>>>>>>>>> scheduler-job config init.");
+        log.info(">>>>>>>>>>> scheduler-job config init.");
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(adminAddresses);
         xxlJobSpringExecutor.setAppname(appName);
