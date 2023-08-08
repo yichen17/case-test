@@ -38,6 +38,42 @@ public class DailyQuestion {
         swapPairsTest(dq);
         StringUtils.divisionLine();
         reverseStringTest(dq);
+        StringUtils.divisionLine();
+        maxAbsoluteSumTest(dq);
+    }
+
+    // 1749. 任意子数组和的绝对值的最大值
+
+    public static void maxAbsoluteSumTest(DailyQuestion dq){
+        System.out.println(dq.maxAbsoluteSum(new int[]{1,-3,2,3,-4}));
+        System.out.println(dq.maxAbsoluteSum(new int[]{2,-5,1,-4,3,-2}));
+        System.out.println(dq.maxAbsoluteSum(new int[]{-1}));
+        System.out.println(dq.maxAbsoluteSum(new int[]{-3,-5,-3,-2,-6,3,10,-10,-8,-3,0,10,3,-5,8,7,-9,-9,5,-8}));
+    }
+
+    public int maxAbsoluteSum(int[] nums) {
+        if (nums == null || nums.length == 0){
+            return 0;
+        }
+        if (nums.length == 1){
+            return Math.abs(nums[0]);
+        }
+        int min = nums[0], max = min, count = min;
+//        int[] dp = new int[nums.length];
+//        dp[0]=count;
+        for (int i=1; i<nums.length; i++){
+            count += nums[i];
+//            dp[i]=count;
+            min = Math.min(count, min);
+            max = Math.max(count, max);
+        }
+        if (max < 0){
+            return -min;
+        }
+        if (min > 0){
+            return max;
+        }
+        return Math.abs(max - min);
     }
 
     // 344. 反转字符串
