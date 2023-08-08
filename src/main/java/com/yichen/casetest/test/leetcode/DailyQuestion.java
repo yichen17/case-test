@@ -40,6 +40,32 @@ public class DailyQuestion {
         reverseStringTest(dq);
         StringUtils.divisionLine();
         maxAbsoluteSumTest(dq);
+        StringUtils.divisionLine();
+        subtractProductAndSumTest(dq);
+    }
+
+    // 1281. 整数的各位积和之差
+
+    public static void subtractProductAndSumTest(DailyQuestion dq){
+        System.out.println(dq.subtractProductAndSum(234));
+        System.out.println(dq.subtractProductAndSum(4421));
+        System.out.println(dq.subtractProductAndSum(1));
+        System.out.println(dq.subtractProductAndSum(0));
+        System.out.println(dq.subtractProductAndSum(99));
+    }
+
+    public int subtractProductAndSum(int n) {
+        if (n == 0){
+            return 0;
+        }
+        int multiply = 1, count = 0, temp;
+        while (n > 0){
+            temp = n%10;
+            multiply *= temp;
+            count += temp;
+            n /= 10;
+        }
+        return multiply - count;
     }
 
     // 1749. 任意子数组和的绝对值的最大值
