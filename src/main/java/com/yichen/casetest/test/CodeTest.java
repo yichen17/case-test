@@ -18,7 +18,12 @@ public class CodeTest {
 
     public static void main(String[] args) {
         test();
-        mapTest();
+//        mapTest();
+        HashMap<Integer,Integer> map = new HashMap<>();
+        map.put(null, 1);
+
+        Byte b = Byte.valueOf("2010");
+
     }
 
     private static void mapTest(){

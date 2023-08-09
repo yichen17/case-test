@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class},
-        scanBasePackageClasses = {com.yichen.casetest.problem.notInject.DevConfig.class})
+        scanBasePackages = {"com.yichen.casetest.problem.notInject.config"})
 // 开启缓存
 @EnableCaching
 @ConfigurationPropertiesScan("com.yichen.casetest.config")

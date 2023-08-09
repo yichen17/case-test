@@ -1,4 +1,4 @@
-package com.yichen.casetest.problem.notInject;
+package com.yichen.casetest.problem.notInject.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +13,10 @@ import java.util.regex.Pattern;
  * @describe
  */
 @Configuration
-@ComponentScan(basePackages = {"com.yichen.casetest"},
+@ComponentScan(basePackages = {"com.yichen.casetest.*"},
         excludeFilters = {
-//                @ComponentScan.Filter(type = FilterType.REGEX, pattern = {"[a-zA-z]+InjectService"}),
-                @ComponentScan.Filter(type = FilterType.REGEX, pattern = {"com.yichen.casetest.problem.notInject.*Service"}),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = {"[.a-zA-Z]+InjectService"}),
+//                @ComponentScan.Filter(type = FilterType.REGEX, pattern = {"com.yichen.casetest.problem.notInject.*Service"}),
 //                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {NotInjectService.class}),
         })
 public class DevConfig {
@@ -27,6 +27,7 @@ public class DevConfig {
         while (repayFailConsumer.find()){
             System.out.println(repayFailConsumer.group());
         }
+        System.out.println(System.currentTimeMillis());
     }
 
 
