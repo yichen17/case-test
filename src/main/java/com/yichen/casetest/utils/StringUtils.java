@@ -298,6 +298,10 @@ public class StringUtils {
         return s;
     }
 
+    public static String batchReplaceBracket(String s){
+        return batchReplaceBracket(s, new String[]{"[", "]"}, new String[]{"{", "}"});
+    }
+
     public static void arrayTwoDimensionPrint(int[][] array){
         for (int[] item : array){
             StringBuilder s = new StringBuilder();

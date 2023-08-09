@@ -2,6 +2,7 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 
 import java.util.*;
 
@@ -42,6 +43,56 @@ public class DailyQuestion {
         maxAbsoluteSumTest(dq);
         StringUtils.divisionLine();
         subtractProductAndSumTest(dq);
+        StringUtils.divisionLine();
+        minFallingPathSumTest(dq);
+    }
+
+
+
+    // 1289. 下降路径最小和 II
+
+    public static void minFallingPathSumTest(DailyQuestion dq){
+//        String s = StringUtils.batchReplaceBracket("[[1,2,3],[4,5,6],[7,8,9]]");
+//        System.out.println(s);
+        System.out.println(dq.minFallingPathSum(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
+        System.out.println(dq.minFallingPathSum(new int[][]{{-6}}));
+    }
+
+    public int minFallingPathSum(int[][] grid) {
+        int len = grid.length;
+        if (len == 0){
+            return 0;
+        }
+        int[] dp = new int[len];
+        for (int i=0; i<len; i++){
+            dp[i] = grid[0][i];
+        }
+        for(int i=1; i<len; i++){
+            int[] temp = new int[len];
+            for (int j=0; j<len; j++){
+                int minPos = this.getMinExclude(dp, j);
+                temp[j] = grid[i][j] + dp[minPos];
+            }
+            dp = temp;
+        }
+        int min = Integer.MAX_VALUE;
+        for(int i=0; i<len; i++){
+            min = Math.min(min, dp[i]);
+        }
+        return min == Integer.MAX_VALUE ? 0 : min;
+    }
+
+    private int getMinExclude(int[] item, int excludePos){
+        int pos = -1;
+        for (int i=0; i<item.length; i++){
+            if (i == excludePos) {
+                continue;
+            }
+            if (pos == -1 || item[pos] > item[i]){
+                pos = i;
+            }
+        }
+        return pos;
     }
 
     // 1281. 整数的各位积和之差
