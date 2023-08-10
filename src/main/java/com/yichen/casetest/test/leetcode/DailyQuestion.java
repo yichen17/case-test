@@ -45,8 +45,32 @@ public class DailyQuestion {
         subtractProductAndSumTest(dq);
         StringUtils.divisionLine();
         minFallingPathSumTest(dq);
+        StringUtils.divisionLine();
+        diagonalSumTest(dq);
     }
 
+    // 1572. 矩阵对角线元素的和
+
+    public static void diagonalSumTest(DailyQuestion dq){
+//        String s = StringUtils.batchReplaceBracket("[[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]]");
+//        System.out.println(s);
+        System.out.println(dq.diagonalSum(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
+        System.out.println(dq.diagonalSum(new int[][]{{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}}));
+        System.out.println(dq.diagonalSum(new int[][]{}));
+        System.out.println(dq.diagonalSum(new int[][]{{3}}));
+    }
+
+    public int diagonalSum(int[][] mat) {
+        int len = mat.length;
+        int result = 0;
+        for (int i=0; i<len; i++){
+            result += mat[i][i];
+            if (len - i - 1 != i){
+                result += mat[i][len-i-1];
+            }
+        }
+        return result;
+    }
 
 
     // 1289. 下降路径最小和 II
