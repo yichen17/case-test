@@ -51,10 +51,19 @@ public class TripTable {
             if (CollectionUtils.isEmpty(heads)){
                 return null;
             }
-            Node p = heads.get(0);
+            int pos = heads.size()-1;
+            Node p = heads.get(pos);
             while (p != null && p.getVal() != val){
-                // 如果下一个节点不为空，且下一个节点的值小于val
-                if (Objects.nonNull(p.getNext()) && p.getNext().getVal() <= val){
+                // 如果当前节点比val值大，上移一层
+                // 如果当前节点小于等于val，且后面的元素后面的也小于等于它  往后移
+                // 如果当前节点小于等于val，且后面无节点或者后面节点大于val，前移查找
+                if (p.getVal() > val){
+                    if (pos == 0){
+                        break;
+                    }
+                    p = heads.get(--pos);
+                }
+                else if (Objects.nonNull(p.getNext()) && p.getNext().getVal() <= val){
                     p = p.next;
                 }
                 else {
@@ -77,15 +86,14 @@ public class TripTable {
             int len = this.randomLevel(), oldLen = heads.size();
             Node addNode = null;
             while (len > oldLen){
-                addNode = this.constructAndLinkNext(addNode, val);
-                heads.add(addNode);
-                len--;
+                heads.add(null);
+                oldLen++;
             }
             // 插入数据
             for (int i=len-1; i>=0; i--){
                 Node node = heads.get(i), p = node;
                 addNode = this.constructAndLinkNext(addNode, val);
-                if (p.getVal() > val){
+                if (Objects.isNull(p) || p.getVal() > val){
                     addNode.next = p;
                     heads.set(i, addNode);
                     continue;
@@ -236,21 +244,60 @@ public class TripTable {
             Long average = 0L;
             Long searchOrDel = 0L;
             for (int i=0; i<testTimes; i++){
-                Long start = System.currentTimeMillis();
-                SkipList skipList = constructRandomInsert(random.nextInt(range));
+                int limit = random.nextInt(range) + 1;
+                long start = System.currentTimeMillis();
+                SkipList skipList = constructRandomInsert(limit);
                 average += System.currentTimeMillis() - start;
                 skipList.check();
-                start = System.currentTimeMillis();
-                searchOrDel(searchOrDelTimes, range, skipList);
-                searchOrDel += System.currentTimeMillis() - start;
-                skipList.check();
+                // 删除查找性能测试
+                searchOrDel += searchOrDel(searchOrDelTimes, range, skipList);
+                // 删除验证测试
+//                boolean result = delAndValidate(searchOrDelTimes, limit, skipList, constructCompareSet(limit));
+//                if (!result){
+//                    return;
+//                }
             }
             // 构造均值 25-35ms  查找删除均值 17
-            log.info("构造平均耗时{}ms", average / testTimes);
-            log.info("{}次查询或删除平均耗时{}", searchOrDelTimes, searchOrDel/testTimes);
+            log.info("构造总耗时:{}ms平均耗时:{}ms", average, average / testTimes);
+            log.info("{}次查询或删除总耗时：{}ms,平均耗时:{}ms", searchOrDelTimes, searchOrDel, searchOrDel/testTimes);
         }
 
-        public static void searchOrDel(int times, int limit, SkipList skipList){
+        public static Set<Integer> constructCompareSet(int range){
+            Set<Integer> compareSet = new HashSet<>();
+            for (int i=1; i<=range; i++){
+                compareSet.add(i);
+            }
+            return compareSet;
+        }
+
+        public static boolean delAndValidate(int times, int limit, SkipList skipList, Set<Integer> compareSet){
+            for (int i=0; i<times; i++){
+                int val = random.nextInt(limit);
+                if (skipList.delete(val) != compareSet.remove(val)){
+                    log.info("删除存在问题");
+                    return false;
+                }
+            }
+            for (int i=0; i<times; i++){
+                int val = random.nextInt(limit);
+                if (skipList.search(val) != compareSet.contains(val)){
+                    log.info("查找存在问题");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static Long searchOrDel(int times, int limit, SkipList skipList){
+            long start = System.currentTimeMillis();
+            doSearchOrDel(times, limit, skipList);
+            start = System.currentTimeMillis() - start;
+            skipList.check();
+            return start;
+        }
+
+
+        public static void doSearchOrDel(int times, int limit, SkipList skipList){
             for (int i=0; i<times; i++){
                 int val = random.nextInt(limit);
                 if (val % 2 == 0){
@@ -266,7 +313,7 @@ public class TripTable {
     }
 
     public static void main(String[] args) {
-        SkipList.caseCheck(100, 10000, 1000);
+        SkipList.caseCheck(100, 10000, 100000);
     }
 
 
