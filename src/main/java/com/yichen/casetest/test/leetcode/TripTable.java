@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -74,14 +75,16 @@ public class TripTable {
                 heads = new LinkedList<>();
             }
             int len = this.randomLevel(), oldLen = heads.size();
+            Node addNode = null;
             while (len > oldLen){
-                heads.add(Node.builder().val(val).build());
+                addNode = this.constructAndLinkNext(addNode, val);
+                heads.add(addNode);
                 len--;
             }
             // 插入数据
             for (int i=len-1; i>=0; i--){
                 Node node = heads.get(i), p = node;
-                Node addNode = Node.builder().val(val).build();
+                addNode = this.constructAndLinkNext(addNode, val);
                 if (p.getVal() > val){
                     addNode.next = p;
                     heads.set(i, addNode);
@@ -96,6 +99,17 @@ public class TripTable {
             }
         }
 
+        private Node constructAndLinkNext(Node now, int val){
+            if (Objects.nonNull(now)){
+                now.setDown(Node.builder().val(val).build());
+                now = now.getDown();
+            }
+            else {
+                now = Node.builder().val(val).build();
+            }
+            return now;
+        }
+
 
         /**
          * 找到最顶上的，然后开始删除操作
@@ -104,11 +118,7 @@ public class TripTable {
          * @return
          */
         public boolean delete(int val){
-            com.yichen.casetest.utils.StringUtils.divisionLine("start delete");
-            boolean result = doDelete(val);
-            this.print();
-            com.yichen.casetest.utils.StringUtils.divisionLine("end delete");
-            return result;
+            return doDelete(val);
         }
 
         private boolean doDelete(int val){
@@ -175,7 +185,6 @@ public class TripTable {
                 return;
             }
             StringBuilder builder =  new StringBuilder();
-            com.yichen.casetest.utils.StringUtils.divisionLine("start print");
             for (Node item :heads){
                 Node p = item;
                 while (Objects.nonNull(p)){
@@ -188,7 +197,6 @@ public class TripTable {
                 System.out.println(builder);
                 builder = new StringBuilder();
             }
-            com.yichen.casetest.utils.StringUtils.divisionLine("end print");
         }
 
         public boolean check(){
@@ -224,19 +232,41 @@ public class TripTable {
             return skipList;
         }
 
-        public static void caseCheck(int times, int range){
+        public static void caseCheck(int testTimes, int range, int searchOrDelTimes){
             Long average = 0L;
-            for (int i=0; i<times; i++){
+            Long searchOrDel = 0L;
+            for (int i=0; i<testTimes; i++){
                 Long start = System.currentTimeMillis();
-                constructRandomInsert(random.nextInt(range)).check();
+                SkipList skipList = constructRandomInsert(random.nextInt(range));
                 average += System.currentTimeMillis() - start;
+                skipList.check();
+                start = System.currentTimeMillis();
+                searchOrDel(searchOrDelTimes, range, skipList);
+                searchOrDel += System.currentTimeMillis() - start;
+                skipList.check();
             }
-            log.info("平均耗时{}ms", average / times);
+            // 构造均值 25-35ms  查找删除均值 17
+            log.info("构造平均耗时{}ms", average / testTimes);
+            log.info("{}次查询或删除平均耗时{}", searchOrDelTimes, searchOrDel/testTimes);
         }
+
+        public static void searchOrDel(int times, int limit, SkipList skipList){
+            for (int i=0; i<times; i++){
+                int val = random.nextInt(limit);
+                if (val % 2 == 0){
+                    skipList.delete(val);
+                }
+                else {
+                    skipList.search(val);
+                }
+            }
+        }
+
+
     }
 
     public static void main(String[] args) {
-        SkipList.caseCheck(100, 10000);
+        SkipList.caseCheck(100, 10000, 1000);
     }
 
 
