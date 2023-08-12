@@ -47,6 +47,47 @@ public class DailyQuestion {
         minFallingPathSumTest(dq);
         StringUtils.divisionLine();
         diagonalSumTest(dq);
+        StringUtils.divisionLine();
+        mergeKLists(dq);
+    }
+
+    // 23. 合并 K 个升序链表
+
+    public static void mergeKLists(DailyQuestion dq){
+        ListNode.printPath(dq.mergeKLists(ListNode.buildArray("[[1,4,5],[1,3,4],[2,6]]")));
+        ListNode.printPath(dq.mergeKLists(ListNode.buildArray("[]")));
+        ListNode.printPath(dq.mergeKLists(ListNode.buildArray("[[]]")));
+        ListNode.printPath(dq.mergeKLists(ListNode.buildArray("[[],[1,2],[3,4,5]]")));
+    }
+
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0){
+            return null;
+        }
+        if (lists.length == 1){
+            return lists[0];
+        }
+        PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>(new Comparator<ListNode>() {
+            @Override
+            public int compare(ListNode o1, ListNode o2) {
+                return o1.val - o2.val;
+            }
+        });
+        ListNode dummy = new ListNode(), p = dummy;
+        for (ListNode node : lists){
+            if (node != null){
+                priorityQueue.offer(node);
+            }
+        }
+        while (!priorityQueue.isEmpty()){
+            ListNode node = priorityQueue.poll();
+            p.next = node;
+            p = p.next;
+            if (node.next != null){
+                priorityQueue.offer(node.next);
+            }
+        }
+        return dummy.next;
     }
 
     // 1572. 矩阵对角线元素的和

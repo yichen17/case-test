@@ -1,8 +1,15 @@
 package com.yichen.casetest.test.leetcode;
 
+import com.yichen.casetest.constants.CommonConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Qiuxinchao
@@ -32,6 +39,40 @@ import java.util.Objects;
             pos = preLink(params[i], pos);
         }
         return root;
+    }
+
+    protected static ListNode buildListedList(String s){
+        if (StringUtils.isEmpty(s)){
+            return null;
+        }
+        String[] items = s.split(CommonConstants.COMMA);
+        Integer[] params = new Integer[items.length];
+        for (int i=0; i< items.length; i++){
+            params[i] = Integer.parseInt(items[i]);
+        }
+        return buildListedList(params);
+    }
+
+    /**
+     * 切分正则表达式   [[1,4,5],[1,3,4],[2,6]]
+     */
+    private static final Pattern pattern= Pattern.compile("([0-9,]{2,})");
+    protected static ListNode[] buildArray(String s){
+        List<ListNode> list = new ArrayList<>();
+        Matcher matcher = pattern.matcher(s);
+        while (matcher.find()){
+            list.add(buildListedList(matcher.group()));
+        }
+        return list.toArray(new ListNode[0]);
+    }
+
+    public static void main(String[] args) {
+        String s = "[[1,4,5],[1,3,4],[2,6]]";
+//        String s = "[1,4,5]";
+        Matcher matcher = pattern.matcher(s);
+        while (matcher.find()){
+            System.out.println(matcher.group());
+        }
     }
 
     protected static String printPath(ListNode root){
