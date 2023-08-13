@@ -51,6 +51,35 @@ public class DailyQuestion {
         mergeKLists(dq);
         StringUtils.divisionLine();
         mergeTest(dq);
+        StringUtils.divisionLine();
+        mergeTreesTest(dq);
+    }
+
+    // 617. 合并二叉树
+
+    public static void  mergeTreesTest(DailyQuestion dq){
+        TreeNode.printTree(dq.mergeTrees(TreeNode.buildTree(new Integer[]{1,3,2,5}),
+                TreeNode.buildTree(new Integer[]{2,1,3,null,4,null,7})));
+        TreeNode.printTree(dq.mergeTrees(TreeNode.buildTree(new Integer[]{1}),
+                TreeNode.buildTree(new Integer[]{1,2})));
+    }
+
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 != null && root2 != null){
+            TreeNode newRoot = new TreeNode(root1.val + root2.val);
+            newRoot.left = this.mergeTrees(root1.left, root2.left);
+            newRoot.right = this.mergeTrees(root1.right, root2.right);
+            return newRoot;
+        }
+        else if (root1 != null){
+            return root1;
+        }
+        else if (root2 != null){
+            return root2;
+        }
+        else {
+            return null;
+        }
     }
 
     // 88. 合并两个有序数组
