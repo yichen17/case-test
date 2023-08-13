@@ -49,6 +49,47 @@ public class DailyQuestion {
         diagonalSumTest(dq);
         StringUtils.divisionLine();
         mergeKLists(dq);
+        StringUtils.divisionLine();
+        mergeTest(dq);
+    }
+
+    // 88. 合并两个有序数组
+
+    public static void mergeTest(DailyQuestion dq){
+        int[] result = new int[]{1,2,3,0,0,0};
+        dq.merge(result, 3 ,new int[]{2,5,6}, 3);
+        StringUtils.printIntArray(result);
+        result = new int[]{1};
+        dq.merge(result, 1 ,new int[]{}, 0);
+        StringUtils.printIntArray(result);
+        result = new int[]{0};
+        dq.merge(result, 0 ,new int[]{1}, 1);
+        StringUtils.printIntArray(result);
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        if (n == 0){
+            return;
+        }
+        int i=m-1, j=n-1, pos=nums1.length-1;
+        while (i >=0 && j >= 0){
+            if (nums1[i] > nums2[j]){
+                nums1[pos--] = nums1[i--];
+            }
+            else {
+                nums1[pos--] = nums2[j--];
+            }
+        }
+        // 提前跳出场景
+        if (i == pos){
+            return;
+        }
+        while (i >= 0){
+            nums1[pos--] = nums1[i--];
+        }
+        while (j >= 0){
+            nums1[pos--] = nums2[j--];
+        }
     }
 
     // 23. 合并 K 个升序链表

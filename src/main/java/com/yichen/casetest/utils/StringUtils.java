@@ -1,11 +1,13 @@
 package com.yichen.casetest.utils;
 
+import com.yichen.casetest.constants.CommonConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -235,6 +237,22 @@ public class StringUtils {
         throw  new RuntimeException("比较泛型Number未配置规则");
     }
 
+    public static void printIntArray(int[] array){
+        if (Objects.isNull(array)){
+            return;
+        }
+        if (array.length == 0){
+            log.info("[]");
+            return;
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int item : array){
+            builder.append(item).append(CommonConstants.COMMA);
+        }
+        builder.replace(builder.length()-1, builder.length(), "]");
+        log.info("{}", builder);
+    }
 
 
     public static <T> void rowPrintArray(T[] array){
@@ -365,6 +383,10 @@ public class StringUtils {
 
         String s = FastJsonUtils.toJson(testJson);
         System.out.println(normalizeJsonStr(s));
+
+        int[] array = new int[2];
+        System.out.println(array.getClass());
+        System.out.println(array.getClass().getComponentType());
 
     }
 
