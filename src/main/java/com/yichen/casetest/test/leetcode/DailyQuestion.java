@@ -53,6 +53,94 @@ public class DailyQuestion {
         mergeTest(dq);
         StringUtils.divisionLine();
         mergeTreesTest(dq);
+        StringUtils.divisionLine();
+        findReplaceString(dq);
+    }
+
+    // 833. 字符串中的查找与替换
+
+    public static void findReplaceString(DailyQuestion dq){
+        System.out.println(dq.findReplaceString("abcd", new int[]{0,2}, new String[]{"a", "cd"}, new String[]{"eee", "ffff"}));
+        System.out.println(dq.findReplaceString("abcd", new int[]{0,2}, new String[]{"ab", "ec"}, new String[]{"eee", "ffff"}));
+        System.out.println(dq.findReplaceString("abcdefgh", new int[]{4,1,2}, new String[]{"e", "b", "c"}, new String[]{"eee", "bbb", "ccc"}));
+    }
+
+    public String findReplaceString(String s, int[] indices, String[] sources, String[] targets) {
+        if (indices.length < 1){
+            return s;
+        }
+        // 排序使得整体有序
+        this.sort(indices, sources, targets, 0, indices.length-1);
+        // 开始逐个替换操作，拼凑结果
+        StringBuilder builder = new StringBuilder();
+        int pos = 0;
+        for (int i=0,len=indices.length; i<len;){
+            if (pos == indices[i]){
+                if (this.checkSubStr(s, pos, sources[i])){
+                    builder.append(targets[i]);
+                    pos += sources[i].length();
+                }
+                i++;
+                continue;
+            }
+            builder.append(s.charAt(pos++));
+        }
+        // 拼上多余的
+        if (pos < s.length()){
+            builder.append(s, pos ,s.length());
+        }
+        // 返回结果
+        return builder.toString();
+    }
+
+    private boolean checkSubStr(String s, int pos, String substr){
+        if (pos + substr.length() > s.length()){
+            return false;
+        }
+        for (int i=pos,j=0; j<substr.length(); i++,j++){
+            if (s.charAt(i) != substr.charAt(j)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void sort(int[] indices, String[] sources, String[] targets, int l, int r){
+        if (l >= r){
+            return;
+        }
+        int check = random.nextInt(r-l) + l;
+        int i = l, j = r, k = indices[check];
+        this.swap(indices, sources, targets, l, check);
+        String temp;
+        while (i < j){
+            while (i < j && indices[j] >= k){
+                j--;
+            }
+            if (i < j){
+                this.swap(indices, sources, targets, i, j);
+            }
+            while (i < j && indices[i] < k){
+                i++;
+            }
+            if (i < j){
+                this.swap(indices, sources, targets, i, j);
+            }
+        }
+        this.sort(indices, sources, targets, l, i-1);
+        this.sort(indices, sources, targets, i+1, r);
+    }
+
+
+    private void swap(int[] indices, String[] sources, String[] targets, int l, int r){
+        if (l >= r){
+            return;
+        }
+        int k;
+        String temp;
+        k = indices[l]; indices[l] = indices[r]; indices[r] = k;
+        temp = sources[l]; sources[l] = sources[r]; sources[r] = temp;
+        temp = targets[l]; targets[l] = targets[r]; targets[r] = temp;
     }
 
     // 617. 合并二叉树
