@@ -14,10 +14,36 @@ import java.util.*;
  * @date 2023/8/3 14:28
  * @describe 跳表实现
  *      参考文章：https://mp.weixin.qq.com/s/HoEfIy2jZbhNsXY99Bm1LA
+ *              https://blog.csdn.net/weixin_45480785/article/details/116293416
  */
 @Slf4j
 public class TripTable {
 
+    /**
+     * 最大层数限制
+     */
+    private static final  int MAX_LEVEL = 32;
+    /**
+     * 上层元素数是下层数量的 1/N（相当于 N 叉树）
+     */
+    private static final int N = 4;
+
+    private static final int RANDOM_RANGE = 10000000;
+
+
+    /**
+     * 存在问题，插入应该只产生一个节点，而不是多个
+     * @return
+     */
+    private static int randomLevel(){
+        int level = 1;
+        while (Math.round(Math.random() * RANDOM_RANGE) % N == 0){
+            level++;
+        }
+        int randomLevel = Math.min(level, MAX_LEVEL);
+//            System.out.println("randomLevel: " + randomLevel);
+        return randomLevel;
+    }
 
     /**
      * 最简易的版本，存在对象重复的场景，即一个节点在多个多层反复构建，插入删除的开销比较大，查找应该相差不大
@@ -27,14 +53,7 @@ public class TripTable {
     @NoArgsConstructor
     @AllArgsConstructor
     static class SkipList{
-        /**
-         * 最大层数限制
-         */
-        private static final  int MAX_LEVEL = 32;
-        /**
-         * 上层元素数是下层数量的 1/N（相当于 N 叉树）
-         */
-        private static final int N = 4;
+
         private LinkedList<Node> heads;
 
         /**
@@ -82,7 +101,7 @@ public class TripTable {
             if (Objects.isNull(heads)){
                 heads = new LinkedList<>();
             }
-            int len = this.randomLevel(), oldLen = heads.size();
+            int len = randomLevel(), oldLen = heads.size();
             Node addNode = null;
             while (len > oldLen){
                 heads.add(null);
@@ -177,15 +196,7 @@ public class TripTable {
             return result;
         }
 
-        private int randomLevel(){
-            int level = 1;
-            while (Math.round(Math.random() * 10000000) % N == 0){
-                level++;
-            }
-            int randomLevel = Math.min(level, MAX_LEVEL);
-//            System.out.println("randomLevel: " + randomLevel);
-            return randomLevel;
-        }
+
 
         public void print(){
             if (CollectionUtils.isEmpty(heads)){
@@ -240,8 +251,8 @@ public class TripTable {
         }
 
         public static void caseCheck(int testTimes, int range, int searchOrDelTimes){
-            Long average = 0L;
-            Long searchOrDel = 0L;
+            long average = 0L;
+            long searchOrDel = 0L;
             for (int i=0; i<testTimes; i++){
                 int limit = random.nextInt(range) + 1;
                 long start = System.currentTimeMillis();
@@ -321,12 +332,43 @@ public class TripTable {
 
 
     static class SkipListOptimize{
+
+        /**
+         * 越往下节点越多，上面的为跳跃节点
+         */
+        private LinkedList<NodeOptimize> root;
+        private int level;
+
+        public boolean insert(int val){
+            return true;
+        }
+
+        public boolean delete(int val){
+
+            return true;
+        }
+
+        public NodeOptimize search(int val){
+            return null;
+        }
+
+        public List<NodeOptimize> findPre(int val){
+            
+            return null;
+        }
+
+
+        /**
+         * 用nextItems替代原先的next、down指针
+         * 引用代替实际创建对象
+         */
         @NoArgsConstructor
         @AllArgsConstructor
         @Data
         @Builder
         static class NodeOptimize{
-
+            private int val;
+            private NodeOptimize[] nextItems;
         }
 
 
