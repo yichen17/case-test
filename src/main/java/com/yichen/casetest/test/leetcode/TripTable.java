@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -309,22 +308,42 @@ public class TripTable {
             }
         }
 
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Data
+        @Builder
+        static class Node {
+            private int val;
+            private Node next;
+            private Node down;
+        }
+    }
+
+
+    static class SkipListOptimize{
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Data
+        @Builder
+        static class NodeOptimize{
+
+        }
+
+
+
 
     }
+
+
 
     public static void main(String[] args) {
         SkipList.caseCheck(100, 10000, 100000);
     }
 
 
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    @Builder
-    static class Node {
-        private int val;
-        private Node next;
-        private Node down;
-    }
+
+
+
+
 
 }
