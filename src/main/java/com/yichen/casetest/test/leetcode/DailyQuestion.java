@@ -55,6 +55,38 @@ public class DailyQuestion {
         mergeTreesTest(dq);
         StringUtils.divisionLine();
         findReplaceString(dq);
+        StringUtils.divisionLine();
+        circularGameLosersTest(dq);
+    }
+
+    // 2682. 找出转圈游戏输家
+
+    public static void circularGameLosersTest(DailyQuestion dq){
+        StringUtils.printIntArray(dq.circularGameLosers(5, 2));
+        StringUtils.printIntArray(dq.circularGameLosers(4, 4));
+        StringUtils.printIntArray(dq.circularGameLosers(20, 4));
+    }
+
+    public int[] circularGameLosers(int n, int k) {
+        boolean[] dp = new boolean[n];
+        int i = 0, len = n, limit = 1;
+        while (true){
+            if (dp[i]){
+                break;
+            }
+            n--;
+            dp[i] = true;
+            i = (i + k * limit) % len;
+            limit++;
+        }
+        int[] result = new int[n];
+        i = 0;
+        for (int p=0; p<len; p++){
+            if (!dp[p]){
+                result[i++] = p+1;
+            }
+        }
+        return result;
     }
 
     // 833. 字符串中的查找与替换
