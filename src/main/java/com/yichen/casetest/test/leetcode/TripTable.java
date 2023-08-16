@@ -31,10 +31,6 @@ public class TripTable {
     private static final int RANDOM_RANGE = 10000000;
 
 
-    /**
-     * 存在问题，插入应该只产生一个节点，而不是多个
-     * @return
-     */
     private static int randomLevel(){
         int level = 1;
         while (Math.round(Math.random() * RANDOM_RANGE) % N == 0){
@@ -46,6 +42,7 @@ public class TripTable {
     }
 
     /**
+     * todo 存在问题，插入应该只产生一个节点，而不是多个  对跳表的概念理解有问题
      * 最简易的版本，存在对象重复的场景，即一个节点在多个多层反复构建，插入删除的开销比较大，查找应该相差不大
      */
     @Data
@@ -331,44 +328,220 @@ public class TripTable {
     }
 
 
+    // 整体设计逻辑
+    // root中存储哨兵节点，nextItems只有一个节点，即后继节点，整体自上而下节点数逐渐增多
+    // 插入时如果随机层高高于当前，则在root头部插入。
+    // 删除时从上往下扫描，
+    // 查找自上而下扫描，直到没有节点可找或者可找的节点值大于等于它停止
+    // 插入删除有一个相对位置定位，我这里设计的非哨兵节点不是全长度铺设的，它的长度是最初插入时的随机长度
+
     static class SkipListOptimize{
 
         /**
          * 越往下节点越多，上面的为跳跃节点
+         * 空的哨兵节点，使得后续节点等价处理
          */
         private LinkedList<NodeOptimize> root;
         private int level;
 
-        public boolean insert(int val){
-            return true;
+        public SkipListOptimize() {
+            this.root = new LinkedList<>();
+            this.level = 0;
         }
 
+        /**
+         * 插入节点，先计算随机层高，空层高直接映射。剩余的找前节点，然后进行处理
+         * @param val 目标值
+         * @return
+         */
+        public NodeOptimize insert(int val){
+            int newLevel = randomLevel(), gap = Math.max(0, newLevel-this.level), startPos = this.level - newLevel;
+            List<NodeOptimize> preNodes = this.findPre(val, startPos);
+            NodeOptimize newNode = NodeOptimize.builder().val(val)
+                    .height(newLevel).nextItems(new ArrayList<>(newLevel)).build();
+            NodeOptimize node, next;
+            // 处理现有节点， newLevel层级以下的
+            for (int i=startPos; i<this.level; i++){
+                // 相对偏移量
+                node = preNodes.get(i - startPos + gap);
+                next = node.nextItems.get(this.getRealPos(i, node.height));
+                node.nextItems.set(this.getRealPos(i, node.height), newNode);
+                newNode.nextItems.set(i-startPos, next);
+                this.root.get(i).len++;
+            }
+            // 填充空节点  哨兵节点只需要一个后继节点以及记录长度就可以了
+            while (newLevel > this.level){
+                List<NodeOptimize> list = new ArrayList<>(2);
+                list.add(newNode);
+                this.root.addFirst(NodeOptimize.builder().len(1).nextItems(list).build());
+                this.level++;
+            }
+            return newNode;
+        }
+
+        /**
+         * 找到前节点删除
+         * 如果触发层级销毁，前提是当前层没有节点，即里面的节点都删除了。
+         * @param val
+         * @return
+         */
         public boolean delete(int val){
-
-            return true;
+            List<NodeOptimize> preNodes = this.findPre(val);
+            NodeOptimize node, next, dummy;
+            boolean result = false;
+            int i=0;
+            Iterator<NodeOptimize> iterator = this.root.iterator();
+            while (iterator.hasNext()){
+                dummy = iterator.next();
+                node = preNodes.get(i++);
+                next = node.nextItems.get(this.getRealPos(i, node.height));
+                // 有后继，改变指针指向， 保存结果，哨兵节点数量减一，到0移除节点
+                if (Objects.nonNull(next)) {
+                    result = true;
+                    dummy.len--;
+                    node.nextItems.set(this.getRealPos(i, node.height),
+                            next.nextItems.get(this.getRealPos(i, next.height)));
+                }
+                // 整个空了，移除
+                if (dummy.len == 0){
+                    iterator.remove();
+                }
+            }
+            return result;
         }
 
+        private NodeOptimize search(NodeOptimize startNode, int val){
+            if (Objects.isNull(startNode)){
+                return null;
+            }
+            NodeOptimize node = startNode;
+            while (Objects.nonNull(node)){
+                // 跳出循环逻辑
+                if (node.val == val){
+                    return node;
+                }
+                else if (node.val > val){
+                    return null;
+                }
+                // 从上往下扫
+                for (int i=0; i<node.nextItems.size(); i++){
+                    if (Objects.nonNull(node.nextItems.get(i))){
+                        node = node.nextItems.get(i);
+                        break;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 查找，自顶向下
+         * @param val
+         * @return 有找到则返回节点，未找到则返回null
+         */
         public NodeOptimize search(int val){
-            return null;
+            if (CollectionUtils.isEmpty(this.root)){
+                return null;
+            }
+            return this.search(this.root.get(0), val);
         }
 
+        /**
+         * 从指定层数开始找前节点
+         * @param val
+         * @param lv
+         * @return
+         */
+        public List<NodeOptimize> findPre(int val, int lv){
+            if (CollectionUtils.isEmpty(this.root) || this.root.size() < lv){
+                return new ArrayList<>(0);
+            }
+            List<NodeOptimize> preNodes = new ArrayList<>(this.root.size() - lv);
+            NodeOptimize pos = this.root.get(lv);
+            // 从哨兵开始扫描
+            while (preNodes.size() < this.level){
+                pos = this.horizontalSearch(pos, val, preNodes.size() + lv);
+                preNodes.add(pos);
+            }
+            return preNodes;
+        }
+
+        /**
+         * 找到前一个节点
+         * @param val
+         * @return
+         */
         public List<NodeOptimize> findPre(int val){
-            
-            return null;
+
+            return this.findPre(val, 0);
+
+//            if (CollectionUtils.isEmpty(this.root)){
+//                return new ArrayList<>(0);
+//            }
+//            List<NodeOptimize> preNodes = new ArrayList<>(this.root.size());
+//            NodeOptimize pos = this.root.get(0), next;
+//            int c = 0;
+//            // 从哨兵开始扫描
+//            while (preNodes.size() < this.level){
+//                pos = this.horizontalSearch(pos, val, preNodes.size());
+//                preNodes.add(pos);
+//            }
+//            return preNodes;
+        }
+
+        /**
+         * 水平定位
+         * @param node
+         * @param val
+         * @param level
+         * @return
+         */
+        private NodeOptimize horizontalSearch(NodeOptimize node, int val, int level){
+            // 没有后续指针，我即是前驱
+//            if (CollectionUtils.isEmpty(node.nextItems)){
+//                return node;
+//            }
+            NodeOptimize next;
+            // 后面同层的为空，或者值比目标值大
+            if (Objects.isNull(next = node.nextItems.get(this.getRealPos(level, node.height))) || next.val > val){
+                return node;
+            }
+            // 后面同层的值小于等于目标值，往后找
+            return this.horizontalSearch(next, val, level);
+        }
+
+        private int getRealPos(int lv, int height){
+            return lv - this.level + height + 1;
         }
 
 
         /**
          * 用nextItems替代原先的next、down指针
          * 引用代替实际创建对象
+         *
+         * 如果跳表的整体层数为q， 当前节点n的最大层数为p(p<=q)，此时n的后继层数标识逻辑为 [0, q-p)
          */
         @NoArgsConstructor
         @AllArgsConstructor
         @Data
         @Builder
         static class NodeOptimize{
+            /**
+             * 层高
+             */
+            private int height;
+            /**
+             * 存储键值
+             */
             private int val;
-            private NodeOptimize[] nextItems;
+            /**
+             * 层节点数量
+             */
+            private int len;
+            /**
+             * 长度根据初始化时的层数设定   理论上来说不可能为空
+             */
+            private List<NodeOptimize> nextItems;
         }
 
 
