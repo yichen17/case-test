@@ -38,7 +38,7 @@ public class CaseTestApplication {
     private static String[] args;
     private static ConfigurableApplicationContext context;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)throws Exception {
 
 //        System.setProperty(TransportConfig.HEARTBEAT_CLIENT_IP, "127.0.0.1");
 

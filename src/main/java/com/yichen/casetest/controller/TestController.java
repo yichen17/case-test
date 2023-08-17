@@ -59,6 +59,17 @@ public class TestController {
     @Autowired
     private DefaultSignUpValidationService defaultSignUpValidationService;
 
+    /**
+     * 路径区分大小写，数据库字符串查找忽略大小写
+     * @return
+     */
+    @PostMapping("/pathCaseIgnore")
+    @ResponseBody
+    @ApiOperation("请求路径大小写问题测试")
+    public String pathCaseIgnore(){
+        return "pathCaseIgnore";
+    }
+
 
     @GetMapping("/transactionTest")
     @ResponseBody

@@ -1,5 +1,6 @@
 package com.yichen.casetest.test.leetcode;
 
+import com.yichen.casetest.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class TripTable {
 
     private static final int RANDOM_RANGE = 10000000;
 
-
+    private static final Random random = new Random();
     private static int randomLevel(){
         int level = 1;
         while (Math.round(Math.random() * RANDOM_RANGE) % N == 0){
@@ -234,12 +235,8 @@ public class TripTable {
             return true;
         }
 
-        private static final Random random = new Random();
-        public static SkipList constructRandomInsert(int len){
-            List<Integer> insertOrders = new ArrayList<>();
-            for (int i=1; i<=len; i++){
-                insertOrders.add(random.nextInt(i), i);
-            }
+        public static SkipList constructRandomInsert(int range){
+            List<Integer> insertOrders = com.yichen.casetest.utils.StringUtils.randomList(range);
             SkipList skipList = new SkipList();
             for (Integer item : insertOrders){
                 skipList.insert(item);
@@ -355,7 +352,9 @@ public class TripTable {
          * @return
          */
         public NodeOptimize insert(int val){
-            int newLevel = randomLevel(), gap = Math.max(0, newLevel-this.level), startPos = this.level - newLevel;
+            // startPos 实际处理位置    gap
+            int newLevel = randomLevel(),
+                    startPos = this.level > newLevel ? this.level - newLevel : 0;
             List<NodeOptimize> preNodes = this.findPre(val, startPos);
             NodeOptimize newNode = NodeOptimize.builder().val(val)
                     .height(newLevel).nextItems(new ArrayList<>(newLevel)).build();
@@ -363,7 +362,7 @@ public class TripTable {
             // 处理现有节点， newLevel层级以下的
             for (int i=startPos; i<this.level; i++){
                 // 相对偏移量
-                node = preNodes.get(i - startPos + gap);
+                node = preNodes.get(i - startPos);
                 next = node.nextItems.get(this.getRealPos(i, node.height));
                 node.nextItems.set(this.getRealPos(i, node.height), newNode);
                 newNode.nextItems.set(i-startPos, next);
@@ -502,16 +501,130 @@ public class TripTable {
 //                return node;
 //            }
             NodeOptimize next;
+            int pos;
             // 后面同层的为空，或者值比目标值大
-            if (Objects.isNull(next = node.nextItems.get(this.getRealPos(level, node.height))) || next.val > val){
+            if (Objects.isNull(node)
+                    || CollectionUtils.isEmpty(node.nextItems)
+                    || (pos = this.getRealPos(level, node.height)) >= node.nextItems.size()
+                    ||  Objects.isNull(next = node.nextItems.get(pos))
+                    || next.val > val){
                 return node;
             }
             // 后面同层的值小于等于目标值，往后找
             return this.horizontalSearch(next, val, level);
         }
 
+        /**
+         * 计算真实高度
+         *                  节点层数 -  （当前跳表层数 - 层数 - 1 ） - 1
+         * @param lv  遍历层数
+         * @param height 节点层高
+         * @return
+         */
         private int getRealPos(int lv, int height){
-            return lv - this.level + height + 1;
+            return lv - this.level + height;
+        }
+
+        public static SkipListOptimize randomInsert(int range){
+            SkipListOptimize root = new SkipListOptimize();
+            StringUtils.randomList(range).forEach(root::insert);
+            return root;
+        }
+
+        /**
+         * 水平打印
+         * @param node
+         */
+        public static void verticalPrint(SkipListOptimize node){
+            if (CollectionUtils.isEmpty(node.root)){
+                return;
+            }
+            StringBuilder builder = new StringBuilder();
+            for (int i=0; i< node.level; i++){
+                boolean first = true;
+                NodeOptimize dummy = node.root.get(i);
+                builder.append("level ");
+                while (Objects.nonNull(dummy)){
+                    if (first){
+                        first = false;
+                    }
+                    else {
+                        builder.append("=> ").append(dummy.val);
+                    }
+                    // 往后定位走
+                    dummy = dummy.nextItems.get(node.getRealPos(i, dummy.height));
+                }
+                System.out.println(builder);
+                builder = new StringBuilder();
+            }
+        }
+
+        /**
+         * 水平校验
+         * @param node
+         * @return
+         */
+        public static boolean verticalCheck(SkipListOptimize node){
+            if (CollectionUtils.isEmpty(node.root)){
+                return true;
+            }
+            StringBuilder builder = new StringBuilder();
+            int preVal;
+            for (int i=0; i< node.level; i++){
+                boolean first = true;
+                preVal = -1;
+                NodeOptimize dummy = node.root.get(i);
+                while (Objects.nonNull(dummy)){
+                    if (first){
+                        first = false;
+                    }
+                    else if (preVal > dummy.val){
+                        verticalPrint(node);
+                        return false;
+                    }
+                    else {
+                        preVal = dummy.val;
+                    }
+                    // 往后定位走
+                    dummy = dummy.nextItems.get(node.getRealPos(i, dummy.height));
+                }
+                System.out.println(builder);
+                builder = new StringBuilder();
+            }
+            return true;
+        }
+
+        public static boolean singleVerify(int range){
+            SkipListOptimize skipListOptimize = randomInsert(range);
+            if (!verticalCheck(skipListOptimize)){
+                verticalPrint(skipListOptimize);
+                return false;
+            }
+            return true;
+        }
+
+
+        /**
+         * 验证构造的跳表的正确性
+         * 1、插入是否有问题
+         * 2、删除查找是否有问题
+         * 3、时间开销
+         * @param insertTimes
+         * @param range
+         */
+        public static void valid(int insertTimes, int range, int searchOrDelTimes){
+            long start;
+            SkipListOptimize root;
+            for (int i=0; i<insertTimes; i++){
+                // 测试插入是否正确
+                if (!singleVerify(range)){
+                    return;
+                }
+                // 测试删除、查找
+//                for (int j=0; j<searchOrDelTimes; j++){
+//
+//                }
+            }
         }
 
 
@@ -543,16 +656,18 @@ public class TripTable {
              */
             private List<NodeOptimize> nextItems;
         }
-
-
-
-
     }
 
 
 
     public static void main(String[] args) {
-        SkipList.caseCheck(100, 10000, 100000);
+//        SkipList.caseCheck(100, 10000, 100000);
+//        SkipListOptimize.valid(100, 10000, 100);
+
+        SkipListOptimize skipListOptimize = new SkipListOptimize();
+        skipListOptimize.insert(1);
+        skipListOptimize.insert(2);
+
     }
 
 

@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +47,19 @@ public class StringUtils {
             builder.append(ALPHA_NUMBER.charAt((int)(Math.random() * ALPHA_NUMBER.length())));
         }
         return  builder.toString();
+    }
+
+    /**
+     * 构造1到 {@code range} 的乱序list
+     * @param range
+     * @return
+     */
+    public static List<Integer> randomList(int range){
+        List<Integer> list = new ArrayList<>();
+        for (int i=1; i<=range; i++){
+            list.add(random.nextInt(i), i);
+        }
+        return list;
     }
 
     private static final String[] SPECIAL_CITY = {"北京市", "上海市", "天津市", "重庆市"};
