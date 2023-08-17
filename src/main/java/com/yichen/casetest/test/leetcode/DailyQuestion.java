@@ -2,7 +2,6 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 
 import java.util.*;
 
@@ -15,7 +14,8 @@ import java.util.*;
 @Slf4j
 public class DailyQuestion {
 
-    Random random = new Random();
+    private static final Random random = new Random();
+    private static final int MOD = 1000000007;
     public void swap(int[] fronts, int a, int b){
         int temp = fronts[a];
         fronts[a] = fronts[b];
@@ -57,6 +57,82 @@ public class DailyQuestion {
         findReplaceString(dq);
         StringUtils.divisionLine();
         circularGameLosersTest(dq);
+        StringUtils.divisionLine();
+        waysTest(dq);
+    }
+
+    // 1444. 切披萨的方案数   52/54 超时，几个小时过去了，我是废物
+
+    public static void waysTest(DailyQuestion dq){
+        System.out.println(dq.ways(new String[]{"AAA","AAA","AAA","AAA"}, 6));
+        System.out.println(dq.ways(new String[]{"A..","AAA","..."}, 3));
+        System.out.println(dq.ways(new String[]{"A..","AA.","..."}, 3));
+        System.out.println(dq.ways(new String[]{"A..","A..","..."}, 1));
+        System.out.println(dq.ways(new String[]{"A"}, 1));
+        System.out.println(dq.ways(new String[]{"."}, 1));
+        System.out.println(dq.ways(new String[]{"AAA","AAA","AAA","AAA","AAA","AAA"}, 6));
+        System.out.println(dq.ways(StringUtils.randomArrayInSpecificCharacters(new char[]{'A', '.'}, 40, 40), 5));
+    }
+
+    private int k;
+    private int splitPizzaResult;
+    public int ways(String[] pizza, int k) {
+        this.k = k;
+        this.splitPizzaResult = 0;
+        int row = pizza.length, col = pizza[0].length();
+        int[][] dp = new int[row+1][col+1];
+        // 以左上角统计苹果个数
+        for (int i=1; i<row+1; i++){
+            for (int j=1; j<col+1; j++){
+                dp[i][j] = dp[i-1][j] + dp[i][j-1] -dp[i-1][j-1] + (pizza[i-1].charAt(j-1) == 'A' ? 1 : 0);
+            }
+        }
+        this.splitPizza(dp, 1, 1, row, col, 0);
+        return this.splitPizzaResult;
+    }
+
+    private void splitPizza(int[][] dp, int r1, int c1, int r2, int c2, int times){
+        if (times == k-1){
+            if (getAppleNum(dp, r1, c1, r2, c2) > 0){
+                this.splitPizzaResult++;
+                if (this.splitPizzaResult > MOD) {
+                    this.splitPizzaResult %= MOD;
+                }
+            }
+            return ;
+        }
+        this.horizontalCut(dp, r1, c1, r2, c2, times);
+        this.verticalCut(dp, r1, c1, r2, c2, times);
+    }
+
+    /**
+     * 水平切 上面的不要
+     */
+    private void horizontalCut(int[][] dp, int r1, int c1, int r2, int c2, int times){
+        for (int i=r1; i<r2; i++){
+            if (this.getAppleNum(dp, r1, c1, i, c2) > 0){
+                this.splitPizza(dp, i+1, c1, r2, c2, times+1);
+            }
+        }
+    }
+
+    /**
+     * 垂直切 左边的不要
+     */
+    private void verticalCut(int[][] dp, int r1, int c1, int r2, int c2, int times){
+        for (int i=c1; i<c2; i++){
+            if (this.getAppleNum(dp, r1, c1, r2, i) > 0){
+                this.splitPizza(dp, r1, i+1, r2, c2, times+1);
+            }
+        }
+    }
+
+    private int getAppleNum(int[][] dp, int r1, int c1, int r2, int c2){
+        int row = dp.length, col = dp[0].length;
+        if (r1 >= row || r2 >= row || c1 >= col || c2 >= col){
+            return 0;
+        }
+        return dp[r2][c2] - dp[r2][c1-1] - dp[r1-1][c2] + dp[r1-1][c1-1];
     }
 
     // 2682. 找出转圈游戏输家
