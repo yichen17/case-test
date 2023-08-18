@@ -294,6 +294,19 @@ public class StringUtils {
     }
 
 
+    public static String[] randomArrayInSpecificCharacters(char[] chars, int vertical, int horizontal){
+        String[] result = new String[vertical];
+        StringBuilder builder = new StringBuilder();
+        for (int i=0; i<vertical; i++){
+            for (int j=0; j<horizontal; j++){
+                builder.append(chars[random.nextInt(chars.length)]);
+            }
+            result[i] = builder.toString();
+            builder = new StringBuilder();
+        }
+        log.debug("randomArrayInSpecificCharacters => {}", printArray(result, "\",\"", "\"", "\""));
+        return result;
+    }
 
     /**
      * 构造指定长度字符串，内容都是字符c
