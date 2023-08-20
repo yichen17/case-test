@@ -59,7 +59,25 @@ public class DailyQuestion {
         circularGameLosersTest(dq);
         StringUtils.divisionLine();
         waysTest(dq);
+        StringUtils.divisionLine();
+//        maxSizeSlicesTest(dq);
+        StringUtils.divisionLine();
+        checkTreeTest(dq);
     }
+
+    // 2236. 判断根结点是否等于子结点之和
+
+    public static void checkTreeTest(DailyQuestion dq){
+        System.out.println(dq.checkTree(TreeNode.buildTree(new Integer[]{10, 4, 6})));
+        System.out.println(dq.checkTree(TreeNode.buildTree(new Integer[]{5, 3, 1})));
+    }
+
+    public boolean checkTree(TreeNode root) {
+        return root.val == root.left.val + root.right.val;
+    }
+
+
+    
 
     // 1444. 切披萨的方案数   52/54 超时，几个小时过去了，我是废物
 
