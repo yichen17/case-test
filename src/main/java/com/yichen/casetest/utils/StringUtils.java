@@ -173,7 +173,27 @@ public class StringUtils {
 
 
     private static Random random = new Random();
-    public static Integer[] randomIntArray(int length, int low, int high){
+
+    public static int[] randomIntArray(int length, int low, int high){
+        if (length <= 0 ){
+            return new int[0];
+        }
+        if (high < low){
+            return new int[0];
+        }
+        int[] result = new int[length];
+        int width = high - low;
+        for (int i=0; i<length; i++){
+            result[i] = random.nextInt(width) + low;
+        }
+        if (log.isDebugEnabled()){
+            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
+                    .mapToObj(String::valueOf).collect(Collectors.joining(",")));
+        }
+        return result;
+    }
+
+    public static Integer[] randomIntArrayWrapper(int length, int low, int high){
         if (length <= 0 ){
             return new Integer[0];
         }
@@ -296,16 +316,19 @@ public class StringUtils {
 
     public static String[] randomArrayInSpecificCharacters(char[] chars, int vertical, int horizontal){
         String[] result = new String[vertical];
-        StringBuilder builder = new StringBuilder();
         for (int i=0; i<vertical; i++){
-            for (int j=0; j<horizontal; j++){
-                builder.append(chars[random.nextInt(chars.length)]);
-            }
-            result[i] = builder.toString();
-            builder = new StringBuilder();
+            result[i] = randomArrayInSpecificCharacters(chars, horizontal);
         }
         log.debug("randomArrayInSpecificCharacters => {}", printArray(result, "\",\"", "\"", "\""));
         return result;
+    }
+
+    public static String randomArrayInSpecificCharacters(char[] chars,  int horizontal){
+        StringBuilder builder = new StringBuilder();
+        for (int j=0; j<horizontal; j++){
+            builder.append(chars[random.nextInt(chars.length)]);
+        }
+        return builder.toString();
     }
 
     /**
@@ -366,13 +389,17 @@ public class StringUtils {
         int times;
         for(int i=0; i<size; i++){
             times = random.nextInt(500);
-            while (times>0){
-                times--;
-                randomSwapCharArray(chars);
-            }
-            result[i] = new String(chars);
+            result[i] = new String(randomSwap(chars, times));
         }
         return result;
+    }
+
+    public static String randomSwap(char[] chars, int times){
+        while (times>0){
+            times--;
+            randomSwapCharArray(chars);
+        }
+        return new String(chars);
     }
 
     private static void randomSwapCharArray(char[] chars){

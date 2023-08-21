@@ -606,7 +606,7 @@ public class SortTest {
                 int len = chainInfo.isRandomLen() ? (int) (Math.random() * chainInfo.getLen()) : chainInfo.getLen();
                 int limit = chainInfo.isRandomLimit() ? (int) (Math.random() * chainInfo.getLimit()) : chainInfo.getLimit();
                 StringUtils.divisionLine(String.format("  len:%s, limit:%s", len, limit));
-                this.array = StringUtils.randomIntArray(len, 0, limit);
+                this.array = StringUtils.randomIntArrayWrapper(len, 0, limit);
                 int failTimes = this.execSingle();
                 if (failTimes > 0){
                     return true;

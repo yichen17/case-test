@@ -34,7 +34,7 @@ public class ForkJoinPoolTest {
         log.info("{} {} {}", (left + right) >> 1, ((left + right) >> 1)+ 1, (left + right) >> 1 + 1);
         System.gc();
 
-        Integer[] params = StringUtils.randomIntArray(1300000000, 0, 2);
+        Integer[] params = StringUtils.randomIntArrayWrapper(1300000000, 0, 2);
 //        Integer[] params = StringUtils.randomIntArray(100000, 0, 1000);
 
 //        forkJoinPool(params);
@@ -96,7 +96,7 @@ public class ForkJoinPoolTest {
         CustomRecursiveAction customRecursiveAction = new CustomRecursiveAction(str);
         customRecursiveAction.compute();
         StringUtils.divisionLine();
-        Integer[] params = StringUtils.randomIntArray(200, 0, 27);
+        Integer[] params = StringUtils.randomIntArrayWrapper(200, 0, 27);
         long onceCal = Arrays.stream(params).filter(p -> p > 10 && p < 27).map(a -> a * 10).count();
         CustomRecursiveTask task = new CustomRecursiveTask(params);
         log.info("task 执行结果 {} {}", task.compute(), onceCal);

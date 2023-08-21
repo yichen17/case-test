@@ -63,7 +63,60 @@ public class DailyQuestion {
 //        maxSizeSlicesTest(dq);
         StringUtils.divisionLine();
         checkTreeTest(dq);
+        StringUtils.divisionLine();
+        canChangeTest(dq);
     }
+
+    // 2337. 移动片段得到字符串
+
+    public static void canChangeTest(DailyQuestion dq){
+        System.out.println(dq.canChange("_L__R__R_", "L______RR"));
+        System.out.println(dq.canChange("R_L_", "__LR"));
+        System.out.println(dq.canChange("_R", "R_"));
+        String s = StringUtils.randomArrayInSpecificCharacters(new char[]{'L', 'R', '_'}, 10000);
+        String s1 = StringUtils.randomSwap(s.toCharArray(), 100);
+        System.out.println(dq.canChange(s, s1));
+    }
+
+    public boolean canChange(String start, String target) {
+        log.debug("\n{}\n{}", start, target);
+        if (start.length() != target.length()
+                || !start.replace("_", "").equals(target.replace("_", ""))){
+            return false;
+        }
+        for (int p = 0, q = 0, len = start.length(); p<len&&q<len;p++,q++){
+            while (p<len && start.charAt(p) != 'L'){
+                p++;
+            }
+            if (p == len){
+                break;
+            }
+            while (target.charAt(q) != 'L'){
+                q++;
+            }
+            if (p<q){
+                return false;
+            }
+        }
+        for (int p = start.length()-1, q = start.length()-1; p>=0&&q>=0;p--,q--){
+            while (p>=0 && start.charAt(p) != 'R'){
+                p--;
+            }
+            if (p == -1){
+                break;
+            }
+            while (target.charAt(q) != 'R'){
+                q--;
+            }
+            if (q < p){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
 
     // 2236. 判断根结点是否等于子结点之和
 
@@ -76,7 +129,109 @@ public class DailyQuestion {
         return root.val == root.left.val + root.right.val;
     }
 
+    // 1388. 3n 块披萨
 
+    public static void maxSizeSlicesTest(DailyQuestion dq){
+        System.out.println(dq.maxSizeSlices(new int[]{1,2,3,4,5,6}));
+        System.out.println(dq.maxSizeSlices(new int[]{8,9,8,6,1,1}));
+        System.out.println(dq.maxSizeSlices(StringUtils.randomIntArray(498, 1, 1000)));
+    }
+
+    public int maxSizeSlices(int[] slices) {
+        int row = slices.length, col = row / 3;
+        SlicesItem needNotTotal = new SlicesItem(1, col-1, 1, slices[0], row-2);
+        SlicesItem notNeedTotal = new SlicesItem(1, col, 0, 0, row-1);
+        Queue<SlicesItem> queue = new LinkedList<>();
+        queue.offer(needNotTotal);
+        queue.offer(notNeedTotal);
+        int result = Integer.MIN_VALUE;
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            while (len > 0){
+                len--;
+                SlicesItem item = queue.poll();
+                if (item.times < 0
+                        || item.times > item.max - item.pos + 1
+                ){
+                    continue;
+                }
+                if (item.pos > item.max){
+                    if (item.times == 0){
+                        result = Math.max(result, item.val);
+                    }
+                    continue;
+                }
+                if (item.flag == 0){
+                    queue.offer(SlicesItem.nextNode(item, true, slices));
+                }
+                queue.offer(SlicesItem.nextNode(item, false, slices));
+            }
+
+        }
+        return result;
+    }
+
+    private static class SlicesItem{
+        public int pos;
+        public int times;
+        /**
+         * 1表示要，0表示不要
+         */
+        public int flag;
+
+        public int val;
+
+        public int max;
+
+        public SlicesItem(int pos, int times, int flag, int val, int max) {
+            this.pos = pos;
+            this.times = times;
+            this.flag = flag;
+            this.val = val;
+            this.max = max;
+        }
+
+        public static SlicesItem nextNode(SlicesItem node, boolean need, int[] slices){
+            if (Objects.isNull(node)){
+                return null;
+            }
+            if (need){
+                return new SlicesItem(node.pos+1, node.times-1, 1, node.val + slices[node.pos], node.max);
+            }
+            return new SlicesItem(node.pos+1, node.times, 0, node.val, node.max);
+        }
+
+        public static SlicesItem getNode(SlicesItem pre,SlicesItem now, int max, boolean totalLen, boolean need){
+            // 空则判断长度校验
+            if (Objects.isNull(pre)){
+                if (checkMaxLen(now, max, totalLen) && checkNeed(now, need)){
+                    return now;
+                }
+                return pre;
+            }
+            // 节点坐标位置不一致，返回pre
+            if (pre.pos != now.pos){
+                return pre;
+            }
+            // 最大值校验
+            if (!checkMaxLen(now, max, totalLen) || !checkNeed(now, need)){
+                return pre;
+            }
+            return now;
+        }
+
+        private static boolean checkNeed(SlicesItem now, boolean need){
+            return (!need && now.flag == 1) ||  now.flag == 0;
+        }
+
+        private static boolean checkMaxLen(SlicesItem now, int max, boolean totalLen){
+            if ((totalLen && now.max == max) || (!totalLen && now.max == max - 1)){
+                return true;
+            }
+            return false;
+        }
+
+    }
     
 
     // 1444. 切披萨的方案数   52/54 超时，几个小时过去了，我是废物
@@ -722,10 +877,14 @@ public class DailyQuestion {
                 set.add(fronts[i]);
                 continue;
             }
-            if (set.add(backs[i]))return backs[i];
+            if (set.add(backs[i])){
+                return backs[i];
+            }
             break;
         }
-        if (i == fronts.length)return 0;
+        if (i == fronts.length){
+            return 0;
+        }
         int min =  fronts[i], b = backs[i];
         boolean first = false;
         for(i = i+1; i<fronts.length; i++){
@@ -765,7 +924,9 @@ public class DailyQuestion {
 
     public void bubbleSort(int[] fronts, int[] backs){
         int len = fronts.length;
-        if (len < 2)return;
+        if (len < 2){
+            return;
+        }
         boolean swapItem = false;
         while (!swapItem){
             swapItem = true;
@@ -800,7 +961,9 @@ public class DailyQuestion {
     }
 
     public void twoArraySwap(int[] fronts, int[] backs, int a,int b){
-        if (a == b)return;
+        if (a == b){
+            return;
+        }
         this.swap(fronts, a, b);
         this.swap(backs, a, b);
     }
