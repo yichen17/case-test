@@ -60,11 +60,48 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         waysTest(dq);
         StringUtils.divisionLine();
-//        maxSizeSlicesTest(dq);
+        maxSizeSlicesTest(dq);
         StringUtils.divisionLine();
         checkTreeTest(dq);
         StringUtils.divisionLine();
         canChangeTest(dq);
+        StringUtils.divisionLine();
+        maxDistToClosestTest(dq);
+    }
+
+    // 849. 到最近的人的最大距离
+
+    private static void maxDistToClosestTest(DailyQuestion dq){
+        System.out.println(dq.maxDistToClosest(new int[]{1,0,0,0,1,0,1}));
+        System.out.println(dq.maxDistToClosest(new int[]{1,0,0,0}));
+        System.out.println(dq.maxDistToClosest(new int[]{0,1}));
+        System.out.println(dq.maxDistToClosest(StringUtils.randomIntArray(10000, 0, 2)));
+    }
+
+    public int maxDistToClosest(int[] seats) {
+        int max = Integer.MIN_VALUE;
+        int pre = -1;
+        for (int i=0; i<seats.length; i++){
+            if (seats[i] == 1){
+                if (pre == -1){
+                    max = i;
+                }
+                else if (pre != -2){
+                    max = Math.max(max, (i-pre)%2 + (i-pre)/2);
+                }
+                pre = -2;
+            }
+            else if(pre == -2){
+                pre = i;
+            }
+        }
+        if (pre == -1){
+            max = Math.max(max, (seats.length-1)%2 + (seats.length-1)/2);
+        }
+        else if (pre != -2){
+            max = Math.max(max, seats.length-pre);
+        }
+        return max;
     }
 
     // 2337. 移动片段得到字符串
@@ -138,100 +175,10 @@ public class DailyQuestion {
     }
 
     public int maxSizeSlices(int[] slices) {
-        int row = slices.length, col = row / 3;
-        SlicesItem needNotTotal = new SlicesItem(1, col-1, 1, slices[0], row-2);
-        SlicesItem notNeedTotal = new SlicesItem(1, col, 0, 0, row-1);
-        Queue<SlicesItem> queue = new LinkedList<>();
-        queue.offer(needNotTotal);
-        queue.offer(notNeedTotal);
-        int result = Integer.MIN_VALUE;
-        while (!queue.isEmpty()){
-            int len = queue.size();
-            while (len > 0){
-                len--;
-                SlicesItem item = queue.poll();
-                if (item.times < 0
-                        || item.times > item.max - item.pos + 1
-                ){
-                    continue;
-                }
-                if (item.pos > item.max){
-                    if (item.times == 0){
-                        result = Math.max(result, item.val);
-                    }
-                    continue;
-                }
-                if (item.flag == 0){
-                    queue.offer(SlicesItem.nextNode(item, true, slices));
-                }
-                queue.offer(SlicesItem.nextNode(item, false, slices));
-            }
-
-        }
-        return result;
+        return 0;
     }
 
-    private static class SlicesItem{
-        public int pos;
-        public int times;
-        /**
-         * 1表示要，0表示不要
-         */
-        public int flag;
 
-        public int val;
-
-        public int max;
-
-        public SlicesItem(int pos, int times, int flag, int val, int max) {
-            this.pos = pos;
-            this.times = times;
-            this.flag = flag;
-            this.val = val;
-            this.max = max;
-        }
-
-        public static SlicesItem nextNode(SlicesItem node, boolean need, int[] slices){
-            if (Objects.isNull(node)){
-                return null;
-            }
-            if (need){
-                return new SlicesItem(node.pos+1, node.times-1, 1, node.val + slices[node.pos], node.max);
-            }
-            return new SlicesItem(node.pos+1, node.times, 0, node.val, node.max);
-        }
-
-        public static SlicesItem getNode(SlicesItem pre,SlicesItem now, int max, boolean totalLen, boolean need){
-            // 空则判断长度校验
-            if (Objects.isNull(pre)){
-                if (checkMaxLen(now, max, totalLen) && checkNeed(now, need)){
-                    return now;
-                }
-                return pre;
-            }
-            // 节点坐标位置不一致，返回pre
-            if (pre.pos != now.pos){
-                return pre;
-            }
-            // 最大值校验
-            if (!checkMaxLen(now, max, totalLen) || !checkNeed(now, need)){
-                return pre;
-            }
-            return now;
-        }
-
-        private static boolean checkNeed(SlicesItem now, boolean need){
-            return (!need && now.flag == 1) ||  now.flag == 0;
-        }
-
-        private static boolean checkMaxLen(SlicesItem now, int max, boolean totalLen){
-            if ((totalLen && now.max == max) || (!totalLen && now.max == max - 1)){
-                return true;
-            }
-            return false;
-        }
-
-    }
     
 
     // 1444. 切披萨的方案数   52/54 超时，几个小时过去了，我是废物
