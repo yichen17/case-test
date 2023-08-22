@@ -61,7 +61,7 @@ public class DailyQuestion {
         waysTest(dq);
         StringUtils.divisionLine();
         maxSizeSlicesTest(dq);
-        StringUtils.divisionLine();
+        StringUtils.divisionLine("maxSizeSlices");
         checkTreeTest(dq);
         StringUtils.divisionLine();
         canChangeTest(dq);
@@ -175,7 +175,21 @@ public class DailyQuestion {
     }
 
     public int maxSizeSlices(int[] slices) {
-        return 0;
+        return Math.max(this.maxSizeSlices(slices, 0, slices.length-2), this.maxSizeSlices(slices, 1, slices.length-1));
+    }
+
+    private int maxSizeSlices(int[] slices, int from, int to){
+        int len = slices.length, times = len/3;
+        int[][] dp = new int[len][times+1];
+        // 节点初始化
+        dp[1][1] = slices[from];
+        dp[2][1] = Math.max(slices[from], slices[from+1]);
+        for (int i=3; i<=to-from+1; i++){
+            for(int k=1; k<i&&k<=times; k++){
+                dp[i][k] = Math.max(dp[i-1][k], dp[i-2][k-1] + slices[from-1+i]);
+            }
+        }
+        return dp[to-from+1][times];
     }
 
 
