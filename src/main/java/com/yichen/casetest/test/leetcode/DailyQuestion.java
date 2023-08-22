@@ -1,7 +1,10 @@
 package com.yichen.casetest.test.leetcode;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -24,9 +27,18 @@ public class DailyQuestion {
 
     int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
 
-
+    private static void setErrorLogLevel(){
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
+        loggerList.forEach(logger -> {
+            logger.setLevel(Level.INFO);
+        });
+    }
 
     public static void main(String[] args) {
+
+        setErrorLogLevel();
+
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
         StringUtils.divisionLine();
@@ -172,10 +184,46 @@ public class DailyQuestion {
         System.out.println(dq.maxSizeSlices(new int[]{1,2,3,4,5,6}));
         System.out.println(dq.maxSizeSlices(new int[]{8,9,8,6,1,1}));
         System.out.println(dq.maxSizeSlices(StringUtils.randomIntArray(498, 1, 1000)));
+        // 执行时长测试
+        long totalCost = 0, start;
+        for (int i=0; i<10000; i++){
+            int[] slices = StringUtils.randomIntArray(3 + 3 * random.nextInt(187), 1, 1000);
+            start = System.currentTimeMillis();
+            dq.maxSizeSlicesOther(slices);
+            totalCost += System.currentTimeMillis() - start;
+        }
+        log.info("maxSizeSlicesOther 10000组耗时{}", totalCost);
+        totalCost = 0;
+        for (int i=0; i<10000; i++){
+            int[] slices = StringUtils.randomIntArray(498, 1, 1000);
+            start = System.currentTimeMillis();
+            dq.maxSizeSlices(slices);
+            totalCost += System.currentTimeMillis() - start;
+        }
+        log.info("maxSizeSlices 10000组耗时{}", totalCost);
     }
 
     public int maxSizeSlices(int[] slices) {
         return Math.max(this.maxSizeSlices(slices, 0, slices.length-2), this.maxSizeSlices(slices, 1, slices.length-1));
+//        return this.maxSizeSlicesOther(slices);
+    }
+
+    public int maxSizeSlicesOther(int[] slices) {
+        int len = slices.length, times = len/3;
+        int[][][] dp = new int[len][times+1][2];
+        int from = 0, to = len-2;
+        // 节点初始化
+        dp[1][1][0] = slices[from];
+        dp[2][1][0] = Math.max(slices[from], slices[from+1]);
+        dp[1][1][1] = slices[from+1];
+        dp[2][1][1] = Math.max(slices[from+1], slices[from+2]);
+        for (int i=3; i<=to-from+1; i++){
+            for(int k=1; k<i&&k<=times; k++){
+                dp[i][k][0] = Math.max(dp[i-1][k][0], dp[i-2][k-1][0] + slices[from-1+i]);
+                dp[i][k][1] = Math.max(dp[i-1][k][1], dp[i-2][k-1][1] + slices[from+i]);
+            }
+        }
+        return Math.max(dp[to-from+1][times][0], dp[to-from+1][times][1]);
     }
 
     private int maxSizeSlices(int[] slices, int from, int to){
