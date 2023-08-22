@@ -184,23 +184,35 @@ public class DailyQuestion {
         System.out.println(dq.maxSizeSlices(new int[]{1,2,3,4,5,6}));
         System.out.println(dq.maxSizeSlices(new int[]{8,9,8,6,1,1}));
         System.out.println(dq.maxSizeSlices(StringUtils.randomIntArray(498, 1, 1000)));
+//        compareMaxSizeSlices(dq);
+    }
+
+    private static void compareMaxSizeSlices(DailyQuestion dq){
         // 执行时长测试
-        long totalCost = 0, start;
+        long totalCostA = 0, costA, totalCostB=0, costB, lessA=0, lessB=0, same=0;
         for (int i=0; i<10000; i++){
             int[] slices = StringUtils.randomIntArray(3 + 3 * random.nextInt(187), 1, 1000);
-            start = System.currentTimeMillis();
+            System.gc();
+            costA = System.currentTimeMillis();
             dq.maxSizeSlicesOther(slices);
-            totalCost += System.currentTimeMillis() - start;
-        }
-        log.info("maxSizeSlicesOther 10000组耗时{}", totalCost);
-        totalCost = 0;
-        for (int i=0; i<10000; i++){
-            int[] slices = StringUtils.randomIntArray(498, 1, 1000);
-            start = System.currentTimeMillis();
+            costA = System.currentTimeMillis() - costA;
+            System.gc();
+            costB = System.currentTimeMillis();
             dq.maxSizeSlices(slices);
-            totalCost += System.currentTimeMillis() - start;
+            costB = System.currentTimeMillis() - costB;
+            if (costA>costB){
+                lessB++;
+            }
+            else if (costA<costB){
+                lessA++;
+            }
+            else {
+                same++;
+            }
+            totalCostB += costB;
+            totalCostA += costA;
         }
-        log.info("maxSizeSlices 10000组耗时{}", totalCost);
+        log.info("10000次，A耗时短{}次，B耗时短{}次,相同耗时{}，A总耗时{},B总耗时{}", lessA, lessB, same, totalCostA, totalCostB);
     }
 
     public int maxSizeSlices(int[] slices) {
