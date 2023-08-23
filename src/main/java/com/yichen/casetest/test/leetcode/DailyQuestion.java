@@ -71,8 +71,8 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         circularGameLosersTest(dq);
         StringUtils.divisionLine();
-        waysTest(dq);
-        StringUtils.divisionLine();
+//        waysTest(dq);
+        StringUtils.divisionLine("waysTest");
         maxSizeSlicesTest(dq);
         StringUtils.divisionLine("maxSizeSlices");
         checkTreeTest(dq);
@@ -82,7 +82,44 @@ public class DailyQuestion {
         maxDistToClosestTest(dq);
         StringUtils.divisionLine();
         countPairsTest(dq);
+        StringUtils.divisionLine();
+        countServersTest(dq);
     }
+
+    // 1267. 统计参与通信的服务器
+
+    private static void countServersTest(DailyQuestion dq){
+        System.out.println(dq.countServers(StringUtils.convert2Array("[[1,0],[0,1]]")));
+        System.out.println(dq.countServers(StringUtils.convert2Array("[[1,0],[1,1]]")));
+        System.out.println(dq.countServers(StringUtils.convert2Array("[[1,1,0,0],[0,0,1,0],[0,0,1,0],[0,0,0,1]]")));
+    }
+
+    public int countServers(int[][] grid) {
+        int row = grid.length, col = grid[0].length;
+        int result = 0;
+        int[] rowCount = new int[row];
+        int[] colCount = new int[col];
+        for (int i=0; i<row; i++){
+            for (int j=0; j<col; j++){
+                if (grid[i][j] == 1){
+                    rowCount[i]++;
+                    colCount[j]++;
+                    result++;
+                }
+            }
+        }
+        for (int i=0; i<row; i++){
+            for (int j=0; j<col; j++){
+                if (grid[i][j] == 1 && (rowCount[i] == 1 && colCount[j] == 1)){
+                    result--;
+                }
+            }
+        }
+        return result;
+    }
+
+
+
 
     // 1782. 统计点对的数目
     // 我是废物  第一次边界值问题  第二次超出时间显示  第三次超出空间限制  第四次自闭。。。
@@ -428,44 +465,23 @@ public class DailyQuestion {
                 dp[i][j] = dp[i-1][j] + dp[i][j-1] -dp[i-1][j-1] + (pizza[i-1].charAt(j-1) == 'A' ? 1 : 0);
             }
         }
-        this.splitPizza(dp, 1, 1, row, col, 0);
-        return this.splitPizzaResult;
-    }
-
-    private void splitPizza(int[][] dp, int r1, int c1, int r2, int c2, int times){
-        if (times == k-1){
-            if (getAppleNum(dp, r1, c1, r2, c2) > 0){
-                this.splitPizzaResult++;
-                if (this.splitPizzaResult > MOD) {
-                    this.splitPizzaResult %= MOD;
+        int[][][] f = new int[row+1][col+1][k+1];
+        for (int i=1; i<=row; i++){
+            for (int j=1; j<=col; j++){
+                for (int t=0; t<=k; t++){
+                    int max = f[i-1][j][t];
+                    max = Math.max(max, f[i][j-1][t]);
+                    if (this.getAppleNum(dp, i-1, j, i, j) > 0){
+                        max = Math.max(max, f[i-1][j][t-1]);
+                    }
+                    if (this.getAppleNum(dp, i, j-1, i, j) > 0){
+                        max = Math.max(max, f[i][j-1][t-1]);
+                    }
+                    f[i][j][t] = max;
                 }
             }
-            return ;
         }
-        this.horizontalCut(dp, r1, c1, r2, c2, times);
-        this.verticalCut(dp, r1, c1, r2, c2, times);
-    }
-
-    /**
-     * 水平切 上面的不要
-     */
-    private void horizontalCut(int[][] dp, int r1, int c1, int r2, int c2, int times){
-        for (int i=r1; i<r2; i++){
-            if (this.getAppleNum(dp, r1, c1, i, c2) > 0){
-                this.splitPizza(dp, i+1, c1, r2, c2, times+1);
-            }
-        }
-    }
-
-    /**
-     * 垂直切 左边的不要
-     */
-    private void verticalCut(int[][] dp, int r1, int c1, int r2, int c2, int times){
-        for (int i=c1; i<c2; i++){
-            if (this.getAppleNum(dp, r1, c1, r2, i) > 0){
-                this.splitPizza(dp, r1, i+1, r2, c2, times+1);
-            }
-        }
+        return f[row][col][k];
     }
 
     private int getAppleNum(int[][] dp, int r1, int c1, int r2, int c2){
