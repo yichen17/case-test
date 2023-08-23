@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
@@ -79,7 +80,153 @@ public class DailyQuestion {
         canChangeTest(dq);
         StringUtils.divisionLine();
         maxDistToClosestTest(dq);
+        StringUtils.divisionLine();
+        countPairsTest(dq);
     }
+
+    // 1782. 统计点对的数目
+    // 我是废物  第一次边界值问题  第二次超出时间显示  第三次超出空间限制  第四次自闭。。。
+
+    public static void countPairsTest(DailyQuestion dq){
+        StringUtils.printIntArray(dq.countPairs(4, new int[][]{{1,2}, {1,3}, {2,3}, {2,4}, {2,1}}, new int[]{2, 3}));
+        StringUtils.printIntArray(dq.countPairsOptimize(4, new int[][]{{1,2}, {1,3}, {2,3}, {2,4}, {2,1}}, new int[]{2, 3}));
+        StringUtils.printIntArray(dq.countPairs(5,
+                StringUtils.convert2Array("[[1,5],[1,5],[3,4],[2,5],[1,3],[5,1],[2,3],[2,5]]"), new int[]{1,2,3,4,5}));
+        StringUtils.printIntArray(dq.countPairsOptimize(5,
+                StringUtils.convert2Array("[[1,5],[1,5],[3,4],[2,5],[1,3],[5,1],[2,3],[2,5]]"), new int[]{1,2,3,4,5}));
+        StringUtils.printIntArray(dq.countPairs(6,
+                StringUtils.convert2Array("[[5,2],[3,5],[4,5],[1,5],[1,4],[3,5],[2,6],[6,4],[5,6],[4,6],[6,2],[2,6],[5,4],[6,1],[6,1],[2,5],[1,3],[1,3],[4,5]]"),
+                new int[]{6,9,2,1,2,3,6,6,6,5,9,7,0,4,5,9,1,18,8,9}));
+        StringUtils.printIntArray(dq.countPairsOptimize(6,
+                StringUtils.convert2Array("[[5,2],[3,5],[4,5],[1,5],[1,4],[3,5],[2,6],[6,4],[5,6],[4,6],[6,2],[2,6],[5,4],[6,1],[6,1],[2,5],[1,3],[1,3],[4,5]]"),
+                new int[]{6,9,2,1,2,3,6,6,6,5,9,7,0,4,5,9,1,18,8,9}));
+//        countPairsTestCompare(dq);
+    }
+
+
+    /**
+     * 比较结果，countPairs 明显慢，原因是因为queries太小，对整体数据做处理的优势不大，如果queries长度为万级别范围，而不是20，那应该会展露出优势
+     *     这里可以体现出对最初需求的理解，根据不同的场景使用不同的实现，方案的选择是基于具体的业务场景的。
+     * @param dq
+     */
+    private static void countPairsTestCompare(DailyQuestion dq){
+        long aCost=0, bCost=0, aCostTotal=0, bCostTotal=0, lessA=0, lessB=0, same=0;
+        int times = 200;
+        for (int i=0; i<times; i++){
+            int n = random.nextInt(2*10000-1) + 2;
+            int[][] edges = StringUtils.constructEdges(1, n, random.nextInt(100000)+1, false);
+            int[] queries = StringUtils.randomIntArray(random.nextInt(2000) + 1, 0, edges.length-1);
+            System.gc();
+            aCost = System.currentTimeMillis();
+            int[] resultA = dq.countPairs(n, edges, queries);
+            aCost = System.currentTimeMillis() - aCost;
+            System.gc();
+            bCost = System.currentTimeMillis();
+            int[] resultB = dq.countPairsOptimize(n, edges, queries);
+            bCost = System.currentTimeMillis() - bCost;
+            if (!StringUtils.compareArray(resultA, resultB)){
+                log.info("countPairsTestCompare结果有差异");
+            }
+            if (aCost>bCost){
+                lessB++;
+            }
+            else if (aCost < bCost){
+                lessA++;
+            }
+            else {
+                same++;
+            }
+            aCostTotal += aCost;
+            bCostTotal += bCost;
+        }
+        log.info("countPairsTestCompare结果汇总，{}次，A快{}次，B块{}次，一样快{}次，A总耗时{}, B总耗时{}",
+                times, lessA, lessB, same, aCostTotal, bCostTotal);
+    }
+
+    private final int tripLimit = 15;
+    public int[] countPairs(int n, int[][] edges, int[] queries) {
+        Map<Integer, Integer> maps = new HashMap<>();
+        int[] link = new int[n+1];
+        int[] allCase = new int[edges.length+1];
+        for (int i=0; i<edges.length; i++){
+            int from = edges[i][0];
+            int to = edges[i][1];
+            link[from]++; link[to]++;
+            maps.put(getPos(from, to), maps.getOrDefault(getPos(from, to), 0) + 1);
+        }
+        for(int i=1; i<n+1; i++){
+            for(int j=i+1; j<n+1; j++){
+                allCase[link[i] + link[j] - maps.getOrDefault(getPos(i, j), 0)]++;
+            }
+        }
+        // 累加和
+        for (int i=allCase.length-2; i>=0; i--){
+            allCase[i] += allCase[i+1];
+        }
+        int[] result = new int[queries.length];
+        for (int i=0; i<queries.length; i++){
+            result[i] = allCase[queries[i]+1];
+        }
+        return result;
+    }
+
+    /**
+     * 理论上优化版本  =>  的确快
+     */
+    public int[] countPairsOptimize(int n, int[][] edges, int[] queries){
+        Map<Integer, Integer> maps = new HashMap<>();
+        int[] link = new int[n];
+        for (int i=0; i<edges.length; i++){
+            int from = edges[i][0]-1;
+            int to = edges[i][1]-1;
+            link[from]++; link[to]++;
+            maps.put(getPos(from, to), maps.getOrDefault(getPos(from, to), 0) + 1);
+        }
+        int[] arr = Arrays.copyOf(link, link.length);
+        Arrays.sort(arr);
+        int[] result = new int[queries.length];
+        final int base = 0x7fff;
+        for (int i=0; i<queries.length; i++){
+            int total=0, bound=queries[i];
+            // 二分查找快速筛选项
+            for (int j=0; j<arr.length; j++){
+                total += arr.length - this.binarySearchGreaterThan(arr,j+1, n-1, bound-arr[j]);
+            }
+            // 过滤掉不合理的
+            for (Map.Entry<Integer, Integer> item : maps.entrySet()) {
+                int x=(item.getKey() & base), y=(item.getKey() >> tripLimit);
+//                int x=item.getKey()/n, y=item.getKey()%n;
+                if (link[x] + link[y] > bound && link[x] + link[y] - item.getValue() <= bound){
+                    total--;
+                }
+            }
+            result[i] = total;
+        }
+        return result;
+    }
+
+    private int binarySearchGreaterThan(int[] arr,int left, int right, int target){
+        int ans = right + 1;
+        while (left <= right) {
+            int mid = (left + right) >> 1;
+            if (arr[mid] <= target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+                ans = mid;
+            }
+        }
+        return ans;
+    }
+
+    private int getPos(int i, int j){
+        if (i>j){
+            return (j << tripLimit) | i;
+        }
+        return (i << tripLimit) | j;
+    }
+
+
 
     // 849. 到最近的人的最大距离
 

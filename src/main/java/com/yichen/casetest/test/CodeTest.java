@@ -22,8 +22,31 @@ public class CodeTest {
         HashMap<Integer,Integer> map = new HashMap<>();
         map.put(null, 1);
 
-        Byte b = Byte.valueOf("2010");
+//        Byte b = Byte.valueOf("2010");
+        bitCal();
 
+    }
+
+
+    private static void bitCal(){
+        final int base = 0x7fff;
+        int a = 10086, b = 7421;
+        int pos = getPos(a, b);
+
+        System.out.println(Integer.toBinaryString(a));
+        System.out.println(Integer.toBinaryString(b));
+        System.out.println(Integer.toBinaryString(pos));
+
+        System.out.println(pos);
+        System.out.println(pos >> 10);
+        System.out.println(pos & base);
+    }
+
+    private static int getPos(int i, int j){
+        if (i>j){
+            return (j << 15) | i;
+        }
+        return (i << 15) | j;
     }
 
     private static void mapTest(){

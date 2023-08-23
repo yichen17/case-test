@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -286,6 +288,39 @@ public class StringUtils {
         log.info("{}", builder);
     }
 
+    public static int[][] constructEdges(int start, int limit, int size, boolean selfCycle){
+        int[][] result = new int[size][2];
+        for (int i=0; i<size; i++){
+            int from = random.nextInt(limit)+start, to=-1;
+            if (selfCycle){
+                to = random.nextInt(limit)+start;
+            }
+            else {
+                while (to == -1 || to == from) {
+                    to = random.nextInt(limit)+start;
+                }
+            }
+            result[i][0] = from;
+            result[i][1] = to;
+        }
+        return result;
+    }
+
+    public static boolean compareArray(int[] aArray, int[] bArray){
+        if (Objects.isNull(aArray) && Objects.isNull(bArray)){
+            return true;
+        }
+        if (Objects.isNull(aArray) || Objects.isNull(bArray) || aArray.length != bArray.length){
+            return false;
+        }
+        for (int i=0; i<aArray.length; i++){
+            if (aArray[i] != bArray[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static <T> void rowPrintArray(T[] array){
         for(T item : array){
@@ -368,6 +403,28 @@ public class StringUtils {
         return batchReplaceBracket(s, new String[]{"[", "]"}, new String[]{"{", "}"});
     }
 
+
+    private static final Pattern convert2ArrayPattern = Pattern.compile("\\[(.*?)\\]");
+    public static int[][] convert2Array(String s){
+        List<List<Integer>> list = new ArrayList<>();
+        Matcher matcher = convert2ArrayPattern.matcher(s);
+        while (matcher.find()){
+             String item = matcher.group(1);
+            item = item.replaceAll("^\\[|\\]$", "");
+            list.add(Arrays.stream(item.split(CommonConstants.COMMA)).map(Integer::valueOf).collect(Collectors.toList()));
+        }
+        if (CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(list.get(0))){
+            return new int[0][0];
+        }
+        int[][] result = new int[list.size()][list.get(0).size()];
+        for (int i=0; i<list.size(); i++){
+            for(int j=0; j<list.get(0).size(); j++){
+                result[i][j] = list.get(i).get(j);
+            }
+        }
+        return result;
+    }
+
     public static void arrayTwoDimensionPrint(int[][] array){
         for (int[] item : array){
             StringBuilder s = new StringBuilder();
@@ -439,6 +496,9 @@ public class StringUtils {
         int[] array = new int[2];
         System.out.println(array.getClass());
         System.out.println(array.getClass().getComponentType());
+
+        s = "[[1,2],[2,4],[1,3],[2,3],[2,1]]";
+        convert2Array(s);
 
     }
 
