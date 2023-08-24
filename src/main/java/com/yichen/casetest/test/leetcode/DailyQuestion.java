@@ -84,6 +84,31 @@ public class DailyQuestion {
         countPairsTest(dq);
         StringUtils.divisionLine();
         countServersTest(dq);
+        StringUtils.divisionLine();
+        goodNodesTest(dq);
+    }
+
+    // 1448. 统计二叉树中好节点的数目
+
+    public static void goodNodesTest(DailyQuestion dq){
+        System.out.println(dq.goodNodes(TreeNode.buildTree(new Integer[]{3,1,4,3,null,1,5})));
+        System.out.println(dq.goodNodes(TreeNode.buildTree(new Integer[]{3,3,null,4,2})));
+        System.out.println(dq.goodNodes(TreeNode.buildTree(new Integer[]{1})));
+    }
+
+    public int goodNodes(TreeNode root) {
+        return this.goodNodesDfs(root, -10001);
+    }
+
+    public int goodNodesDfs(TreeNode root, int max){
+        if (root == null){
+            return 0;
+        }
+        int result = root.val >= max ? 1 : 0;
+        // 当前节点计算
+        result += goodNodesDfs(root.left, Math.max(max, root.val));
+        result += goodNodesDfs(root.right, Math.max(max, root.val));
+        return result;
     }
 
     // 1267. 统计参与通信的服务器
