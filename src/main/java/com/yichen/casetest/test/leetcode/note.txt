@@ -1,2 +1,24 @@
 常见算法定义：
     https://www.cnblogs.com/onepixel/articles/7674659.html
+
+跳表实现逻辑：
+1、节点数据内容为 节点值、后续节点数组、节点层高、
+    层高可以通过数组长度来获取
+2、删除操作  删除一个元素
+    找到各层改点之前的节点，然后进行删除操作
+3、插入操作  插入一个元素
+    找到各层该点之前的节点，然后进行插入
+4、水平打印  一层一层打印
+    从每层的哨兵节点开始遍历打印数据
+5、节点搜索  寻找目标节点
+    从上往下搜索，直至找到或者到最下层元素比它大
+6、结构校验   是否符合跳表的定义
+    水平打印有序校验
+7、找到一个元素的各层前驱节点，可以有开始层入参
+
+8、
+
+
+基准测试参考文章：
+https://stackoverflow.com/questions/410437/is-stopwatch-benchmarking-acceptable
+https://stackoverflow.com/questions/504103/how-do-i-write-a-correct-micro-benchmark-in-java
