@@ -432,10 +432,13 @@ public class TripTable {
                 if (Objects.nonNull(next) && next.val == target) {
                     result = true;
                     preNode.nextItems[pos] =  next.nextItems[this.getRealPos(i, next.height)];
+                    // 现有槽位置空
+                    next.nextItems[this.getRealPos(i, next.height)] = null;
                 }
             }
             // 移除空节点
             this.dummys.removeIf(nodeOptimize -> Objects.isNull(nodeOptimize.nextItems[0]));
+            this.level = this.dummys.size();
             return result;
         }
 
@@ -628,38 +631,7 @@ public class TripTable {
             return root;
         }
 
-        public static boolean singleVerify(int range){
-            SkipListOptimize skipListOptimize = randomInsert(range);
-            if (!horizontalCheck(skipListOptimize)){
-                horizontalPrint(skipListOptimize);
-                return false;
-            }
-            return true;
-        }
 
-
-        /**
-         * 验证构造的跳表的正确性
-         * 1、插入是否有问题
-         * 2、删除查找是否有问题
-         * 3、时间开销
-         * @param insertTimes
-         * @param range
-         */
-        public static void valid(int insertTimes, int range, int searchOrDelTimes){
-            long start;
-            SkipListOptimize root;
-            for (int i=0; i<insertTimes; i++){
-                // 测试插入是否正确
-                if (!singleVerify(range)){
-                    return;
-                }
-                // 测试删除、查找
-//                for (int j=0; j<searchOrDelTimes; j++){
-//
-//                }
-            }
-        }
 
 
         public static void insertTest(int range, int times){
@@ -703,7 +675,7 @@ public class TripTable {
                     }
                 }
                 catch (Exception e){
-                    SkipListOptimize.horizontalPrint(root);
+//                    SkipListOptimize.horizontalPrint(root);
                     log.error("delTest删除节点异常 {}", r);
                     throw e;
                 }
@@ -753,14 +725,19 @@ public class TripTable {
     public static void main(String[] args) {
 //        SkipList.caseCheck(100, 10000, 100000);
 
-        SkipListOptimize.insertTest(1000, 1000);
-        StringUtils.divisionLine("insertTest");
+
+        for (int i=0; i<10000; i++){
+            SkipListOptimize.insertTest(1000, 1000);
+            StringUtils.divisionLine("insertTest");
 //        SkipListOptimize.singlePrint(1000);
 //        StringUtils.divisionLine("singlePrint");
-        SkipListOptimize.searchTest(1000, 1000);
-        StringUtils.divisionLine("searchTest");
-        SkipListOptimize.delTest(1000, 1000);
-        StringUtils.divisionLine("delTest");
+            SkipListOptimize.searchTest(1000, 1000);
+            StringUtils.divisionLine("searchTest");
+            SkipListOptimize.delTest(1000, 1000);
+            StringUtils.divisionLine("delTest");
+        }
+
+
 
 
 
