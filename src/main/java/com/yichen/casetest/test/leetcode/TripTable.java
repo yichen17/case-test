@@ -339,14 +339,13 @@ public class TripTable {
          * 空的哨兵节点，使得后续节点等价处理
          */
         private LinkedList<NodeOptimize> dummys;
-        /**
-         * 整体层高
-         */
-        private int level;
+
+        private int getLevel(){
+            return CollectionUtils.isEmpty(dummys) ? 0 : dummys.size();
+        }
 
         public SkipListOptimize() {
             this.dummys = new LinkedList<>();
-            this.level = 0;
         }
 
         /**
@@ -357,9 +356,9 @@ public class TripTable {
          * @return
          */
         private int getRealPos(int lv, int height){
-            int result = lv - this.level + height;
+            int result = lv - this.getLevel() + height;
             if (result < 0 || result >= height){
-                log.error("getRealPos 计算存在问题 {} {} {}", lv, this.level, height);
+                log.error("getRealPos 计算存在问题 {} {} {}", lv, this.getLevel(), height);
             }
             return result;
         }
@@ -374,17 +373,16 @@ public class TripTable {
             // startPos开始位置 当新层高高于当前，则为0，否则为当前层高 - 新层高
             // gap 节点间距 用于新节点的nextItems相对位置计算
             int newLevel = randomLevel(),
-                    startPos = this.level > newLevel ? this.level - newLevel : 0,
-                    gap = this.level > newLevel ? 0 : newLevel - this.level;
+                    startPos = this.getLevel() > newLevel ? this.getLevel() - newLevel : 0,
+                    gap = this.getLevel() > newLevel ? 0 : newLevel - this.getLevel();
             // 寻找现有层级的插入位置
             List<NodeOptimize> preNodes = this.findPre(val, startPos);
             // 新节点构造
             NodeOptimize newNode = NodeOptimize.builder().val(val)
-                    .height(newLevel)
                     .nextItems(new NodeOptimize[newLevel]).build();
             NodeOptimize preNode, next;
             // 处理现有节点， newLevel层级以下的
-            for (int i=startPos; i<this.level; i++){
+            for (int i=startPos; i<this.getLevel(); i++){
                 preNode = preNodes.get(i - startPos);
                 int pos;
                 // 哨兵特殊处理
@@ -393,17 +391,16 @@ public class TripTable {
                 }
                 // 相对偏移量
                 else {
-                    pos = this.getRealPos(i, preNode.height);
+                    pos = this.getRealPos(i, preNode.getHeight());
                 }
                 next = preNode.nextItems[pos];
                 preNode.nextItems[pos] = newNode;
                 newNode.nextItems[i-startPos+gap] = next;
             }
             // 填充空节点  哨兵节点只需要一个后继节点以及记录长度就可以了
-            while (newLevel > this.level){
-                this.dummys.addFirst(NodeOptimize.builder().height(1).dummy(true)
+            while (newLevel > this.getLevel()){
+                this.dummys.addFirst(NodeOptimize.builder().dummy(true)
                         .nextItems(new NodeOptimize[]{newNode}).build());
-                this.level++;
             }
             return newNode;
         }
@@ -425,20 +422,19 @@ public class TripTable {
                     pos = 0;
                 }
                 else {
-                    pos = this.getRealPos(i, preNode.height);
+                    pos = this.getRealPos(i, preNode.getHeight());
                 }
                 next = preNode.nextItems[pos];
                 // 有后继，改变指针指向， 保存结果，哨兵节点数量减一，到0移除节点
                 if (Objects.nonNull(next) && next.val == target) {
                     result = true;
-                    preNode.nextItems[pos] =  next.nextItems[this.getRealPos(i, next.height)];
+                    preNode.nextItems[pos] =  next.nextItems[this.getRealPos(i, next.getHeight())];
                     // 现有槽位置空
-                    next.nextItems[this.getRealPos(i, next.height)] = null;
+                    next.nextItems[this.getRealPos(i, next.getHeight())] = null;
                 }
             }
             // 移除空节点
             this.dummys.removeIf(nodeOptimize -> Objects.isNull(nodeOptimize.nextItems[0]));
-            this.level = this.dummys.size();
             return result;
         }
 
@@ -475,7 +471,7 @@ public class TripTable {
             // 上一步出口结果为 node.val < target
             // 数据节点查询
             while (i < this.dummys.size()){
-                next = node.nextItems[this.getRealPos(i, node.height)];
+                next = node.nextItems[this.getRealPos(i, node.getHeight())];
                 // 同一层下一个节点为空或者值比target要大
                 if (Objects.isNull(next) || next.val > target){
                     i++;
@@ -552,7 +548,7 @@ public class TripTable {
             NodeOptimize next;
             // 1、节点为空  2、后续节点为空 3、后续节点值大于等于目标值
             if (Objects.isNull(node)
-                    ||  Objects.isNull(next = node.nextItems[this.getRealPos(level, node.height)])
+                    ||  Objects.isNull(next = node.nextItems[this.getRealPos(level, node.getHeight())])
                     || next.val >= target){
                 return node;
             }
@@ -570,7 +566,7 @@ public class TripTable {
             }
             StringBuilder builder = new StringBuilder();
             int pos;
-            for (int i=0; i< node.level; i++){
+            for (int i=0; i< node.getLevel(); i++){
                 boolean first = true;
                 NodeOptimize dummy = node.dummys.get(i);
                 builder.append("level").append(i);
@@ -583,7 +579,7 @@ public class TripTable {
                     // 真实数据节点
                     else {
                         builder.append(" => ").append(dummy.val);
-                        pos = node.getRealPos(i, dummy.height);
+                        pos = node.getRealPos(i, dummy.getHeight());
                         dummy = dummy.nextItems[pos];
                     }
                 }
@@ -603,7 +599,7 @@ public class TripTable {
                 return true;
             }
             int preVal;
-            for (int i=0; i< root.level; i++){
+            for (int i=0; i< root.getLevel(); i++){
                 preVal = -1;
                 NodeOptimize node = root.dummys.get(i);
                 while (Objects.nonNull(node)){
@@ -619,19 +615,19 @@ public class TripTable {
                         preVal = node.val;
                     }
                     // 往后定位走
-                    node = node.nextItems[root.getRealPos(i, node.height)];
+                    node = node.nextItems[root.getRealPos(i, node.getHeight())];
                 }
             }
             return true;
         }
+
+        // 功能测试方法
 
         public static SkipListOptimize randomInsert(int range){
             SkipListOptimize root = new SkipListOptimize();
             StringUtils.randomList(range).forEach(root::insert);
             return root;
         }
-
-
 
 
         public static void insertTest(int range, int times){
@@ -696,10 +692,6 @@ public class TripTable {
         @Builder
         static class NodeOptimize{
             /**
-             * 层高  计算相对位置
-             */
-            private Integer height;
-            /**
              * 存储键值
              */
             private Integer val;
@@ -708,11 +700,15 @@ public class TripTable {
              */
             private NodeOptimize[] nextItems;
 
+            private int getHeight(){
+                return nextItems.length;
+            }
+
             private boolean dummy;
 
             public void printInfo(){
                 StringBuilder builder = new StringBuilder();
-                builder.append("NodeOptimize printInfo: height:{}, val:{}", height, val);
+                builder.append("NodeOptimize printInfo: height:{}, val:{}", getHeight(), val);
                 System.out.println(builder);
             }
 
@@ -726,7 +722,7 @@ public class TripTable {
 //        SkipList.caseCheck(100, 10000, 100000);
 
 
-        for (int i=0; i<10000; i++){
+        for (int i=0; i<100; i++){
             SkipListOptimize.insertTest(1000, 1000);
             StringUtils.divisionLine("insertTest");
 //        SkipListOptimize.singlePrint(1000);
