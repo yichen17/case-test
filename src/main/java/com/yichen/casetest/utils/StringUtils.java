@@ -64,6 +64,36 @@ public class StringUtils {
         return list;
     }
 
+
+    public static int[] randomArray(int range){
+        List<Integer> list = randomList(range);
+        int[] result = new int[list.size()];
+        for (int i=0; i<list.size(); i++){
+            result[i] = list.get(i);
+        }
+        return result;
+    }
+
+    /**
+     * 构建随机不重复数字，
+     * @return
+     */
+    public static int[] randomNoRepeat(int len, int start, int end){
+        int[] result = new int[len];
+        Set<Integer> set = new HashSet<>();
+        int i=0;
+        while (i<len){
+            int r = random.nextInt(end-start) + start;
+            if (set.add(r)){
+                result[i++] = r;
+            }
+        }
+        Arrays.sort(result);
+        printIntArray(result);
+        return result;
+    }
+
+
     private static final String[] SPECIAL_CITY = {"北京市", "上海市", "天津市", "重庆市"};
     private static final Pattern PROVINCE_REGEX = Pattern.compile("(?<province>[^自治区]+自治区|[^省]+省|[^市]+市)");
     private static final Pattern CITY_REGEX = Pattern.compile("(?<city>[^辖区]+辖区|[^盟]+盟|[^自治州]+自治州|[^地区]+地区|[^市]+市|.+区划)");

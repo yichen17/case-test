@@ -2,12 +2,14 @@ package com.yichen.casetest.test.leetcode;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
+import com.yichen.casetest.constants.CommonConstants;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Qiuxinchao
@@ -86,6 +88,51 @@ public class DailyQuestion {
         countServersTest(dq);
         StringUtils.divisionLine();
         goodNodesTest(dq);
+        StringUtils.divisionLine();
+        summaryRanges(dq);
+    }
+
+    // 228. 汇总区间   边界值问题，代码不够优雅
+
+    private static void summaryRanges(DailyQuestion dq){
+        System.out.println(String.join(CommonConstants.COMMA, dq.summaryRanges(new int[]{0, 1, 2, 4, 5, 7})));
+        System.out.println(String.join(CommonConstants.COMMA, dq.summaryRanges(new int[]{0,2,3,4,6,8,9})));
+        System.out.println(String.join(CommonConstants.COMMA, dq.summaryRanges(StringUtils.randomNoRepeat(1234, -1000, 1000))));
+    }
+
+    public List<String> summaryRanges(int[] nums) {
+        List<String> result = new ArrayList<>(16);
+        if (nums.length == 0){
+            return result;
+        }
+        Integer start=null, pre = null, i;
+
+        for (i=0; i<nums.length; i++){
+            if (start == null){
+                start = pre = i;
+                continue;
+            }
+            if (nums[i] - nums[pre] == 1){
+                pre = i;
+            }
+            else if(i-start == 1){
+                result.add(String.format("%s", nums[start]));
+                start = i;
+                pre = i;
+            }
+            else {
+                result.add(String.format("%s->%s", nums[start], nums[pre]));
+                start = i;
+                pre = i;
+            }
+        }
+        if (i-start == 1){
+            result.add(String.format("%s", nums[start]));
+        }
+        else {
+            result.add(String.format("%s->%s", nums[start], nums[pre]));
+        }
+        return result;
     }
 
     // 1448. 统计二叉树中好节点的数目
