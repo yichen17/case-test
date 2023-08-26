@@ -73,23 +73,26 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         circularGameLosersTest(dq);
         StringUtils.divisionLine();
-//        waysTest(dq);
-        StringUtils.divisionLine("waysTest");
-        maxSizeSlicesTest(dq);
-        StringUtils.divisionLine("maxSizeSlices");
-        checkTreeTest(dq);
-        StringUtils.divisionLine();
-        canChangeTest(dq);
-        StringUtils.divisionLine();
-        maxDistToClosestTest(dq);
-        StringUtils.divisionLine();
-        countPairsTest(dq);
-        StringUtils.divisionLine();
-        countServersTest(dq);
-        StringUtils.divisionLine();
-        goodNodesTest(dq);
-        StringUtils.divisionLine();
-        summaryRanges(dq);
+        waysTest(dq);
+//        StringUtils.divisionLine("waysTest");
+//        maxSizeSlicesTest(dq);
+//        StringUtils.divisionLine("maxSizeSlices");
+//        checkTreeTest(dq);
+//        StringUtils.divisionLine();
+//        canChangeTest(dq);
+//        StringUtils.divisionLine();
+//        maxDistToClosestTest(dq);
+//        StringUtils.divisionLine();
+//        countPairsTest(dq);
+//        StringUtils.divisionLine();
+//        countServersTest(dq);
+//        StringUtils.divisionLine();
+//        goodNodesTest(dq);
+//        StringUtils.divisionLine();
+//        summaryRanges(dq);
+
+
+
     }
 
     // 228. 汇总区间   边界值问题，代码不够优雅
@@ -521,48 +524,91 @@ public class DailyQuestion {
         System.out.println(dq.ways(new String[]{"A"}, 1));
         System.out.println(dq.ways(new String[]{"."}, 1));
         System.out.println(dq.ways(new String[]{"AAA","AAA","AAA","AAA","AAA","AAA"}, 6));
-        System.out.println(dq.ways(StringUtils.randomArrayInSpecificCharacters(new char[]{'A', '.'}, 40, 40), 5));
+        String[] pizza = StringUtils.randomArrayInSpecificCharacters(new char[]{'A', '.'}, 40, 40);
+        int k = random.nextInt(10);
+        log.info("waysTest => {} {}", StringUtils.printArray(pizza, "\",\"","\"", "\""), k);
+        System.out.println(dq.ways(pizza, k));
+        pizza = StringUtils.randomArrayInSpecificCharacters(new char[]{'A', '.'}, 5, 5);
+        k = random.nextInt(10);
+        log.info("waysTest => {} {}", StringUtils.printArray(pizza, "\",\"","\"", "\""), k);
+        System.out.println(dq.ways(pizza, k));
     }
 
-    private int k;
-    private int splitPizzaResult;
+    /**
+     * 不行，大数据量计算有问题 待和other比对
+     */
     public int ways(String[] pizza, int k) {
-        this.k = k;
-        this.splitPizzaResult = 0;
         int row = pizza.length, col = pizza[0].length();
-        int[][] dp = new int[row+1][col+1];
+        // 右上数据汇总
+        int[][] apples = new int[row+1][col+1];
+        int[][][] dp = new int[row+1][col+1][k+1];
         // 以左上角统计苹果个数
         for (int i=1; i<row+1; i++){
             for (int j=1; j<col+1; j++){
-                dp[i][j] = dp[i-1][j] + dp[i][j-1] -dp[i-1][j-1] + (pizza[i-1].charAt(j-1) == 'A' ? 1 : 0);
-            }
-        }
-        int[][][] f = new int[row+1][col+1][k+1];
-        for (int i=1; i<=row; i++){
-            for (int j=1; j<=col; j++){
-                for (int t=0; t<=k; t++){
-                    int max = f[i-1][j][t];
-                    max = Math.max(max, f[i][j-1][t]);
-                    if (this.getAppleNum(dp, i-1, j, i, j) > 0){
-                        max = Math.max(max, f[i-1][j][t-1]);
-                    }
-                    if (this.getAppleNum(dp, i, j-1, i, j) > 0){
-                        max = Math.max(max, f[i][j-1][t-1]);
-                    }
-                    f[i][j][t] = max;
+                apples[i][j] = apples[i-1][j] + apples[i][j-1] -apples[i-1][j-1] + (pizza[i-1].charAt(j-1) == 'A' ? 1 : 0);
+                if (apples[i][j] > 0){
+                    dp[i][j][1] = 1;
                 }
             }
         }
-        return f[row][col][k];
+        for (int p=2; p<=k; p++){
+            for (int i=1; i<=row; i++){
+                for (int j=1; j<=col; j++){
+                    // 横向切割
+                    for (int t=1; t<=i-1; t++){
+                        if (apples[i][j] > apples[t][j]){
+                            dp[i][j][p] = (dp[i][j][p] + dp[t][j][p-1]) % MOD;
+                        }
+                    }
+                    // 纵向切割
+                    for (int t=1; t<=j-1; t++){
+                        if (apples[i][j] > apples[i][t]){
+                            dp[i][j][p] = (dp[i][j][p] + dp[i][t][p-1]) % MOD;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[row][col][k];
     }
 
-    private int getAppleNum(int[][] dp, int r1, int c1, int r2, int c2){
-        int row = dp.length, col = dp[0].length;
-        if (r1 >= row || r2 >= row || c1 >= col || c2 >= col){
-            return 0;
+    /**
+     * ok 没啥问题
+     */
+    public int waysOther(String[] pizza, int k) {
+        int row = pizza.length, col = pizza[0].length();
+        // 右上数据汇总
+        int[][] apples = new int[row+1][col+1];
+        int[][][] dp = new int[row+1][col+1][k+1];
+        // 以左上角统计苹果个数
+        for (int i=row-1; i>=0; i--){
+            for (int j=col-1; j>=0; j--){
+                apples[i][j] = apples[i+1][j] + apples[i][j+1] - apples[i+1][j+1] + (pizza[i].charAt(j) == 'A' ? 1 : 0);
+                if (apples[i][j] > 0){
+                    dp[i][j][1] = 1;
+                }
+            }
         }
-        return dp[r2][c2] - dp[r2][c1-1] - dp[r1-1][c2] + dp[r1-1][c1-1];
+        for (int p=2; p<=k; p++){
+            for (int i=row; i>=0; i--){
+                for (int j=col; j>=0; j--){
+                    for (int t=i+1; t<=row; t++){
+                        if (apples[i][j] > apples[t][j]){
+                            dp[i][j][p] = (dp[i][j][p] + dp[t][j][p-1]) % MOD;
+                        }
+                    }
+                    for (int t=j+1; t<=col; t++){
+                        if (apples[i][j] > apples[i][t]){
+                            dp[i][j][p] = (dp[i][j][p] + dp[i][t][p-1]) % MOD;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[0][0][k];
     }
+
+
 
     // 2682. 找出转圈游戏输家
 
