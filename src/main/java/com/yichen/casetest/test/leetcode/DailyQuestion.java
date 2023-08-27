@@ -92,14 +92,63 @@ public class DailyQuestion {
         summaryRanges(dq);
         StringUtils.divisionLine();
         mergeIntervalsTest(dq);
+        StringUtils.divisionLine();
+        insertIntervalTest(dq);
+    }
 
+    // 57. 插入区间
+
+    private static void insertIntervalTest(DailyQuestion dq){
+        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,3],[6,9]]"), new int[]{2,5}));
+        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,2],[3,5],[6,7],[8,10],[12,16]]"), new int[]{4,8}));
+//        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[]"), new int[]{5,7}));
+        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,5]]"), new int[]{2,3}));
+        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,5]]"), new int[]{2,7}));
+        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,5]]"), new int[]{6,8}));
+    }
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> list = new ArrayList<>();
+        int from, to, i=0, len=intervals.length;
+        if (len == 0){
+            list.add(newInterval);
+            return list.toArray(new int[list.size()][2]);
+        }
+        int flag = 0;
+        while (i < len){
+            from = intervals[i][0];
+            to = intervals[i][1];
+            if (from > newInterval[1] || to < newInterval[0]){
+                if (flag == 0 && from > newInterval[1]){
+                    list.add(newInterval);
+                    flag = 2;
+                }
+                list.add(new int[]{from, to});
+                i++;
+                continue;
+            }
+            // 相交场景
+            from = Math.min(from , newInterval[0]);
+            to = Math.max(to, newInterval[1]);
+            i++;
+            while (i<len && (to >= intervals[i][0] && from <= intervals[i][1])){
+                from = Math.min(intervals[i][0] , from);
+                to = Math.max(intervals[i][1], to);
+                i++;
+            }
+            list.add(new int[]{from, to});
+            flag = 1;
+        }
+        if (flag == 0){
+            list.add(newInterval);
+        }
+        return list.toArray(new int[list.size()][2]);
     }
 
     // 56. 合并区间
 
     private static void mergeIntervalsTest(DailyQuestion dq){
-//        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,3],[2,6],[8,10],[15,18]]")));
-//        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,4],[4,5]]")));
+        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,3],[2,6],[8,10],[15,18]]")));
+        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,4],[4,5]]")));
         StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[40,45],[99,99],[97,99],[46,99],[55,63],[74,87],[26,66],[99,99],[58,90],[35,46]]")));
         StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.constructEdges(0, 100, 10, false, true)));
     }
