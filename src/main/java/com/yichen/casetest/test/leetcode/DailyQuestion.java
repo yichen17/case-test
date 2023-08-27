@@ -40,7 +40,7 @@ public class DailyQuestion {
 
     public static void main(String[] args) {
 
-        setErrorLogLevel();
+//        setErrorLogLevel();
 
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
@@ -74,25 +74,65 @@ public class DailyQuestion {
         circularGameLosersTest(dq);
         StringUtils.divisionLine();
         waysTest(dq);
-//        StringUtils.divisionLine("waysTest");
-//        maxSizeSlicesTest(dq);
-//        StringUtils.divisionLine("maxSizeSlices");
-//        checkTreeTest(dq);
-//        StringUtils.divisionLine();
-//        canChangeTest(dq);
-//        StringUtils.divisionLine();
-//        maxDistToClosestTest(dq);
-//        StringUtils.divisionLine();
-//        countPairsTest(dq);
-//        StringUtils.divisionLine();
-//        countServersTest(dq);
-//        StringUtils.divisionLine();
-//        goodNodesTest(dq);
-//        StringUtils.divisionLine();
-//        summaryRanges(dq);
+        StringUtils.divisionLine("waysTest");
+        maxSizeSlicesTest(dq);
+        StringUtils.divisionLine("maxSizeSlices");
+        checkTreeTest(dq);
+        StringUtils.divisionLine();
+        canChangeTest(dq);
+        StringUtils.divisionLine();
+        maxDistToClosestTest(dq);
+        StringUtils.divisionLine();
+        countPairsTest(dq);
+        StringUtils.divisionLine();
+        countServersTest(dq);
+        StringUtils.divisionLine();
+        goodNodesTest(dq);
+        StringUtils.divisionLine();
+        summaryRanges(dq);
+        StringUtils.divisionLine();
+        mergeIntervalsTest(dq);
 
+    }
 
+    // 56. 合并区间
 
+    private static void mergeIntervalsTest(DailyQuestion dq){
+//        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,3],[2,6],[8,10],[15,18]]")));
+//        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,4],[4,5]]")));
+        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[40,45],[99,99],[97,99],[46,99],[55,63],[74,87],[26,66],[99,99],[58,90],[35,46]]")));
+        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.constructEdges(0, 100, 10, false, true)));
+    }
+
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] != o2[0]){
+                    return o1[0] > o2[0] ? 1 : -1;
+                }
+                else if (o1[1] != o2[1]){
+                    return o1[1] > o2[1] ? 1 : -1;
+                }
+                return 0;
+            }
+        });
+        List<int[]> list = new ArrayList<>();
+        int from, to, i=0;
+        while (i < intervals.length){
+            from = intervals[i][0];
+            to = intervals[i][1];
+            while (i<intervals.length && to >= intervals[i][0]){
+                to = Math.max(intervals[i][1], to);
+                i++;
+            }
+            list.add(new int[]{from ,to});
+        }
+        int[][] result = new int[list.size()][2];
+        for (i=0; i<list.size(); i++){
+            result[i] = list.get(i);
+        }
+        return result;
     }
 
     // 228. 汇总区间   边界值问题，代码不够优雅
@@ -226,7 +266,7 @@ public class DailyQuestion {
         int times = 200;
         for (int i=0; i<times; i++){
             int n = random.nextInt(2*10000-1) + 2;
-            int[][] edges = StringUtils.constructEdges(1, n, random.nextInt(100000)+1, false);
+            int[][] edges = StringUtils.constructEdges(1, n, random.nextInt(100000)+1, false, false);
             int[] queries = StringUtils.randomIntArray(random.nextInt(2000) + 1, 0, edges.length-1);
             System.gc();
             aCost = System.currentTimeMillis();
@@ -525,11 +565,11 @@ public class DailyQuestion {
         System.out.println(dq.ways(new String[]{"."}, 1));
         System.out.println(dq.ways(new String[]{"AAA","AAA","AAA","AAA","AAA","AAA"}, 6));
         String[] pizza = StringUtils.randomArrayInSpecificCharacters(new char[]{'A', '.'}, 40, 40);
-        int k = random.nextInt(10);
+        int k = random.nextInt(9) + 1;
         log.info("waysTest => {} {}", StringUtils.printArray(pizza, "\",\"","\"", "\""), k);
         System.out.println(dq.ways(pizza, k));
         pizza = StringUtils.randomArrayInSpecificCharacters(new char[]{'A', '.'}, 5, 5);
-        k = random.nextInt(10);
+        k = random.nextInt(9) + 1;
         log.info("waysTest => {} {}", StringUtils.printArray(pizza, "\",\"","\"", "\""), k);
         System.out.println(dq.ways(pizza, k));
     }

@@ -318,12 +318,17 @@ public class StringUtils {
         log.info("{}", builder);
     }
 
-    public static int[][] constructEdges(int start, int limit, int size, boolean selfCycle){
+    public static int[][] constructEdges(int start, int limit, int size, boolean selfCycle, boolean greater){
         int[][] result = new int[size][2];
         for (int i=0; i<size; i++){
             int from = random.nextInt(limit)+start, to=-1;
             if (selfCycle){
                 to = random.nextInt(limit)+start;
+            }
+            else if (greater){
+                while (to == -1 || to < from){
+                    to = random.nextInt(limit)+start;
+                }
             }
             else {
                 while (to == -1 || to == from) {
@@ -333,6 +338,7 @@ public class StringUtils {
             result[i][0] = from;
             result[i][1] = to;
         }
+        arrayTwoDimensionPrintNormal(result);
         return result;
     }
 
@@ -465,6 +471,21 @@ public class StringUtils {
             s.insert(s.length()-1, "]");
             log.info("{}", s);
         }
+        log.info("arrayTwoDimensionPrint end\n");
+    }
+
+    public static void arrayTwoDimensionPrintNormal(int[][] array){
+        StringBuilder s = new StringBuilder();
+        s.append("[");
+        for (int[] item : array){
+            s.append("[");
+            for (int tt : item){
+                s.append(tt).append(",");
+            }
+            s.insert(s.length()-1, "]");
+        }
+        s.replace(s.length()-1, s.length(), "]");
+        log.info("leetcode version print {}\n", s);
     }
 
     /**
