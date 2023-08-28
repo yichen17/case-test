@@ -1,15 +1,10 @@
 package com.yichen.casetest.test.leetcode;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
 import com.yichen.casetest.constants.CommonConstants;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Qiuxinchao
@@ -30,18 +25,11 @@ public class DailyQuestion {
 
     int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
 
-    private static void setErrorLogLevel(){
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
-        loggerList.forEach(logger -> {
-            logger.setLevel(Level.INFO);
-        });
-    }
+
 
     public static void main(String[] args) {
 
-//        setErrorLogLevel();
-
+//        MainUtils.setLoggerLevel(Level.INFO);
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
         StringUtils.divisionLine();
@@ -101,7 +89,7 @@ public class DailyQuestion {
     private static void insertIntervalTest(DailyQuestion dq){
         StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,3],[6,9]]"), new int[]{2,5}));
         StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,2],[3,5],[6,7],[8,10],[12,16]]"), new int[]{4,8}));
-//        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[]"), new int[]{5,7}));
+        StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[]"), new int[]{5,7}));
         StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,5]]"), new int[]{2,3}));
         StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,5]]"), new int[]{2,7}));
         StringUtils.arrayTwoDimensionPrint(dq.insert(StringUtils.convert2Array("[[1,5]]"), new int[]{6,8}));

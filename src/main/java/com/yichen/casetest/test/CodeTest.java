@@ -1,5 +1,6 @@
 package com.yichen.casetest.test;
 
+import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URLDecoder;
@@ -24,7 +25,13 @@ public class CodeTest {
 
 //        Byte b = Byte.valueOf("2010");
         bitCal();
+        StringUtils.divisionLine();
+        timeTest();
+    }
 
+    private static void timeTest(){
+        System.out.println(System.currentTimeMillis());
+        System.out.println(System.nanoTime());
     }
 
 

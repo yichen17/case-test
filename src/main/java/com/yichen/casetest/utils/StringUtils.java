@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -218,10 +217,10 @@ public class StringUtils {
         for (int i=0; i<length; i++){
             result[i] = random.nextInt(width) + low;
         }
-        if (log.isDebugEnabled()){
-            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
-                    .mapToObj(String::valueOf).collect(Collectors.joining(",")));
-        }
+//        if (log.isDebugEnabled()){
+//            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
+//                    .mapToObj(String::valueOf).collect(Collectors.joining(",")));
+//        }
         return result;
     }
 
@@ -447,6 +446,9 @@ public class StringUtils {
         while (matcher.find()){
              String item = matcher.group(1);
             item = item.replaceAll("^\\[|\\]$", "");
+            if (org.apache.commons.lang3.StringUtils.isEmpty(item)){
+                break;
+            }
             list.add(Arrays.stream(item.split(CommonConstants.COMMA)).map(Integer::valueOf).collect(Collectors.toList()));
         }
         if (CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(list.get(0))){
