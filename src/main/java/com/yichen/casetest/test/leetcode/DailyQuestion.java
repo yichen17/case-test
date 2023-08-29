@@ -82,6 +82,48 @@ public class DailyQuestion {
         mergeIntervalsTest(dq);
         StringUtils.divisionLine();
         insertIntervalTest(dq);
+        StringUtils.divisionLine();
+        numFactoredBinaryTreesTest(dq);
+    }
+
+    // 823. 带因子的二叉树
+
+    public static void numFactoredBinaryTreesTest(DailyQuestion dq){
+        System.out.println(dq.numFactoredBinaryTrees(new int[]{2, 4}));
+        System.out.println(dq.numFactoredBinaryTrees(new int[]{2, 4, 5, 10}));
+        System.out.println(dq.numFactoredBinaryTrees(StringUtils.randomNoRepeat(800, 1, 1000000000)));
+    }
+
+    public int numFactoredBinaryTrees(int[] arr) {
+        Arrays.sort(arr);
+        HashMap<Integer, Integer> maps = new HashMap<>(arr.length);
+        int[] dp = new int[arr.length];
+        for (int i=0; i<arr.length; i++){
+            maps.put(arr[i], i);
+            dp[i] = -1;
+        }
+        int result = 0;
+        for (int i=0; i<arr.length; i++){
+            result = (result + this.buildTree(arr[i], arr, maps, dp)) % MOD;
+        }
+        return result;
+    }
+
+    private int buildTree(int parentVal, int[] arr, HashMap<Integer, Integer> maps, int[] dp){
+        if (dp[maps.get(parentVal)] != -1){
+            return dp[maps.get(parentVal)];
+        }
+        int result = 1, p, q;
+        for (int i=maps.get(parentVal)-1; i>=0; i--){
+            p = arr[i];
+            if (parentVal % p == 0 && maps.containsKey(q = parentVal/p)){
+                long oneResult = (long) this.buildTree(p, arr, maps, dp) * this.buildTree(q, arr, maps, dp);
+                oneResult %= MOD;
+                result = (result + (int)oneResult) % MOD;
+            }
+        }
+        dp[maps.get(parentVal)] = result;
+        return result;
     }
 
     // 57. 插入区间
