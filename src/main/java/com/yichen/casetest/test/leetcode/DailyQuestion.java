@@ -30,6 +30,7 @@ public class DailyQuestion {
     public static void main(String[] args) {
 
 //        MainUtils.setLoggerLevel(Level.INFO);
+
         DailyQuestion dq = new DailyQuestion();
         flipGameTest(dq);
         StringUtils.divisionLine();
@@ -86,6 +87,77 @@ public class DailyQuestion {
         numFactoredBinaryTreesTest(dq);
         StringUtils.divisionLine();
         eliminateMaximumTest(dq);
+        StringUtils.divisionLine();
+        minimumJumpsTest(dq);
+    }
+
+    // 449. 序列化和反序列化二叉搜索树
+
+    private static void serializeAndDeserializeTest(DailyQuestion dq){
+        TreeNode origin = TreeNode.buildTree(new Integer[]{2,1,3});
+        String serializeStr = dq.serialize(origin);
+        TreeNode trans = dq.deserialize(serializeStr);
+
+         origin = TreeNode.buildTree(new Integer[]{});
+         serializeStr = dq.serialize(origin);
+         trans = dq.deserialize(serializeStr);
+
+         origin = TreeNode.buildTree(new Integer[]{2,1,4,null,null,3,6,null,null,5,7});
+         serializeStr = dq.serialize(origin);
+         trans = dq.deserialize(serializeStr);
+    }
+
+    public String serialize(TreeNode root) {
+        if (root == null){
+            return "null";
+        }
+        TreeNode empty = new TreeNode();
+        StringBuilder builder = new StringBuilder();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            TreeNode item = queue.poll();
+            if (item.equals(empty)){
+                builder.append("null,");
+                continue;
+            }
+            builder.append(item.val).append(",");
+            queue.offer(item.left == null ? empty : item.left);
+            queue.offer(item.right == null ? empty : item.right);
+        }
+        builder.replace(builder.length()-1, builder.length(), "");
+        return builder.toString();
+    }
+
+    public TreeNode deserialize(String data) {
+        String[] items = data.split(",");
+        if (items.length == 1){
+            return this.getNode(items[0]);
+        }
+        TreeNode root = this.getNode(items[0]), left, right, pos;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        for (int i=1; i<items.length; i=i+2){
+            left = this.getNode(items[i]);
+            right = this.getNode(items[i+1]);
+            pos = queue.poll();
+            pos.left = left;
+            pos.right = right;
+            if (left != null){
+                queue.offer(left);
+            }
+            if (right != null){
+                queue.offer(right);
+            }
+        }
+        return root;
+    }
+
+    private TreeNode getNode(String s){
+        if ("null".equals(s)){
+            return null;
+        }
+        return new TreeNode(Integer.parseInt(s));
     }
 
     // 1921. 消灭怪物的最大数量
@@ -109,6 +181,111 @@ public class DailyQuestion {
         }
         return pos;
     }
+
+    // 1654. 到家的最少跳跃次数
+
+    private static void minimumJumpsTest(DailyQuestion dq){
+        System.out.println(dq.minimumJumps(new int[]{14,4,18,1,15}, 3, 15, 9));
+        System.out.println(dq.minimumJumps(new int[]{8,3,16,6,12,20}, 15, 13, 11));
+        System.out.println(dq.minimumJumps(new int[]{1,6,2,14,5,17,4}, 16, 9, 7));
+        System.out.println(dq.minimumJumps(new int[]{}, 10, 8, 32));
+        int[] data = StringUtils.randomNoRepeat(1000, 1, 2000);
+        int a = random.nextInt(100)+1;
+        int b = random.nextInt(100)+1;
+        int x = StringUtils.randomNotIn(data, 1, 2000);
+        log.info("a:{}, b:{}, x:{}", a, b, x);
+        System.out.println(dq.minimumJumps(data, a, b, x));
+    }
+
+    public int minimumJumps(int[] forbidden, int a, int b, int x) {
+        int len = 0;
+        while (len <= x+1){
+            len += a;
+        }
+        int[] dp = new int[len];
+        Set<Integer> forbiddenPos = new HashSet<>();
+        for (int pos : forbidden){
+            forbiddenPos.add(pos);
+            if (pos < len){
+                dp[pos] = -1;
+            }
+        }
+        int[] forwardSteps = null;
+        Integer back = null;
+        if (a == b){
+            forwardSteps = new int[]{a};
+        }
+        else if (a > b){
+            forwardSteps = new int[]{a, a-b};
+        }
+        else {
+            forwardSteps = new int[]{a};
+            back = b-a;
+        }
+
+        for (int i=1; i<len; i++){
+            if (forbiddenPos.contains(i)){
+                continue;
+            }
+            if (i % a == 0){
+                dp[i] = i/a;
+                continue;
+            }
+            int min = Integer.MAX_VALUE;
+            for (int j=0; j<forwardSteps.length; j++){
+                int step = forwardSteps[j];
+                if (i - step < 0 || dp[i-step] == -1){
+                    continue;
+                }
+                min = Math.min(min, dp[i-step] + j + 1);
+            }
+            if (min == Integer.MAX_VALUE){
+                dp[i] = -1;
+            }
+            else {
+                dp[i] = min;
+            }
+        }
+        if (back != null){
+            List<Integer> items = new ArrayList<>();
+            int tt = a-back, times=1;
+            while (tt > 0){
+                items.add(tt);
+                if (forbiddenPos.contains(tt)){
+
+                }
+                else if (dp[tt] == -1){
+                    dp[tt] = 1+times*2;
+                }
+                else {
+                    dp[tt] = Math.min(dp[tt], 1+times*2);
+                }
+                tt -= back;
+                times++;
+            }
+            for (int item : items) {
+                while (item < len) {
+                    if (forbiddenPos.contains(item) || item - a >= 0
+                            || forbiddenPos.contains(item - a) || dp[item - a] == -1) {
+                        break;
+                    }
+                    if (dp[item] == -1) {
+                        dp[item] = dp[item - a] + 1;
+                    } else {
+                        dp[item] = Math.min(dp[item], dp[item - a] + 1);
+                    }
+                    item += a;
+                }
+            }
+        }
+        return dp[x];
+    }
+
+
+
+
+
+
 
     // 823. 带因子的二叉树
 

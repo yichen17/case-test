@@ -92,6 +92,19 @@ public class StringUtils {
         return result;
     }
 
+    public static int randomNotIn(int[] data, int start, int end){
+        Set<Integer> set = new HashSet<>();
+        for (int item : data){
+            set.add(item);
+        }
+        while (true){
+            int r = random.nextInt(end-start) + start;
+            if (!set.contains(r)){
+                return r;
+            }
+        }
+    }
+
 
     private static final String[] SPECIAL_CITY = {"北京市", "上海市", "天津市", "重庆市"};
     private static final Pattern PROVINCE_REGEX = Pattern.compile("(?<province>[^自治区]+自治区|[^省]+省|[^市]+市)");
