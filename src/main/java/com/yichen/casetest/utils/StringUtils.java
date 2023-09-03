@@ -217,10 +217,10 @@ public class StringUtils {
         for (int i=0; i<length; i++){
             result[i] = random.nextInt(width) + low;
         }
-//        if (log.isDebugEnabled()){
-//            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
-//                    .mapToObj(String::valueOf).collect(Collectors.joining(",")));
-//        }
+        if (log.isDebugEnabled()){
+            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
+                    .mapToObj(String::valueOf).collect(Collectors.joining(",")));
+        }
         return result;
     }
 

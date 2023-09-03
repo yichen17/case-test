@@ -84,6 +84,30 @@ public class DailyQuestion {
         insertIntervalTest(dq);
         StringUtils.divisionLine();
         numFactoredBinaryTreesTest(dq);
+        StringUtils.divisionLine();
+        eliminateMaximumTest(dq);
+    }
+
+    // 1921. 消灭怪物的最大数量
+
+    private static void eliminateMaximumTest(DailyQuestion dq){
+        System.out.println(dq.eliminateMaximum(new int[]{1,3,4}, new int[]{1,1,1}));
+        System.out.println(dq.eliminateMaximum(new int[]{1,1,2,3}, new int[]{1,1,1,1}));
+        System.out.println(dq.eliminateMaximum(new int[]{3,2,4}, new int[]{5,3,2}));
+        System.out.println(dq.eliminateMaximum(StringUtils.randomIntArray(100, 9000, 10000), StringUtils.randomIntArray(100, 100, 1000)));
+    }
+
+    public int eliminateMaximum(int[] dist, int[] speed) {
+        List<Integer> times = new ArrayList<>();
+        for (int i=0; i<dist.length; i++){
+            times.add((dist[i] / speed[i]) + (dist[i] % speed[i] == 0 ? 0 : 1) - 1);
+        }
+        Collections.sort(times);
+        int pos = 0;
+        while (pos < times.size() && times.get(pos) >= pos){
+            pos++;
+        }
+        return pos;
     }
 
     // 823. 带因子的二叉树
