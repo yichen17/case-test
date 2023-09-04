@@ -96,6 +96,44 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         minimumJumpsTest(dq);
         StringUtils.divisionLine("minimumJumpsTest");
+        minNumberTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2605. 从两个数字数组里生成最小数字
+
+    private static void minNumberTest(DailyQuestion dq){
+        System.out.println(dq.minNumber(new int[]{4,1,3}, new int[]{5,7}));
+        System.out.println(dq.minNumber(new int[]{3,5,2,6}, new int[]{3,1,7}));
+    }
+
+    public int minNumber(int[] nums1, int[] nums2) {
+        int min1=-1, min2=-1, minSame=Integer.MAX_VALUE;
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums1){
+            if (min1 == -1 || min1 > num){
+                min1 = num;
+            }
+            set.add(num);
+        }
+        for (int num : nums2){
+            if (min2 == -1 || min2 > num){
+                min2 = num;
+            }
+            if (set.contains(num)){
+                minSame = Math.min(minSame, num);
+            }
+        }
+        if (minSame != Integer.MAX_VALUE){
+            return minSame;
+        }
+        if (min1 == min2){
+            return min1;
+        }
+        if (min1 < min2){
+            return min2 + min1 * 10;
+        }
+        return min1 + min2 * 10;
     }
 
     // 2240.买钢笔和铅笔的方案数
@@ -286,8 +324,9 @@ public class DailyQuestion {
     private static final Integer forbid = -3;
     private static final Integer init = -2;
     private static final Integer circle = -1;
+    private static final Integer addSubScene = 1;
     public int minimumJumps(int[] forbidden, int a, int b, int x) {
-        int len = Math.max(a,b) + x + 1, combineTrip = a-b;
+        int len = Math.max(a,b) + x + 1;
         int[] dp = new int[len];
         Arrays.fill(dp, init);
         dp[x] = 0;
@@ -298,33 +337,56 @@ public class DailyQuestion {
             dp[pos] = forbid;
         }
         Set<Integer> visited = new HashSet<>();
-        minimumJumpsDfs(dp, a, combineTrip,  0, visited);
+        minimumJumpsDfs(dp, a, b,  0, visited, 0);
         return dp[0];
     }
 
-    private void minimumJumpsDfs(int[] dp, int tripA, int tripB, int pos, Set<Integer> visited){
-        if (pos < 0 || pos >= dp.length || dp[pos] == forbid || dp[pos] == circle){
+    private void minimumJumpsDfs(int[] dp, int a, int b, int pos, Set<Integer> visited, int type){
+        if (pos < 0 || pos >= dp.length || !this.canTouch(dp[pos])){
             return;
         }
         if (!visited.add(pos)){
             dp[pos] = circle;
             return;
         }
-        int resultA = Integer.MAX_VALUE, resultB = Integer.MAX_VALUE;
-        if (pos+tripA >=0 && pos+tripA < dp.length){
-            if (dp[pos+tripA] == init){
-                minimumJumpsDfs(dp, tripA, tripB,  pos+tripA, visited);
+        int resultA = Integer.MAX_VALUE, resultB = Integer.MAX_VALUE, resultC = Integer.MAX_VALUE, resultD;
+        int addSub = pos + a, subAdd = pos-b, twoStepGo = pos + a - b;
+        if (addSub >=0 && addSub < dp.length){
+            if (dp[addSub] == init){
+                minimumJumpsDfs(dp, a, b,  addSub, visited, 0);
             }
-            resultA = dp[pos+tripA] == forbid  || dp[pos+tripA] == circle ? Integer.MAX_VALUE : dp[pos+tripA] + 1;
+            resultA = !this.canTouch(dp[addSub]) ? dp[addSub] : dp[addSub] + 1;
         }
-        if (pos+tripB >=0 && pos+tripB < dp.length){
-            if (dp[pos+tripB] == init){
-                minimumJumpsDfs(dp, tripA, tripB, pos+tripB, visited);
+        if (type == 0 && subAdd >=0 && subAdd < dp.length){
+            if (dp[subAdd] == init){
+                minimumJumpsDfs(dp, a, b,  subAdd, visited, addSubScene);
             }
-            resultB = dp[pos+tripB] == forbid || dp[pos+tripB] == circle ? Integer.MAX_VALUE : dp[pos+tripB] + 2;
+            resultC = !this.canTouch(dp[subAdd]) ? dp[subAdd] : dp[subAdd] + 1;
+        }
+        if ((this.canTouch(resultA) || this.canTouch(resultC)) && twoStepGo >=0 && twoStepGo < dp.length){
+            if (dp[twoStepGo] == init){
+                if (this.canTouch(resultA)){
+                    minimumJumpsDfs(dp, a, b,  twoStepGo, visited, 0);
+                }
+                else {
+                    minimumJumpsDfs(dp, a, b,  twoStepGo, visited, addSubScene);
+                }
+            }
+            if (dp[twoStepGo] >= 0){
+                if (resultA >= 0){
+                    resultB = Math.min(resultB, resultA+1);
+                }
+                if (resultC >= 0){
+                    resultB = Math.min(resultB, resultC+1);
+                }
+            }
         }
         dp[pos] = Math.min(resultA, resultB) == Integer.MAX_VALUE ? -1 : Math.min(resultA, resultB);
         visited.remove(pos);
+    }
+
+    private boolean canTouch(int n){
+        return n != circle && n != forbid;
     }
 
 
