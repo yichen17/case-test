@@ -93,6 +93,33 @@ public class DailyQuestion {
         serializeAndDeserializeTest(dq);
         StringUtils.divisionLine();
         captureFortsTest(dq);
+        StringUtils.divisionLine();
+        waysToBuyPensPencilsTest(dq);
+    }
+
+    // 2240.买钢笔和铅笔的方案数
+
+    private static void waysToBuyPensPencilsTest(DailyQuestion dq){
+        // 9
+        System.out.println(dq.waysToBuyPensPencils(20, 10, 5));
+        // 1
+        System.out.println(dq.waysToBuyPensPencils(5, 10, 10));
+        int total = random.nextInt(100000), cost1 = random.nextInt(1000), cost2 = random.nextInt(1000);
+        log.info("waysToBuyPensPencilsTest total:{} cost1:{} cost2:{}", total, cost1, cost2);
+        System.out.println(dq.waysToBuyPensPencils(total, cost1, cost2));
+        total = random.nextInt(100000); cost1 = random.nextInt(1000); cost2 = random.nextInt(1000);
+        log.info("waysToBuyPensPencilsTest total:{} cost1:{} cost2:{}", total, cost1, cost2);
+        System.out.println(dq.waysToBuyPensPencils(total, cost1, cost2));
+    }
+
+    public long waysToBuyPensPencils(int total, int cost1, int cost2) {
+        int times1 = total / cost1, remain;
+        long result = 0L;
+        for (int i=0; i<=times1; i++){
+            remain = total - i * cost1;
+            result = result + (remain / cost2) + 1;
+        }
+        return result;
     }
 
     // 2511.最多可以摧毁的敌人城堡数目    审题  只能移动一次
