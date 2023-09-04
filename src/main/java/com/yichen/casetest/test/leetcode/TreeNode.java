@@ -158,4 +158,17 @@ public class TreeNode {
         return sameCheck(p.getLeft(), q.getLeft()) && sameCheck(p.getRight(), q.getRight());
     }
 
+
+    /**
+     * 根据字符串值构造数据
+     * @param s
+     * @return
+     */
+    public static TreeNode constructNode(String s){
+        if (NULL.equals(s)){
+            return null;
+        }
+        return new TreeNode(Integer.parseInt(s));
+    }
+
 }

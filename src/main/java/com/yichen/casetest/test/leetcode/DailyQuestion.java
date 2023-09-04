@@ -91,7 +91,54 @@ public class DailyQuestion {
         minimumJumpsTest(dq);
         StringUtils.divisionLine();
         serializeAndDeserializeTest(dq);
+        StringUtils.divisionLine();
+        captureFortsTest(dq);
     }
+
+    // 2511.最多可以摧毁的敌人城堡数目    审题  只能移动一次
+
+    private static void captureFortsTest(DailyQuestion dq){
+        System.out.println(dq.captureForts(new int[]{1,0,0,-1,0,0,0,0,1}));
+        System.out.println(dq.captureForts(new int[]{0,0,1,-1}));
+        System.out.println(dq.captureForts(new int[]{1,0,0,-1,0,0,-1,0,1}));
+        System.out.println(dq.captureForts(StringUtils.randomIntArray(500, -1, 2)));
+    }
+
+    public int captureForts(int[] forts) {
+        int i=0,pre=-1,next,len=forts.length,result=0;
+        while (i<len){
+            if (forts[i] == 1){
+                next = i+1;
+                if (pre != -1){
+                    result = Math.max(result, i-pre-1);
+                }
+                while (next < len && forts[next] == 0){
+                    next++;
+                }
+                if (next == len){
+                    break;
+                }
+                if (forts[next] == -1){
+                    result = Math.max(result, next-i-1);
+                    i = next+1;
+                    pre = next;
+                }
+                else {
+                    pre = -1;
+                    i = next;
+                }
+            }
+            else if (forts[i] == -1){
+                pre = i;
+                i++;
+            }
+            else {
+                i++;
+            }
+        }
+        return result;
+    }
+
 
     // 449. 序列化和反序列化二叉搜索树
 
@@ -157,10 +204,7 @@ public class DailyQuestion {
     }
 
     private TreeNode getNode(String s){
-        if ("null".equals(s)){
-            return null;
-        }
-        return new TreeNode(Integer.parseInt(s));
+        return TreeNode.constructNode(s);
     }
 
     // 1921. 消灭怪物的最大数量
