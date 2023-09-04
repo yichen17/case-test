@@ -89,22 +89,25 @@ public class DailyQuestion {
         eliminateMaximumTest(dq);
         StringUtils.divisionLine();
         minimumJumpsTest(dq);
+        StringUtils.divisionLine();
+        serializeAndDeserializeTest(dq);
     }
 
     // 449. 序列化和反序列化二叉搜索树
 
-    private static void serializeAndDeserializeTest(DailyQuestion dq){
-        TreeNode origin = TreeNode.buildTree(new Integer[]{2,1,3});
+    private static void serializeAndDeserializeTest(DailyQuestion dq) {
+        TreeNode origin = TreeNode.buildTree(new Integer[]{2, 1, 3});
         String serializeStr = dq.serialize(origin);
         TreeNode trans = dq.deserialize(serializeStr);
-
-         origin = TreeNode.buildTree(new Integer[]{});
-         serializeStr = dq.serialize(origin);
-         trans = dq.deserialize(serializeStr);
-
-         origin = TreeNode.buildTree(new Integer[]{2,1,4,null,null,3,6,null,null,5,7});
-         serializeStr = dq.serialize(origin);
-         trans = dq.deserialize(serializeStr);
+        assert TreeNode.sameCheck(origin, trans);
+        origin = TreeNode.buildTree(new Integer[]{});
+        serializeStr = dq.serialize(origin);
+        trans = dq.deserialize(serializeStr);
+        assert TreeNode.sameCheck(origin, trans);
+        origin = TreeNode.buildTree(new Integer[]{2, 1, 4, null, null, 3, 6, null, null, 5, 7});
+        serializeStr = dq.serialize(origin);
+        trans = dq.deserialize(serializeStr);
+        assert TreeNode.sameCheck(origin, trans);
     }
 
     public String serialize(TreeNode root) {

@@ -142,4 +142,20 @@ public class TreeNode {
         }
     }
 
+    /**
+     * 校验两棵树是否一样
+     * @param p
+     * @param q
+     * @return
+     */
+    public static boolean sameCheck(TreeNode p, TreeNode q){
+        if (Objects.isNull(p) && Objects.isNull(q)){
+            return true;
+        }
+        if (Objects.isNull(p) || Objects.isNull(q) || p.getVal() != q.getVal()){
+            return false;
+        }
+        return sameCheck(p.getLeft(), q.getLeft()) && sameCheck(p.getRight(), q.getRight());
+    }
+
 }
