@@ -88,13 +88,14 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         eliminateMaximumTest(dq);
         StringUtils.divisionLine();
-        minimumJumpsTest(dq);
-        StringUtils.divisionLine();
         serializeAndDeserializeTest(dq);
         StringUtils.divisionLine();
         captureFortsTest(dq);
         StringUtils.divisionLine();
         waysToBuyPensPencilsTest(dq);
+        StringUtils.divisionLine();
+        minimumJumpsTest(dq);
+        StringUtils.divisionLine("minimumJumpsTest");
     }
 
     // 2240.买钢笔和铅笔的方案数
@@ -104,10 +105,10 @@ public class DailyQuestion {
         System.out.println(dq.waysToBuyPensPencils(20, 10, 5));
         // 1
         System.out.println(dq.waysToBuyPensPencils(5, 10, 10));
-        int total = random.nextInt(100000), cost1 = random.nextInt(1000), cost2 = random.nextInt(1000);
+        int total = random.nextInt(100000)+1, cost1 = random.nextInt(1000)+1, cost2 = random.nextInt(1000)+1;
         log.info("waysToBuyPensPencilsTest total:{} cost1:{} cost2:{}", total, cost1, cost2);
         System.out.println(dq.waysToBuyPensPencils(total, cost1, cost2));
-        total = random.nextInt(100000); cost1 = random.nextInt(1000); cost2 = random.nextInt(1000);
+        total = random.nextInt(100000)+1; cost1 = random.nextInt(1000)+1; cost2 = random.nextInt(1000)+1;
         log.info("waysToBuyPensPencilsTest total:{} cost1:{} cost2:{}", total, cost1, cost2);
         System.out.println(dq.waysToBuyPensPencils(total, cost1, cost2));
     }
@@ -259,106 +260,72 @@ public class DailyQuestion {
     // 1654. 到家的最少跳跃次数
 
     private static void minimumJumpsTest(DailyQuestion dq){
+        // 3
         System.out.println(dq.minimumJumps(new int[]{14,4,18,1,15}, 3, 15, 9));
+        // -1
         System.out.println(dq.minimumJumps(new int[]{8,3,16,6,12,20}, 15, 13, 11));
+        // 2
         System.out.println(dq.minimumJumps(new int[]{1,6,2,14,5,17,4}, 16, 9, 7));
         System.out.println(dq.minimumJumps(new int[]{}, 10, 8, 32));
-        int[] data = StringUtils.randomNoRepeat(1000, 1, 2000);
+        int[] data = StringUtils.randomNoRepeat(100, 1, 2000);
         int a = random.nextInt(100)+1;
         int b = random.nextInt(100)+1;
         int x = StringUtils.randomNotIn(data, 1, 2000);
         log.info("a:{}, b:{}, x:{}", a, b, x);
         System.out.println(dq.minimumJumps(data, a, b, x));
+        // 121
+        data = new int[]{162,118,178,152,167,100,40,74,199,186,26,73,200,127,
+                30,124,193,84,184,36,103,149,153,9,54,154,133,95,45,198,79,157,64,
+                122,59,71,48,177,82,35,14,176,16,108,111,6,168,31,134,164,136,72,98};
+        a = 29;
+        b = 98;
+        x = 80;
+        System.out.println(dq.minimumJumps(data, a, b, x));
     }
 
+    private static final Integer forbid = -3;
+    private static final Integer init = -2;
+    private static final Integer circle = -1;
     public int minimumJumps(int[] forbidden, int a, int b, int x) {
-        int len = 0;
-        while (len <= x+1){
-            len += a;
-        }
+        int len = Math.max(a,b) + x + 1, combineTrip = a-b;
         int[] dp = new int[len];
-        Set<Integer> forbiddenPos = new HashSet<>();
+        Arrays.fill(dp, init);
+        dp[x] = 0;
         for (int pos : forbidden){
-            forbiddenPos.add(pos);
-            if (pos < len){
-                dp[pos] = -1;
-            }
-        }
-        int[] forwardSteps = null;
-        Integer back = null;
-        if (a == b){
-            forwardSteps = new int[]{a};
-        }
-        else if (a > b){
-            forwardSteps = new int[]{a, a-b};
-        }
-        else {
-            forwardSteps = new int[]{a};
-            back = b-a;
-        }
-
-        for (int i=1; i<len; i++){
-            if (forbiddenPos.contains(i)){
+            if (pos >= len){
                 continue;
             }
-            if (i % a == 0){
-                dp[i] = i/a;
-                continue;
-            }
-            int min = Integer.MAX_VALUE;
-            for (int j=0; j<forwardSteps.length; j++){
-                int step = forwardSteps[j];
-                if (i - step < 0 || dp[i-step] == -1){
-                    continue;
-                }
-                min = Math.min(min, dp[i-step] + j + 1);
-            }
-            if (min == Integer.MAX_VALUE){
-                dp[i] = -1;
-            }
-            else {
-                dp[i] = min;
-            }
+            dp[pos] = forbid;
         }
-        if (back != null){
-            List<Integer> items = new ArrayList<>();
-            int tt = a-back, times=1;
-            while (tt > 0){
-                items.add(tt);
-                if (forbiddenPos.contains(tt)){
-
-                }
-                else if (dp[tt] == -1){
-                    dp[tt] = 1+times*2;
-                }
-                else {
-                    dp[tt] = Math.min(dp[tt], 1+times*2);
-                }
-                tt -= back;
-                times++;
-            }
-            for (int item : items) {
-                while (item < len) {
-                    if (forbiddenPos.contains(item) || item - a >= 0
-                            || forbiddenPos.contains(item - a) || dp[item - a] == -1) {
-                        break;
-                    }
-                    if (dp[item] == -1) {
-                        dp[item] = dp[item - a] + 1;
-                    } else {
-                        dp[item] = Math.min(dp[item], dp[item - a] + 1);
-                    }
-                    item += a;
-                }
-            }
-        }
-        return dp[x];
+        Set<Integer> visited = new HashSet<>();
+        minimumJumpsDfs(dp, a, combineTrip,  0, visited);
+        return dp[0];
     }
 
-
-
-
-
+    private void minimumJumpsDfs(int[] dp, int tripA, int tripB, int pos, Set<Integer> visited){
+        if (pos < 0 || pos >= dp.length || dp[pos] == forbid || dp[pos] == circle){
+            return;
+        }
+        if (!visited.add(pos)){
+            dp[pos] = circle;
+            return;
+        }
+        int resultA = Integer.MAX_VALUE, resultB = Integer.MAX_VALUE;
+        if (pos+tripA >=0 && pos+tripA < dp.length){
+            if (dp[pos+tripA] == init){
+                minimumJumpsDfs(dp, tripA, tripB,  pos+tripA, visited);
+            }
+            resultA = dp[pos+tripA] == forbid  || dp[pos+tripA] == circle ? Integer.MAX_VALUE : dp[pos+tripA] + 1;
+        }
+        if (pos+tripB >=0 && pos+tripB < dp.length){
+            if (dp[pos+tripB] == init){
+                minimumJumpsDfs(dp, tripA, tripB, pos+tripB, visited);
+            }
+            resultB = dp[pos+tripB] == forbid || dp[pos+tripB] == circle ? Integer.MAX_VALUE : dp[pos+tripB] + 2;
+        }
+        dp[pos] = Math.min(resultA, resultB) == Integer.MAX_VALUE ? -1 : Math.min(resultA, resultB);
+        visited.remove(pos);
+    }
 
 
     // 823. 带因子的二叉树
