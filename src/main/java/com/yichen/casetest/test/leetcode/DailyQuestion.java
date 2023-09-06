@@ -98,7 +98,67 @@ public class DailyQuestion {
         StringUtils.divisionLine("minimumJumpsTest");
         minNumberTest(dq);
         StringUtils.divisionLine();
+        lcaDeepestLeavesTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 1123. 最深叶节点的最近公共祖先
+
+    private static void lcaDeepestLeavesTest(DailyQuestion dq){
+        TreeNode.printTree(dq.lcaDeepestLeaves(TreeNode.buildTree(new Integer[]{3,5,1,6,2,0,8,null,null,7,4})));
+        TreeNode.printTree(dq.lcaDeepestLeaves(TreeNode.buildTree(new Integer[]{1})));
+        TreeNode.printTree(dq.lcaDeepestLeaves(TreeNode.buildTree(new Integer[]{0,1,3,null,2})));
+        TreeNode.printTree(dq.lcaDeepestLeaves(TreeNode.buildTree(new Integer[]{3,5,1,6,2,0,8,null,null,7,4,9})));
+    }
+
+    private int lcaDeepestLeavesMax;
+    private Stack<TreeNode> lcaDeepestLeavesMaxStack;
+
+    public TreeNode lcaDeepestLeaves(TreeNode root) {
+        lcaDeepestLeavesMax = -1;
+        lcaDeepestLeavesMaxStack = null;
+        this.lcaDeepestLeavesDfs(root, new Stack<>());
+        return lcaDeepestLeavesMaxStack.pop();
+    }
+
+    private void lcaDeepestLeavesDfs(TreeNode root ,Stack<TreeNode> path){
+        path.push(root);
+        if (root.left == null && root.right == null){
+            if (lcaDeepestLeavesMax == -1 || lcaDeepestLeavesMax < path.size()){
+                lcaDeepestLeavesMax = path.size();
+                lcaDeepestLeavesMaxStack = this.copy(path);
+            }
+            else if (lcaDeepestLeavesMax == path.size()){
+                Stack<TreeNode> copy = this.copy(path);
+                while (copy.size() > lcaDeepestLeavesMaxStack.size()){
+                    copy.pop();
+                }
+                while (copy.size() != 0 && copy.peek().val != lcaDeepestLeavesMaxStack.peek().val){
+                    copy.pop();
+                    lcaDeepestLeavesMaxStack.pop();
+                }
+            }
+        }
+        if (root.left != null){
+            lcaDeepestLeavesDfs(root.left, path);
+        }
+        if (root.right != null){
+            lcaDeepestLeavesDfs(root.right, path);
+        }
+        path.pop();
+    }
+
+    private Stack<TreeNode> copy(Stack<TreeNode> origin){
+        Stack<TreeNode> newStack = new Stack<>();
+        for (int i=0; i<origin.size(); i++){
+            newStack.push(origin.get(i));
+        }
+        return newStack;
+    }
+
+
+
+
 
     // 2605. 从两个数字数组里生成最小数字
 
