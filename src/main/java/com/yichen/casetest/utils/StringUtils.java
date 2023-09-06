@@ -330,21 +330,37 @@ public class StringUtils {
         log.info("{}", builder);
     }
 
-    public static int[][] constructEdges(int start, int limit, int size, boolean selfCycle, boolean greater){
+    public static int[][] constructEdges(int start, int limit, int size, boolean selfCycle, boolean greater, boolean duplicate){
         int[][] result = new int[size][2];
+        Set<Integer> set = new HashSet<>();
         for (int i=0; i<size; i++){
             int from = random.nextInt(limit)+start, to=-1;
             if (selfCycle){
                 to = random.nextInt(limit)+start;
             }
             else if (greater){
-                while (to == -1 || to < from){
+                int times = 0;
+                while (to == -1 || to <= from){
                     to = random.nextInt(limit)+start;
+                    times++;
+                    if (times > 40){
+                        break;
+                    }
+                }
+                if (times > 40){
+                    i--;
+                    continue;
                 }
             }
             else {
                 while (to == -1 || to == from) {
                     to = random.nextInt(limit)+start;
+                }
+            }
+            if (!duplicate){
+                if (!set.add((from << 14) | to)){
+                    i--;
+                    continue;
                 }
             }
             result[i][0] = from;

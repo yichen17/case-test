@@ -100,7 +100,49 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         lcaDeepestLeavesTest(dq);
         StringUtils.divisionLine();
+        minTrioDegreeTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 1761. 一个图中连通三元组的最小度数
+
+    private static void minTrioDegreeTest(DailyQuestion dq){
+        System.out.println(dq.minTrioDegree(6, StringUtils.convert2Array("[[1,2],[1,3],[3,2],[4,1],[5,2],[3,6]]")));
+        System.out.println(dq.minTrioDegree(7, StringUtils.convert2Array("[[1,3],[4,1],[4,3],[2,5],[5,6],[6,7],[7,5],[2,6]]")));
+        System.out.println(dq.minTrioDegree(2, StringUtils.convert2Array("[[1,2]")));
+        System.out.println(dq.minTrioDegree(200, StringUtils.constructEdges(1, 200, 300, false,true, false)));
+    }
+
+    public int minTrioDegree(int n, int[][] edges) {
+        int[] degree = new int[n+1];
+        int[][] dp = new int[n+1][n+1];
+        for (int[] edge : edges){
+            degree[edge[0]]++;
+            degree[edge[1]]++;
+            dp[edge[0]][edge[1]]=1;
+            dp[edge[1]][edge[0]]=1;
+        }
+        List<Integer> greaterThan1 = new ArrayList<>();
+        for (int i=1; i<degree.length; i++){
+            if (degree[i] > 1){
+                greaterThan1.add(i);
+            }
+        }
+        int result = Integer.MAX_VALUE;
+        for (int i=0; i<greaterThan1.size(); i++){
+            for (int j=i+1; j<greaterThan1.size(); j++){
+                if (dp[greaterThan1.get(i)][greaterThan1.get(j)] == 1){
+                    for (int k=j+1; k<greaterThan1.size(); k++){
+                        if (dp[greaterThan1.get(i)][greaterThan1.get(k)] == 1 && dp[greaterThan1.get(k)][greaterThan1.get(j)] == 1){
+                            result = Math.min(result, degree[greaterThan1.get(i)] + degree[greaterThan1.get(j)] + degree[greaterThan1.get(k)] - 6);
+                        }
+                    }
+                }
+            }
+        }
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
 
     // 1123. 最深叶节点的最近公共祖先
 
@@ -544,7 +586,7 @@ public class DailyQuestion {
         StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,3],[2,6],[8,10],[15,18]]")));
         StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[1,4],[4,5]]")));
         StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.convert2Array("[[40,45],[99,99],[97,99],[46,99],[55,63],[74,87],[26,66],[99,99],[58,90],[35,46]]")));
-        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.constructEdges(0, 100, 10, false, true)));
+        StringUtils.arrayTwoDimensionPrint(dq.merge(StringUtils.constructEdges(0, 100, 10, false, true, true)));
     }
 
     public int[][] merge(int[][] intervals) {
@@ -709,7 +751,7 @@ public class DailyQuestion {
         int times = 200;
         for (int i=0; i<times; i++){
             int n = random.nextInt(2*10000-1) + 2;
-            int[][] edges = StringUtils.constructEdges(1, n, random.nextInt(100000)+1, false, false);
+            int[][] edges = StringUtils.constructEdges(1, n, random.nextInt(100000)+1, false, false, true);
             int[] queries = StringUtils.randomIntArray(random.nextInt(2000) + 1, 0, edges.length-1);
             System.gc();
             aCost = System.currentTimeMillis();
