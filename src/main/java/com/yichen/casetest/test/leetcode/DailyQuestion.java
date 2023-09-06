@@ -397,7 +397,7 @@ public class DailyQuestion {
         return pos;
     }
 
-    // 1654. 到家的最少跳跃次数
+    // 1654. 到家的最少跳跃次数    旧事重提，边界值边界值！！！   长度左边界计算不出来，还有整体解题思路有点乱
 
     private static void minimumJumpsTest(DailyQuestion dq){
         // 3
@@ -406,7 +406,7 @@ public class DailyQuestion {
         System.out.println(dq.minimumJumps(new int[]{8,3,16,6,12,20}, 15, 13, 11));
         // 2
         System.out.println(dq.minimumJumps(new int[]{1,6,2,14,5,17,4}, 16, 9, 7));
-        System.out.println(dq.minimumJumps(new int[]{}, 10, 8, 32));
+        System.out.println(dq.minimumJumps(new int[]{1}, 10, 8, 32));
         int[] data = StringUtils.randomNoRepeat(100, 1, 2000);
         int a = random.nextInt(100)+1;
         int b = random.nextInt(100)+1;
@@ -427,8 +427,13 @@ public class DailyQuestion {
     private static final Integer init = -2;
     private static final Integer circle = -1;
     private static final Integer addSubScene = 1;
+    private static final Integer normal = 0;
+    private static final Integer subAddScene = 2;
     public int minimumJumps(int[] forbidden, int a, int b, int x) {
-        int len = Math.max(a,b) + x + 1;
+        if (x == 0){
+            return 0;
+        }
+        int len = Math.max(Arrays.stream(forbidden).max().getAsInt() + a, x) + b + 1;
         int[] dp = new int[len];
         Arrays.fill(dp, init);
         dp[x] = 0;
@@ -439,7 +444,7 @@ public class DailyQuestion {
             dp[pos] = forbid;
         }
         Set<Integer> visited = new HashSet<>();
-        minimumJumpsDfs(dp, a, b,  0, visited, 0);
+        minimumJumpsDfs(dp, a, b,  0, visited, normal);
         return dp[0];
     }
 
@@ -451,39 +456,33 @@ public class DailyQuestion {
             dp[pos] = circle;
             return;
         }
-        int resultA = Integer.MAX_VALUE, resultB = Integer.MAX_VALUE, resultC = Integer.MAX_VALUE, resultD;
+        int addSubResult = Integer.MAX_VALUE, twoStepResult = Integer.MAX_VALUE;
         int addSub = pos + a, subAdd = pos-b, twoStepGo = pos + a - b;
         if (addSub >=0 && addSub < dp.length){
             if (dp[addSub] == init){
-                minimumJumpsDfs(dp, a, b,  addSub, visited, 0);
+                minimumJumpsDfs(dp, a, b,  addSub, visited, addSubScene);
             }
-            resultA = !this.canTouch(dp[addSub]) ? dp[addSub] : dp[addSub] + 1;
-        }
-        if (type == 0 && subAdd >=0 && subAdd < dp.length){
-            if (dp[subAdd] == init){
-                minimumJumpsDfs(dp, a, b,  subAdd, visited, addSubScene);
-            }
-            resultC = !this.canTouch(dp[subAdd]) ? dp[subAdd] : dp[subAdd] + 1;
-        }
-        if ((this.canTouch(resultA) || this.canTouch(resultC)) && twoStepGo >=0 && twoStepGo < dp.length){
-            if (dp[twoStepGo] == init){
-                if (this.canTouch(resultA)){
-                    minimumJumpsDfs(dp, a, b,  twoStepGo, visited, 0);
-                }
-                else {
+            addSubResult = !this.canTouch(dp[addSub]) ? Integer.MAX_VALUE : dp[addSub] + 1;
+            if (dp[addSub] != forbid && twoStepGo >=0 && twoStepGo < dp.length){
+                if (dp[twoStepGo] == init){
                     minimumJumpsDfs(dp, a, b,  twoStepGo, visited, addSubScene);
                 }
-            }
-            if (dp[twoStepGo] >= 0){
-                if (resultA >= 0){
-                    resultB = Math.min(resultB, resultA+1);
-                }
-                if (resultC >= 0){
-                    resultB = Math.min(resultB, resultC+1);
+                if (this.canTouch(dp[twoStepGo])){
+                    twoStepResult = dp[twoStepGo] + 2;
                 }
             }
         }
-        dp[pos] = Math.min(resultA, resultB) == Integer.MAX_VALUE ? -1 : Math.min(resultA, resultB);
+        if (twoStepResult == Integer.MAX_VALUE && (type & addSubScene) == 0 && subAdd >=0 && subAdd < dp.length){
+            if (dp[subAdd] != forbid && twoStepGo >=0 && twoStepGo < dp.length){
+                if (dp[twoStepGo] == init){
+                    minimumJumpsDfs(dp, a, b,  twoStepGo, visited, subAddScene);
+                }
+                if (this.canTouch(dp[twoStepGo])){
+                    twoStepResult = dp[twoStepGo] + 2;
+                }
+            }
+        }
+        dp[pos] = Math.min(addSubResult, twoStepResult) == Integer.MAX_VALUE ? -1 : Math.min(addSubResult, twoStepResult);
         visited.remove(pos);
     }
 
