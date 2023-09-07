@@ -102,6 +102,75 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         minTrioDegreeTest(dq);
         StringUtils.divisionLine();
+        repairCarsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2594. 修车的最少时间  耗时有点高。。。  可以用二分，草
+
+    private static void repairCarsTest(DailyQuestion dq){
+        System.out.println(dq.repairCars(new int[]{4,2,3,1}, 10));
+        System.out.println(dq.repairCars(new int[]{5,1,8}, 6));
+        System.out.println(dq.repairCars(StringUtils.randomIntArray(1000, 1, 101), 10000));
+    }
+
+    public long repairCars(int[] ranks, int cars) {
+        int count = 0, i=0;
+        long result = 0L;
+        Arrays.sort(ranks);
+        PriorityQueue<RepairCarItem> priorityQueue = new PriorityQueue<>(new Comparator<RepairCarItem>() {
+            @Override
+            public int compare(RepairCarItem o1, RepairCarItem o2) {
+                if (o1.nextTimes != o2.nextTimes){
+                    return o1.nextTimes > o2.nextTimes ? 1 : -1;
+                }
+                return o1.num - o2.num;
+            }
+        });
+        RepairCarItem repairCarItem;
+        while (count < cars){
+            // 没有元素或者队头的时长大于新节点
+            if (i < ranks.length && (priorityQueue.isEmpty() || priorityQueue.peek().nextTimes > (long) ranks[i])){
+                repairCarItem = new RepairCarItem(ranks[i++]);
+            }
+            // 有元素且队头小于等于新节点
+            else {
+                repairCarItem = priorityQueue.remove();
+                repairCarItem.incr();
+            }
+            priorityQueue.add(repairCarItem);
+            result = Math.max(result, repairCarItem.times);
+            count++;
+        }
+        return result;
+    }
+
+    static class RepairCarItem{
+        public int rank;
+        public int num;
+        public long times;
+        public long nextTimes;
+        RepairCarItem(int rank){
+            this.rank = rank;
+            num = 1;
+            times = this.costTime();
+            nextTimes = this.nextCostTime();
+        }
+
+        public void incr(){
+            this.num ++;
+            this.times = this.nextTimes;
+            this.nextTimes = this.nextCostTime();
+        }
+
+        private long costTime(){
+            return (long)this.num * this.num * this.rank;
+        }
+
+        private long nextCostTime(){
+            return (long)(this.num+1) * (this.num+1) * this.rank;
+        }
+
     }
 
     // 1761. 一个图中连通三元组的最小度数
