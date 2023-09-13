@@ -110,6 +110,48 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         queensAttacktheKingTest(dq);
         StringUtils.divisionLine();
+        canFinishTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 207. 课程表
+
+    private static void canFinishTest(DailyQuestion dq){
+        System.out.println(dq.canFinish(2, new int[][]{{1,0}}));
+        System.out.println(dq.canFinish(2, StringUtils.convert2Array("[[1,0],[0,1]]")));
+        System.out.println(dq.canFinish(100, StringUtils.constructEdges(0, 99, 100, false, true, false)));
+    }
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[] indegree = new int[numCourses];
+        Set<Integer>[] link = new HashSet[numCourses];
+        for (int i=0; i<link.length; i++){
+            link[i] = new HashSet<>();
+        }
+        for (int[] item : prerequisites){
+            int p = item[0];
+            int q = item[1];
+            indegree[p] ++;
+            link[q].add(p);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i=0; i<indegree.length; i++){
+            if (indegree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        int times = 0;
+        while (!queue.isEmpty()){
+            int source = queue.poll();
+            times++;
+            for (int item : link[source]){
+                indegree[item]--;
+                if (indegree[item] == 0){
+                    queue.offer(item);
+                }
+            }
+        }
+        return times == numCourses;
     }
 
     // 1222. 可以攻击国王的皇后
