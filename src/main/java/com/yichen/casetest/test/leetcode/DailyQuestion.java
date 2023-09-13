@@ -24,6 +24,7 @@ public class DailyQuestion {
     }
 
     int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
+    int[][] tripDir = new int[][]{{-1,-2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, -2}, {2, -1}, {2,1}, {1, 2}};
 
 
 
@@ -104,6 +105,40 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         repairCarsTest(dq);
         StringUtils.divisionLine();
+        checkValidGrid(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2596. 检查骑士巡视方案   菜鸡注意审题
+
+    private static void checkValidGrid(DailyQuestion dq){
+        System.out.println(dq.checkValidGrid(StringUtils.convert2Array("[[0,11,16,5,20],[17,4,19,10,15],[12,1,8,21,6],[3,18,23,14,9],[24,13,2,7,22]]")));
+        System.out.println(dq.checkValidGrid(StringUtils.convert2Array("[[0,3,6],[5,8,1],[2,7,4]]")));
+        System.out.println(dq.checkValidGrid(StringUtils.convert2Array("[[24,11,22,17,4],[21,16,5,12,9],[6,23,10,3,18],[15,20,1,8,13],[0,7,14,19,2]]")));
+    }
+
+    public boolean checkValidGrid(int[][] grid) {
+        int pos = 0;
+        int i=0,j=0,limit=grid.length;
+        if (grid[0][0] != 0){
+            return false;
+        }
+        int nextI, nextJ;
+        while (true){
+            boolean next = false;
+            for (int[] item : tripDir){
+                if ((nextI = i + item[0]) >=0 && nextI < limit && (nextJ = j + item[1]) >= 0 && nextJ < limit && grid[nextI][nextJ] == pos+1){
+                    pos++;
+                    i = nextI;
+                    j = nextJ;
+                    next = true;
+                }
+            }
+            if (!next){
+                break;
+            }
+        }
+        return pos == limit* limit - 1;
     }
 
     // 2594. 修车的最少时间  耗时有点高。。。  可以用二分，草
