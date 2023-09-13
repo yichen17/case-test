@@ -23,8 +23,9 @@ public class DailyQuestion {
         fronts[b] = temp;
     }
 
-    int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
-    int[][] tripDir = new int[][]{{-1,-2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, -2}, {2, -1}, {2,1}, {1, 2}};
+    private static final int[][] dir = new int[][]{{1,0}, {-1,0}, {0,1}, {0,-1}};
+    private static final int[][] tripDir = new int[][]{{-1,-2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, -2}, {2, -1}, {2,1}, {1, 2}};
+    private static final int[][] allDir = new int[][]{{-1,0}, {1,0}, {0,1}, {0,-1}, {-1,-1}, {1,1}, {-1,1}, {1, -1}};
 
 
 
@@ -107,6 +108,40 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         checkValidGrid(dq);
         StringUtils.divisionLine();
+        queensAttacktheKingTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1222. 可以攻击国王的皇后
+
+    private static void queensAttacktheKingTest(DailyQuestion dq){
+        StringUtils.print(dq.queensAttacktheKing(StringUtils.convert2Array("[[0,1],[1,0],[4,0],[0,4],[3,3],[2,4]]"), new int[]{0,0}));
+        StringUtils.print(dq.queensAttacktheKing(StringUtils.convert2Array("[[0,0],[1,1],[2,2],[3,4],[3,5],[4,4],[4,5]]"), new int[]{3,3}));
+        StringUtils.print(dq.queensAttacktheKing(StringUtils.convert2Array("[[5,6],[7,7],[2,1],[0,7],[1,6],[5,1],[3,7],[0,3],[4,0],[1,2],[6,3],[5,0],[0,4],[2,2],[1,1],[6,4],[5,4],[0,0],[2,6],[4,5],[5,2],[1,4],[7,5],[2,3],[0,5],[4,2],[1,0],[2,7],[0,1],[4,6],[6,1],[0,6],[4,3],[1,7]]"), new int[]{3,4}));
+    }
+
+    public List<List<Integer>> queensAttacktheKing(int[][] queens, int[] king) {
+        int[][] dp = new int[8][8];
+        int x = king[0], y = king[1], p, q;
+        for (int[] queen : queens){
+            dp[queen[0]][queen[1]] = 1;
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        for (int[] item : allDir){
+            p = x; q=y;
+            while (this.validPos(p) && this.validPos(q) && dp[p][q] == 0){
+                p = p + item[0];
+                q = q + item[1];
+            }
+            if (this.validPos(p) && this.validPos(q)){
+                result.add(Arrays.asList(p, q));
+            }
+        }
+        return result;
+    }
+
+    private boolean validPos(int x){
+        return x >= 0 && x < 8;
     }
 
     // 2596. 检查骑士巡视方案   菜鸡注意审题
