@@ -18,6 +18,17 @@ public class BaseTypeTest {
         Long l = 10L;
         System.out.println(l.equals(10L));
 
+        stringBuilderTest();
+
+    }
+
+    private static void stringBuilderTest(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("shanliang");
+        System.out.println(builder);
+//        builder.setLength(1);
+        builder.setLength(30);
+        System.out.println(builder);
     }
 
 }
