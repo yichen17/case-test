@@ -112,6 +112,53 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         canFinishTest(dq);
         StringUtils.divisionLine();
+        checkIfPrerequisiteTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1462. 课程表 IV
+
+    private static void checkIfPrerequisiteTest(DailyQuestion dq){
+        StringUtils.print(dq.checkIfPrerequisite(2, StringUtils.convert2Array("[[1,0]]"), StringUtils.convert2Array("[[0,1],[1,0]]")));
+        StringUtils.print(dq.checkIfPrerequisite(2, StringUtils.convert2Array(""), StringUtils.convert2Array("[[0,1],[1,0]]")));
+        StringUtils.print(dq.checkIfPrerequisite(3, StringUtils.convert2Array("[[1,2],[1,0],[2,0]]"), StringUtils.convert2Array("[[1,0],[1,2]]")));
+        StringUtils.print(dq.checkIfPrerequisite(30, StringUtils.constructEdges(0, 29, 100, false, true, false),
+                StringUtils.constructEdges(0, 29, 30, false, true, false)));
+    }
+
+    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+        int[][] dp = new int[numCourses][numCourses];
+        for (int[] item : prerequisites){
+            int from = item[0];
+            int to = item[1];
+            dp[from][to] = 1;
+        }
+        int len = queries.length;
+        List<Boolean> result = new ArrayList<>(len);
+        for (int[] item : queries){
+            boolean r = this.dfs(dp, item[0], item[1], new HashSet<>());
+            if (r){
+                dp[item[0]][item[1]] = 1;
+            }
+            result.add(r);
+        }
+        return result;
+    }
+
+    private boolean dfs(int[][] dp, int from, int to, Set<Integer> visited){
+        if (!visited.add(from)) {
+            return false;
+        }
+        if (from == to){
+            return true;
+        }
+        for (int i=0; i<dp[from].length; i++){
+            if (dp[from][i] == 1 && this.dfs(dp, i, to, visited)){
+                return true;
+            }
+        }
+        visited.remove(from);
+        return false;
     }
 
     // 207. 课程表
