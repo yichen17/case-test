@@ -136,17 +136,17 @@ public class DailyQuestion {
         int len = queries.length;
         List<Boolean> result = new ArrayList<>(len);
         for (int[] item : queries){
-            boolean r = this.dfs(dp, item[0], item[1], new HashSet<>());
-            if (r){
-                dp[item[0]][item[1]] = 1;
-            }
-            result.add(r);
+            result.add(this.dfs(dp, item[0], item[1], new HashSet<>()));
         }
         return result;
     }
 
     private boolean dfs(int[][] dp, int from, int to, Set<Integer> visited){
+        if (dp[from][to] != 0){
+            return dp[from][to] != -1;
+        }
         if (!visited.add(from)) {
+            dp[from][to] = -1;
             return false;
         }
         if (from == to){
@@ -154,10 +154,12 @@ public class DailyQuestion {
         }
         for (int i=0; i<dp[from].length; i++){
             if (dp[from][i] == 1 && this.dfs(dp, i, to, visited)){
+                dp[from][to] = 1;
                 return true;
             }
         }
         visited.remove(from);
+        dp[from][to] = -1;
         return false;
     }
 
