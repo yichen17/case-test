@@ -114,6 +114,34 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         checkIfPrerequisiteTest(dq);
         StringUtils.divisionLine();
+        robTest(dq);
+        StringUtils.divisionLine();
+    }
+    
+    // 198. 打家劫舍
+
+    private static void robTest(DailyQuestion dq){
+        System.out.println(dq.rob(new int[]{1,2,3,1}));
+        System.out.println(dq.rob(new int[]{2,7,9,3,1}));
+        System.out.println(dq.rob(new int[]{2}));
+        System.out.println(dq.rob(StringUtils.randomIntArray(80, 0, 300)));
+    }
+
+    public int rob(int[] nums) {
+        if (nums.length == 1){
+            return nums[0];
+        }
+        if (nums.length == 2){
+            return Math.max(nums[0], nums[1]);
+        }
+        int len = nums.length, i;
+        int[] dp = new int[len];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+        for (i=2; i<len; i++){
+            dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2]);
+        }
+        return dp[len-1];
     }
 
     // 1462. 课程表 IV
