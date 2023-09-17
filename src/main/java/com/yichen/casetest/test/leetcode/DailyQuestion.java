@@ -116,6 +116,40 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         robTest(dq);
         StringUtils.divisionLine();
+        rob2Test(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 213. 打家劫舍 II
+
+    private static void rob2Test(DailyQuestion dq){
+        System.out.println(dq.rob2(new int[]{2,3,2}));
+        System.out.println(dq.rob2(new int[]{1,2,3,1}));
+        System.out.println(dq.rob2(new int[]{1,2,3}));
+        System.out.println(dq.rob2(StringUtils.randomIntArray(50, 0, 500)));
+    }
+
+    public int rob2(int[] nums) {
+        if (nums.length == 1){
+            return nums[0];
+        }
+        return Math.max(this.rob(nums, 0, nums.length-2), this.rob(nums, 1, nums.length-1));
+    }
+
+    private int rob(int[] nums, int start, int end){
+        if (start > end || start < 0 || start >= nums.length || end < 0 || end >= nums.length){
+            return 0;
+        }
+        if (start == end){
+            return nums[start];
+        }
+        int p = nums[start], q = Math.max(nums[start+1], nums[start]), r;
+        for (int i=start+2; i<=end; i++){
+            r = Math.max(nums[i] + p, q);
+            p = q;
+            q = r;
+        }
+        return q;
     }
     
     // 198. 打家劫舍
