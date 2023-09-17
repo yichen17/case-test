@@ -114,6 +114,34 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         checkIfPrerequisiteTest(dq);
         StringUtils.divisionLine();
+        robTest(dq);
+        StringUtils.divisionLine();
+    }
+    
+    // 198. 打家劫舍
+
+    private static void robTest(DailyQuestion dq){
+        System.out.println(dq.rob(new int[]{1,2,3,1}));
+        System.out.println(dq.rob(new int[]{2,7,9,3,1}));
+        System.out.println(dq.rob(new int[]{2}));
+        System.out.println(dq.rob(StringUtils.randomIntArray(80, 0, 300)));
+    }
+
+    public int rob(int[] nums) {
+        if (nums.length == 1){
+            return nums[0];
+        }
+        if (nums.length == 2){
+            return Math.max(nums[0], nums[1]);
+        }
+        int len = nums.length, i;
+        int[] dp = new int[len];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+        for (i=2; i<len; i++){
+            dp[i] = Math.max(dp[i-1], nums[i] + dp[i-2]);
+        }
+        return dp[len-1];
     }
 
     // 1462. 课程表 IV
@@ -136,17 +164,17 @@ public class DailyQuestion {
         int len = queries.length;
         List<Boolean> result = new ArrayList<>(len);
         for (int[] item : queries){
-            boolean r = this.dfs(dp, item[0], item[1], new HashSet<>());
-            if (r){
-                dp[item[0]][item[1]] = 1;
-            }
-            result.add(r);
+            result.add(this.dfs(dp, item[0], item[1], new HashSet<>()));
         }
         return result;
     }
 
     private boolean dfs(int[][] dp, int from, int to, Set<Integer> visited){
+        if (dp[from][to] != 0){
+            return dp[from][to] != -1;
+        }
         if (!visited.add(from)) {
+            dp[from][to] = -1;
             return false;
         }
         if (from == to){
@@ -154,10 +182,12 @@ public class DailyQuestion {
         }
         for (int i=0; i<dp[from].length; i++){
             if (dp[from][i] == 1 && this.dfs(dp, i, to, visited)){
+                dp[from][to] = 1;
                 return true;
             }
         }
         visited.remove(from);
+        dp[from][to] = -1;
         return false;
     }
 
