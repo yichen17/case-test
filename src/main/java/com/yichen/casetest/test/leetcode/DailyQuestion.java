@@ -118,6 +118,59 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         rob2Test(dq);
         StringUtils.divisionLine();
+        rob3Test(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 337. 打家劫舍 III
+
+    private static void rob3Test(DailyQuestion dq){
+        System.out.println(dq.rob(TreeNode.buildTree(new Integer[]{3,2,3,null,3,null,1})));
+        System.out.println(dq.rob(TreeNode.buildTree(new Integer[]{3,4,5,1,3,null,1})));
+        System.out.println(dq.rob(TreeNode.buildTree(new Integer[]{3})));
+    }
+
+    private Map<TreeNode, Integer> need;
+    private Map<TreeNode, Integer> notNeed;
+
+    public int rob(TreeNode root) {
+        need = new HashMap<>();
+        notNeed = new HashMap<>();
+        return this.rob(root, false);
+    }
+
+    private int rob(TreeNode root, boolean select){
+        if (root == null){
+            return 0;
+        }
+        if (select){
+            return this.getRobResult(root, need, notNeed);
+        }
+        return Math.max(this.getRobResult(root, need, notNeed),
+                this.getRobResult(root, notNeed, need) + root.val);
+    }
+
+    private int getRobResult(TreeNode root, Map<TreeNode, Integer> otherMap, Map<TreeNode, Integer> checkMap){
+        if (root == null){
+            return 0;
+        }
+        int left, right;
+        if (root.left != null  && checkMap.containsKey(root.left)){
+            left = checkMap.get(root.left);
+        }
+        else {
+            left = this.rob(root.left, false);
+        }
+        if (root.right != null && checkMap.containsKey(root.right)){
+            right = checkMap.get(root.right);
+        }
+        else {
+            right = this.rob(root.right, false);
+        }
+        // 这么写leetCode通过了，好像逻辑有bug呢
+//        otherMap.put(root, left + right);
+        otherMap.put(root, Math.max(otherMap.getOrDefault(root, 0), left + right));
+        return left + right;
     }
 
     // 213. 打家劫舍 II
