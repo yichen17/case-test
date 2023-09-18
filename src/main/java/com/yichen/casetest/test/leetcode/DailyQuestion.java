@@ -120,6 +120,39 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         rob3Test(dq);
         StringUtils.divisionLine();
+        minCapability(dq);
+        StringUtils.divisionLine();
+
+    }
+
+    // 2560. 打家劫舍 IV    操，我是废物，不应该用dp的
+
+    private static void  minCapability(DailyQuestion dq){
+        System.out.println(dq.minCapability(new int[]{2,3,5,9}, 2));
+        System.out.println(dq.minCapability(new int[]{2,7,9,3,1}, 2));
+        System.out.println(dq.minCapability(StringUtils.randomIntArray(1000, 1, 10000), 400));
+    }
+
+    public int minCapability(int[] nums, int k) {
+        if (nums.length == 1 && k == 1){
+            return nums[0];
+        }
+        int len = nums.length;
+        int[][] dp = new int[2][k+1];
+        for (int i=0; i<2; i++){
+            for (int j=1; j<=k; j++){
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        dp[0][1] = nums[0];
+        dp[1][1] = Math.min(nums[0], nums[1]);
+        for (int i=2; i<len; i++){
+            for (int j=k; j>0; j--){
+                int select = Math.max(dp[(i-2)%2][j-1], nums[i]);
+                dp[i%2][j] = Math.min(select, dp[(i-1)%2][j]);
+            }
+        }
+        return dp[(len-1)%2][k];
     }
 
     // 337. 打家劫舍 III
