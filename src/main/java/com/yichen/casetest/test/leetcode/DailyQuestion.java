@@ -122,7 +122,38 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         minCapability(dq);
         StringUtils.divisionLine();
+        scheduleCourseTest(dq);
+        StringUtils.divisionLine();
+        minCountTest(dq);
+        StringUtils.divisionLine();
+    }
 
+    // LCP 06. 拿硬币
+
+    private static void minCountTest(DailyQuestion dq){
+        System.out.println(dq.minCount(new int[]{4,2,1}));
+        System.out.println(dq.minCount(new int[]{2,3,10}));
+        System.out.println(dq.minCount(StringUtils.randomIntArray(4, 1, 10)));
+    }
+
+    public int minCount(int[] coins) {
+        int result = 0;
+        for (int coin : coins){
+            result += (coin+1) / 2;
+        }
+        return result;
+    }
+
+    // 630. 课程表 III
+
+    private static void scheduleCourseTest(DailyQuestion dq){
+        System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[100,200], [200,1300], [1000,1250], [2000,3200]]")));
+        System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[1,2]]")));
+        System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[3,2],[4,3]]")));
+    }
+
+    public int scheduleCourse(int[][] courses) {
+        return -1;
     }
 
     // 2560. 打家劫舍 IV    操，我是废物，不应该用dp的

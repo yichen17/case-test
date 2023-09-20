@@ -470,6 +470,7 @@ public class StringUtils {
 
     private static final Pattern convert2ArrayPattern = Pattern.compile("\\[(.*?)\\]");
     public static int[][] convert2Array(String s){
+        s = s.replace(" ", "");
         List<List<Integer>> list = new ArrayList<>();
         Matcher matcher = convert2ArrayPattern.matcher(s);
         while (matcher.find()){
