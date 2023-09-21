@@ -126,6 +126,39 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         minCountTest(dq);
         StringUtils.divisionLine();
+        distMoneyTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2591. 将钱分给最多的儿童
+
+    private static void distMoneyTest(DailyQuestion dq){
+        System.out.println(dq.distMoney(20, 3));
+        System.out.println(dq.distMoney(16, 2));
+        System.out.println(dq.distMoney(18, 2));
+        int money = random.nextInt(199) + 1; int children = 2 + random.nextInt(28);
+        log.info("money {}, children {}", money, children);
+        System.out.println(dq.distMoney(money, children));
+        money = random.nextInt(199) + 1;  children = 2 + random.nextInt(28);
+        log.info("money {}, children {}", money, children);
+        System.out.println(dq.distMoney(money, children));
+    }
+
+    public int distMoney(int money, int children) {
+        if (money > 8 * children){
+            return children -1;
+        } else if (money == 8 * children) {
+            return children;
+        }
+        else if (money < children){
+            return -1;
+        }
+        money -= children;
+        int result = money / 7;
+        if (children - result == 1 && money - result * 7 == 3){
+            return result-1;
+        }
+        return result;
     }
 
     // LCP 06. 拿硬币
