@@ -128,6 +128,151 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         distMoneyTest(dq);
         StringUtils.divisionLine();
+        lockingTreeTest();
+        StringUtils.divisionLine();
+    }
+
+    // 1993. 树上的操作
+
+    private static void lockingTreeTest(){
+        LockingTree tree = new LockingTree(new int[]{-1, 0, 0, 1, 1, 2, 2});
+        System.out.println(tree.lock(2,2));;
+        System.out.println(tree.unlock(2,3));
+        System.out.println(tree.unlock(2,2));
+        System.out.println(tree.lock(4,5));
+        System.out.println(tree.upgrade(0,1));
+        System.out.println(tree.lock(0, 1));
+    }
+
+    private static class LockingTree {
+
+        private static class Node{
+            private final List<Node> children;
+            private int lockUser;
+            private Node parent;
+
+            private static final int NO_LOCK = -1;
+
+            Node(){
+                children = new ArrayList<>();
+                this.lockUser = NO_LOCK;
+            }
+
+
+
+            public void setParent(Node parent) {
+                this.parent = parent;
+            }
+
+            public Node getParent() {
+                return parent;
+            }
+
+            public int getLockUser() {
+                return lockUser;
+            }
+
+            public void resetLock(){
+                this.lockUser = NO_LOCK;
+            }
+
+            public void setLockUser(int lockUser) {
+                this.lockUser = lockUser;
+            }
+
+            public boolean locked(){
+                return this.lockUser != NO_LOCK ;
+            }
+
+            public void addChildren(Node children){
+                this.children.add(children);
+            }
+
+            public List<Node> getChildren() {
+                return children;
+            }
+        }
+
+        Map<Integer, Node> nodeMap;
+
+
+        public LockingTree(int[] parent) {
+            nodeMap = new HashMap<>();
+            Node node = new Node(), pNode;
+            nodeMap.put(0, node);
+            for (int i=1; i<parent.length; i++){
+                node = nodeMap.get(i);
+                if (node == null){
+                    node = new Node();
+                    nodeMap.put(i, node);
+                }
+                pNode = nodeMap.get(parent[i]);
+                if (pNode == null){
+                    pNode = new Node();
+                    nodeMap.put(parent[i], pNode);
+                }
+                node.setParent(pNode);
+                pNode.addChildren(node);
+            }
+        }
+
+        public boolean lock(int num, int user) {
+            Node node = nodeMap.get(num);
+            if (node.getLockUser() == Node.NO_LOCK){
+                node.setLockUser(user);
+                return true;
+            }
+            return false;
+        }
+
+
+
+        public boolean unlock(int num, int user) {
+            Node node = nodeMap.get(num);
+            if (node.getLockUser() == user){
+                node.resetLock();
+                return true;
+            }
+            return false;
+        }
+
+        public boolean upgrade(int num, int user) {
+            Node node = nodeMap.get(num);
+            if (!node.locked() && !this.forwardSearchLock(node) && this.backwardCheckAndUnlock(node)){
+                nodeMap.get(num).setLockUser(user);
+                return true;
+            }
+            return false;
+        }
+
+        private boolean backwardCheckAndUnlock(Node node){
+            boolean result = false;
+            Queue<Node> queue = new LinkedList<>(node.getChildren());
+            while (!queue.isEmpty()){
+                Node item = queue.poll();
+                queue.addAll(item.getChildren());
+                if (item.locked()){
+                    item.resetLock();
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        private boolean forwardSearchLock(Node node){
+            node = node.getParent();
+            while (true){
+                if (node == null){
+                    return false;
+                }
+                else if (node.getLockUser() == Node.NO_LOCK){
+                    node = node.getParent();
+                }
+                else {
+                    return true;
+                }
+            }
+        }
     }
 
     // 2591. 将钱分给最多的儿童
