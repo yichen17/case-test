@@ -180,13 +180,40 @@ public class DailyQuestion {
     // 630. 课程表 III
 
     private static void scheduleCourseTest(DailyQuestion dq){
+        System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[5,5],[4,6],[2,6]]")));
         System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[100,200], [200,1300], [1000,1250], [2000,3200]]")));
         System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[1,2]]")));
         System.out.println(dq.scheduleCourse(StringUtils.convert2Array("[[3,2],[4,3]]")));
     }
 
     public int scheduleCourse(int[][] courses) {
-        return -1;
+        Arrays.sort(courses, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
+            }
+        });
+        PriorityQueue<int[]> queue = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o2[0] - o1[0];
+            }
+        });
+        int pos = 0;
+        for (int[] course : courses){
+            // 无数据、没有超过最后期限
+            if (pos + course[0] <= course[1]){
+                pos += course[0];
+                queue.offer(course);
+            }
+            // 持续时间比它短
+            else if (!queue.isEmpty() && queue.peek()[0] > course[0]){
+                pos = pos - queue.peek()[0] + course[0];
+                queue.poll();
+                queue.offer(course);
+            }
+        }
+        return queue.size();
     }
 
     // 2560. 打家劫舍 IV    操，我是废物，不应该用dp的
