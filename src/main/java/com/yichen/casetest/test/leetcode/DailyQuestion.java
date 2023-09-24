@@ -130,6 +130,109 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         lockingTreeTest();
         StringUtils.divisionLine();
+        LRUCacheTest();
+        StringUtils.divisionLine();
+    }
+
+    //  146. LRU 缓存
+
+    private static void LRUCacheTest(){
+        LRUCache lruCache = new LRUCache(2);
+        lruCache.put(1, 1);
+        lruCache.put(2, 2);
+        System.out.println(lruCache.get(1));
+        lruCache.put(3, 3);
+        System.out.println(lruCache.get(2));
+        lruCache.put(4, 4);
+        System.out.println(lruCache.get(1));
+        System.out.println(lruCache.get(3));
+        System.out.println(lruCache.get(4));
+    }
+
+    private static class LRUCache {
+
+        /**
+         * 新的节点在前，旧的节点在末尾
+         */
+        private static class LRUCacheNode{
+            LRUCacheNode pre,next;
+            int val,key;
+            LRUCacheNode(int val, int key){
+                this.val = val;
+                this.key = key;
+            }
+
+        }
+
+        Map<Integer, LRUCacheNode> map;
+        LRUCacheNode head, tail;
+        int capacity;
+        int size;
+
+        public LRUCache(int capacity) {
+            this.capacity = capacity;
+            this.map = new HashMap<>();
+            this.head = this.tail = new LRUCacheNode(-1, -1);
+            this.size = 0;
+        }
+
+        public int get(int key) {
+            LRUCacheNode node = this.getNode(key);
+            return node == null ? -1 : node.val;
+        }
+
+        private LRUCacheNode getNode(int key){
+            LRUCacheNode node = map.get(key);
+            if (node != null){
+                if (node.next == null){
+                    this.tail = node.pre;
+                }
+                else {
+                    node.next.pre = node.pre;
+                }
+                node.pre.next = node.next;
+
+                node.next = head.next;
+                if (head.next != null){
+                    head.next.pre = node;
+                }
+                head.next = node;
+                node.pre = head;
+                if (node.next == null){
+                    this.tail = node;
+                }
+            }
+            return node;
+        }
+
+        public void put(int key, int value) {
+            LRUCacheNode node = this.getNode(key);
+            if (node != null){
+                node.val = value;
+                return;
+            }
+            node = new LRUCacheNode(value, key);
+            if (this.size >= this.capacity){
+                LRUCacheNode pre = this.tail.pre;
+                this.tail.pre = null;
+                pre.next = null;
+                map.remove(this.tail.key);
+                this.tail = pre;
+            }
+            else {
+                this.size++;
+            }
+            node.pre = this.head;
+            node.next = this.head.next;
+            if (this.head.next != null){
+                this.head.next.pre = node;
+            }
+            this.head.next = node;
+            if (node.next == null){
+                this.tail = node;
+            }
+            map.put(key, node);
+        }
     }
 
     // 1993. 树上的操作
