@@ -5,6 +5,7 @@ import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Qiuxinchao
@@ -132,6 +133,136 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         LRUCacheTest();
         StringUtils.divisionLine();
+        filterRestaurantsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    //1333. 餐厅过滤器
+
+    private static void filterRestaurantsTest(DailyQuestion dq){
+        System.out.println(dq.filterRestaurants(StringUtils.convert2Array("[[1,4,1,40,10],[2,8,0,50,5],[3,8,1,30,4],[4,10,0,10,3],[5,1,1,15,1]]"),
+                1, 50, 10));
+        System.out.println(dq.filterRestaurants(StringUtils.convert2Array("[[1,4,1,40,10],[2,8,0,50,5],[3,8,1,30,4],[4,10,0,10,3],[5,1,1,15,1]]"),
+                0, 50, 10));
+        System.out.println(dq.filterRestaurants(StringUtils.convert2Array("[[1,4,1,40,10],[2,8,0,50,5],[3,8,1,30,4],[4,10,0,10,3],[5,1,1,15,1]]"),
+                0, 30, 3));
+    }
+
+
+    public List<Integer> filterRestaurants(int[][] restaurants, int veganFriendly, int maxPrice, int maxDistance) {
+        return Arrays.stream(restaurants).filter(p -> {
+            boolean check = p[3] <= maxPrice && p[4] <= maxDistance;
+            if (check && (veganFriendly == 0 || p[2] == 1)){
+                return true;
+            }
+            return false;
+        })
+        .sorted(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[1] != o2[1]){
+                    return o2[1] - o1[1];
+                }
+                return o2[0] - o1[0];
+            }
+        }).map(p -> p[0]).collect(Collectors.toList());
+    }
+
+    // 460. LFU 缓存
+
+    private static class LFUCache {
+
+        private static class LFUCacheNode{
+            private int useTimes;
+            private int key;
+            private int val;
+            private LFUCacheNode prev, next;
+
+            public LFUCacheNode(int key, int val, int lastUse) {
+                this.key = key;
+                this.val = val;
+                this.useTimes = 1;
+            }
+
+            public void useTimesIncr(){
+                this.useTimes++;
+            }
+
+            public int getUseTimes() {
+                return useTimes;
+            }
+
+
+            public int getVal() {
+                return val;
+            }
+
+            public void setVal(int val) {
+                this.val = val;
+            }
+
+
+
+        }
+
+        private LFUCacheNode head, tail;
+        private Map<Integer, LFUCacheNode> maps;
+        private int capacity;
+        private int times;
+
+        public LFUCache(int capacity) {
+            this.maps = new HashMap<>();
+            this.capacity = capacity;
+        }
+
+        public int get(int key) {
+            LFUCacheNode node = this.getNode(key);
+            return node == null ? -1 : node.getVal();
+        }
+
+        private LFUCacheNode getNode(int key){
+            LFUCacheNode node = maps.get(key);
+            if (node != null){
+                node.useTimesIncr();
+                this.resort(node);
+            }
+            return node;
+        }
+
+
+        /**
+         * 往后移，直到 useTimes 大于当前值
+         * @param node
+         */
+        private void resort(LFUCacheNode node){
+
+        }
+
+        public void put(int key, int value) {
+            LFUCacheNode node = this.getNode(key), removeNode;
+            if (node != null){
+                node.setVal(value);
+                return;
+            }
+            node = new LFUCacheNode(key, value, this.times++);
+            if (maps.size() == this.capacity){
+                removeNode = head;
+                head = head.next;
+                removeNode.next = null;
+                head.prev = null;
+                maps.remove(removeNode);
+            }
+            maps.put(key, node);
+            if (head == tail){
+                this.head = node;
+                this.tail = node;
+            }
+            else {
+                this.tail.next = node;
+                node.prev = this.tail;
+                this.tail = node;
+            }
+        }
     }
 
     //  146. LRU 缓存
