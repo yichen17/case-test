@@ -139,6 +139,83 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         canPlaceFlowersTest(dq);
         StringUtils.divisionLine();
+        fullBloomFlowersTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2251. 花期内花的数目  这题很好，有待思考。解法超时。。。
+
+    private static void fullBloomFlowersTest(DailyQuestion dq){
+//        StringUtils.printIntArray(dq.fullBloomFlowers(StringUtils.convert2Array("[[1,6],[3,7],[9,12],[4,13]]"), new int[]{2,3,7,11}));
+//        StringUtils.printIntArray(dq.fullBloomFlowers(StringUtils.convert2Array("[[1,10],[3,3]]"), new int[]{3,3,2}));
+//        StringUtils.printIntArray(dq.fullBloomFlowers(StringUtils.constructEdges(1, 100000000, 10000, false, true, true),
+//                StringUtils.randomIntArray(10000, 1, 100000000)));
+//        StringUtils.printIntArray(dq.fullBloomFlowers(StringUtils.convert2Array("[[19,37],[19,38],[19,35]]"), new int[]{6,7,21,1,13,37,5,37,46,43}));
+        StringUtils.printIntArray(dq.fullBloomFlowers(StringUtils.convert2Array("[[32,36],[20,26],[32,32],[43,46],[40,50],[9,10],[19,19],[2,23],[36,37],[38,48],[13,25],[12,48],[21,33],[4,43],[43,49],[35,46],[41,44],[36,44],[40,50],[42,47],[27,50],[7,43],[5,41],[32,35],[24,31],[33,42],[44,47],[32,46],[39,46],[48,50],[10,49],[14,19],[13,20],[41,43],[39,48],[33,44],[23,37],[34,48],[36,36],[6,12],[14,17],[31,34],[28,40],[11,31],[17,50],[31,47],[17,21],[33,49],[20,29],[27,43],[18,47],[46,47],[29,49],[50,50],[5,24],[19,27],[16,24],[18,42],[5,17],[17,26]]"), new int[]{19,17,42,36,43,42,25,35,31,21,49,14,1,4,24,12,38,48,33,36,37,8,45,50,27,20,45,42,12,5,32,41,16,23,30,29,1,37,16,42,43,5,50,6,49,22,34,24,6}));
+    }
+
+    public int[] fullBloomFlowers(int[][] flowers, int[] people) {
+        // 两个list，外层是起始点的，内层是结束点
+        Map<Integer, FullBloomNode> maps = new HashMap<>();
+        for (int[] flower : flowers){
+            FullBloomNode node = maps.computeIfAbsent(flower[0], FullBloomNode::new);
+            node.ends.add(flower[1]);
+        }
+        ArrayList<FullBloomNode> startList = new ArrayList<>(maps.values());
+        startList.sort(new Comparator<FullBloomNode>() {
+            @Override
+            public int compare(FullBloomNode o1, FullBloomNode o2) {
+                return o1.start - o2.start;
+            }
+        });
+        startList.forEach(p -> p.ends.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        }));
+        int len = people.length, i, count, pos;
+        int[] result = new int[len];
+        for (i=0; i<len; i++){
+           count = 0;
+           pos = 0;
+           while (pos < startList.size() && startList.get(pos).start <= people[i]){
+               List<Integer> ends = startList.get(pos).ends;
+               pos++;
+               // 如果没有节点或者最大的节点也小于people[i] 则跳过。
+               if (ends.size() == 0 || ends.get(ends.size() - 1) < people[i]){
+                   continue;
+               }
+               int left = 0, right = ends.size()-1, mid = (left + right) >> 1;
+               // 二分查找大于等于 people[i]的数量 至少有一个节点大于 people[i]
+               // 确保每次收缩都有一个大于等于people[i]的
+               while (left <= right){
+                   mid = (left + right) >> 1;
+                   if (ends.get(left) >= people[i]){
+                       mid = left;
+                       break;
+                   }
+                   else if (ends.get(mid) >= people[i]){
+                       right = mid;
+                   }
+                   else {
+                       left = mid+1;
+                   }
+               }
+               count += ends.size() - mid;
+           }
+           result[i] = count;
+        }
+        return result;
+    }
+
+    private static class FullBloomNode {
+        public int start;
+        public List<Integer> ends;
+        FullBloomNode(int start){
+            this.start = start;
+            ends = new ArrayList<>();
+        }
     }
 
     // 605. 种花问题
