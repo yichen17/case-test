@@ -7,11 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -29,6 +28,16 @@ public class TestStream {
         streamGroupBy();
         StringUtils.divisionLine();
         typeTransfer();
+        StringUtils.divisionLine();
+        streamRangeTest();
+    }
+
+    /**
+     * 生成指定范围的数据数组
+     */
+    private static void streamRangeTest(){
+        Integer[] array = IntStream.range(1, 100).boxed().toArray(Integer[]::new);
+        System.out.println(StringUtils.printArray(array));;
     }
 
     private static void streamGroupBy(){
