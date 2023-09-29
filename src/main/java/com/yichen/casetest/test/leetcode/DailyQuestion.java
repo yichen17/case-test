@@ -133,8 +133,35 @@ public class DailyQuestion {
         StringUtils.divisionLine();
         LRUCacheTest();
         StringUtils.divisionLine();
+        LFUCacheTest();
+        StringUtils.divisionLine("LFUCacheTest");
         filterRestaurantsTest(dq);
         StringUtils.divisionLine();
+        canPlaceFlowersTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 605. 种花问题
+
+    private static void canPlaceFlowersTest(DailyQuestion dq){
+        System.out.println(dq.canPlaceFlowers(new int[]{1,0,0,0,1}, 1));
+        System.out.println(dq.canPlaceFlowers(new int[]{1,0,0,0,1}, 2));
+    }
+
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        int pos = 0, len = flowerbed.length;
+        while(true){
+            if (pos >= len || n == 0){
+                break;
+            }
+            if (flowerbed[pos] == 0 && (pos-1 < 0 || flowerbed[pos-1] == 0)
+                    && (pos+1 >= len || flowerbed[pos+1] == 0)){
+                n--;
+                flowerbed[pos] = 1;
+            }
+            pos++;
+        }
+        return n == 0;
     }
 
     //1333. 餐厅过滤器
@@ -168,47 +195,53 @@ public class DailyQuestion {
         }).map(p -> p[0]).collect(Collectors.toList());
     }
 
-    // 460. LFU 缓存
+    // 460. LFU 缓存  我是废物，做了半天，思路劈叉了。。。
+
+    private static void LFUCacheTest(){
+        LFUCache lfu = new LFUCache(2);
+        lfu.put(1, 1);
+        lfu.put(2, 2);
+        System.out.println(lfu.get(1));
+        lfu.put(3, 3);
+        System.out.println(lfu.get(2));
+        System.out.println(lfu.get(3));
+        lfu.put(4, 4);
+        System.out.println(lfu.get(1));
+        System.out.println(lfu.get(3));
+        System.out.println(lfu.get(4));
+        StringUtils.divisionLine("LFUCacheTest next turn");
+        lfu = new LFUCache(3);
+        lfu.put(2, 2);
+        lfu.put(1, 1);
+        System.out.println(lfu.get(2));
+        System.out.println(lfu.get(1));
+        System.out.println(lfu.get(2));
+        lfu.put(3, 3);
+        lfu.put(4, 4);
+        System.out.println(lfu.get(3));
+        System.out.println(lfu.get(2));
+        System.out.println(lfu.get(1));
+        System.out.println(lfu.get(4));
+    }
 
     private static class LFUCache {
 
         private static class LFUCacheNode{
-            private int useTimes;
-            private int key;
-            private int val;
-            private LFUCacheNode prev, next;
+            public int useTimes;
+            public int key;
+            public int val;
+            public LFUCacheNode prev, next;
 
-            public LFUCacheNode(int key, int val, int lastUse) {
+            public LFUCacheNode(int key, int val) {
                 this.key = key;
                 this.val = val;
                 this.useTimes = 1;
             }
-
-            public void useTimesIncr(){
-                this.useTimes++;
-            }
-
-            public int getUseTimes() {
-                return useTimes;
-            }
-
-
-            public int getVal() {
-                return val;
-            }
-
-            public void setVal(int val) {
-                this.val = val;
-            }
-
-
-
         }
 
         private LFUCacheNode head, tail;
         private Map<Integer, LFUCacheNode> maps;
         private int capacity;
-        private int times;
 
         public LFUCache(int capacity) {
             this.maps = new HashMap<>();
@@ -217,13 +250,13 @@ public class DailyQuestion {
 
         public int get(int key) {
             LFUCacheNode node = this.getNode(key);
-            return node == null ? -1 : node.getVal();
+            return node == null ? -1 : node.val;
         }
 
         private LFUCacheNode getNode(int key){
             LFUCacheNode node = maps.get(key);
             if (node != null){
-                node.useTimesIncr();
+                node.useTimes++;
                 this.resort(node);
             }
             return node;
@@ -235,32 +268,67 @@ public class DailyQuestion {
          * @param node
          */
         private void resort(LFUCacheNode node){
-
+            if (this.tail == node){
+                return;
+            }
+            LFUCacheNode p = node, next = node.next, prev = node.prev;
+            while (p != null && p.useTimes <= node.useTimes){
+                p = p.next;
+            }
+            if (p == next){
+                return;
+            }
+            // 移除原节点关系
+            next.prev = prev;
+            if (prev != null){
+                prev.next = next;
+            }
+            // 放到新位置上去
+            if (p == null){
+                this.tail.next = node;
+                node.prev = this.tail;
+                this.tail = node;
+                node.next = null;
+            }
+            else {
+                if (p.prev != null){
+                    p.prev.next = node;
+                }
+                node.prev = p.prev;
+                node.next = p;
+                p.prev = node;
+            }
+            if (prev == null){
+                this.head = next;
+            }
         }
 
         public void put(int key, int value) {
             LFUCacheNode node = this.getNode(key), removeNode;
             if (node != null){
-                node.setVal(value);
+                node.val = value;
                 return;
             }
-            node = new LFUCacheNode(key, value, this.times++);
+            node = new LFUCacheNode(key, value);
             if (maps.size() == this.capacity){
-                removeNode = head;
-                head = head.next;
+                removeNode = this.head;
+                this.head = this.head.next;
                 removeNode.next = null;
-                head.prev = null;
-                maps.remove(removeNode);
+                if (this.head != null){
+                    this.head.prev = null;
+                }
+                maps.remove(removeNode.key);
             }
             maps.put(key, node);
-            if (head == tail){
+            if (this.head == null){
                 this.head = node;
                 this.tail = node;
             }
             else {
-                this.tail.next = node;
-                node.prev = this.tail;
-                this.tail = node;
+                node.next = this.head;
+                this.head.prev = node;
+                this.head = node;
+                this.resort(node);
             }
         }
     }
