@@ -3,8 +3,7 @@ package com.yichen.casetest.test.leetcode;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,6 +20,105 @@ public class DailyQuestion202310 {
         DailyQuestion202310 dq = new DailyQuestion202310();
         earliestFullBloomTest(dq);
         StringUtils.divisionLine();
+        collectTheCoinsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2603. 收集树中金币
+
+    private static void collectTheCoinsTest(DailyQuestion202310 dq){
+        System.out.println(dq.collectTheCoins(new int[]{1,0,0,0,0,1}, StringUtils.convert2Array("[[0,1],[1,2],[2,3],[3,4],[4,5]]")));
+        System.out.println(dq.collectTheCoins(new int[]{0,0,0,1,1,0,0,1}, StringUtils.convert2Array("[[0,1],[0,2],[1,3],[1,4],[2,5],[5,6],[5,7]]")));
+        System.out.println(dq.collectTheCoins(new int[]{0,0,0}, StringUtils.convert2Array("[[0,1],[0,2]]")));
+    }
+
+    public int collectTheCoins(int[] coins, int[][] edges) {
+        if (coins.length < 3){
+            return 0;
+        }
+        int n = coins.length,result = n;
+        int i=0, p, q;
+        Set<Integer>[] degree = new HashSet[n];
+        for (int[] edge : edges){
+            p = edge[0]; q = edge[1];
+            if (degree[p] == null){
+                degree[p] = new HashSet<>();
+            }
+            degree[p].add(q);
+            if (degree[q] == null){
+                degree[q] = new HashSet<>();
+            }
+            degree[q].add(p);
+        }
+
+        Queue<Integer> queue;
+
+//        Set<Integer> set = new HashSet<>();
+//        while (i<n){
+//            if (degree[i] == null){
+//                i++;
+//                continue;
+//            }
+//            if (degree[i].size() == 1 && coins[i] == 0){
+//                degree[degree[i].iterator().next()].remove(i);
+//                result--;
+//                degree[i] = null;
+//                i = 0;
+//                continue;
+//            }
+//            else if (degree[i].size() == 1 && coins[i] == 1){
+//                set.add(i);
+//            }
+//            i++;
+//        }
+//        queue = new LinkedList<>(set);
+
+        queue = new LinkedList<>();
+        for (i=0; i<n; i++){
+            if (degree[i] != null && degree[i].size() == 1 && coins[i] == 0){
+                queue.offer(i);
+                result--;
+            }
+        }
+        while (!queue.isEmpty()){
+            p = queue.poll();
+            if (degree[p].isEmpty()){
+                continue;
+            }
+            q = degree[p].iterator().next();
+            degree[p] = null;
+            degree[q].remove(p);
+            if (degree[q].size() == 1 && coins[q] == 0){
+                queue.offer(q);
+                result--;
+            }
+        }
+        for(i=0; i<n; i++){
+            if (degree[i] != null && degree[i].size() == 1){
+                queue.offer(i);
+            }
+        }
+
+
+        for (int t=0; t<2; t++){
+            i=0;
+            int len = queue.size();
+            while (i <len){
+                i++;
+                p = queue.poll();
+                if (degree[p] == null || degree[p].isEmpty()){
+                    continue;
+                }
+                q = degree[p].iterator().next();
+                degree[p] = null;
+                degree[q].remove(p);
+                if (degree[q].size() == 1){
+                    queue.offer(q);
+                }
+            }
+            result -= len;
+        }
+        return result < 1 ? 0 : 2 * (result - 1);
     }
 
     // 2136. 全部开花的最早一天 寻找规律，推断验证规律。动手，别靠猜哎。。
