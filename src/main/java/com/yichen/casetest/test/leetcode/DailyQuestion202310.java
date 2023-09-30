@@ -52,27 +52,6 @@ public class DailyQuestion202310 {
         }
 
         Queue<Integer> queue;
-
-//        Set<Integer> set = new HashSet<>();
-//        while (i<n){
-//            if (degree[i] == null){
-//                i++;
-//                continue;
-//            }
-//            if (degree[i].size() == 1 && coins[i] == 0){
-//                degree[degree[i].iterator().next()].remove(i);
-//                result--;
-//                degree[i] = null;
-//                i = 0;
-//                continue;
-//            }
-//            else if (degree[i].size() == 1 && coins[i] == 1){
-//                set.add(i);
-//            }
-//            i++;
-//        }
-//        queue = new LinkedList<>(set);
-
         queue = new LinkedList<>();
         for (i=0; i<n; i++){
             if (degree[i] != null && degree[i].size() == 1 && coins[i] == 0){
@@ -82,7 +61,7 @@ public class DailyQuestion202310 {
         }
         while (!queue.isEmpty()){
             p = queue.poll();
-            if (degree[p].isEmpty()){
+            if (degree[p] == null || degree[p].isEmpty()){
                 continue;
             }
             q = degree[p].iterator().next();
@@ -93,18 +72,15 @@ public class DailyQuestion202310 {
                 result--;
             }
         }
-        for(i=0; i<n; i++){
-            if (degree[i] != null && degree[i].size() == 1){
-                queue.offer(i);
-            }
-        }
-
 
         for (int t=0; t<2; t++){
-            i=0;
-            int len = queue.size();
-            while (i <len){
-                i++;
+            for(i=0; i<n; i++){
+                if (degree[i] != null && degree[i].size() == 1){
+                    queue.offer(i);
+                }
+            }
+            result -= queue.size();
+            while (!queue.isEmpty()){
                 p = queue.poll();
                 if (degree[p] == null || degree[p].isEmpty()){
                     continue;
@@ -112,11 +88,7 @@ public class DailyQuestion202310 {
                 q = degree[p].iterator().next();
                 degree[p] = null;
                 degree[q].remove(p);
-                if (degree[q].size() == 1){
-                    queue.offer(q);
-                }
             }
-            result -= len;
         }
         return result < 1 ? 0 : 2 * (result - 1);
     }
