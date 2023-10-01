@@ -22,6 +22,34 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         collectTheCoinsTest(dq);
         StringUtils.divisionLine();
+        maxProfitTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 121. 买卖股票的最佳时机
+
+    private static void maxProfitTest(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit(new int[]{7,1,5,3,6,4}));
+        System.out.println(dq.maxProfit(new int[]{7,6,4,3,1}));
+        System.out.println(dq.maxProfit(StringUtils.randomIntArray(1000, 1, 9999)));
+    }
+
+    public int maxProfit(int[] prices) {
+        int max,min=0,result=0;
+        Stack<Integer> stack = new Stack<>();
+        for (int price : prices){
+            while (!stack.isEmpty() && stack.peek() > price){
+                stack.pop();
+            }
+            if (stack.isEmpty()){
+                min = price;
+            }
+            else {
+                result = Math.max(result, price-min);
+            }
+            stack.push(price);
+        }
+        return result;
     }
 
     // 2603. 收集树中金币
