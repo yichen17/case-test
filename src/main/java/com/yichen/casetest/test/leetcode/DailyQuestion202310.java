@@ -22,11 +22,13 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         collectTheCoinsTest(dq);
         StringUtils.divisionLine();
+        maxProfit1Test(dq);
+        StringUtils.divisionLine();
         maxProfitTest(dq);
         StringUtils.divisionLine();
     }
 
-    // 121. 买卖股票的最佳时机
+    // 122. 买卖股票的最佳时机 II
 
     private static void maxProfitTest(DailyQuestion202310 dq){
         System.out.println(dq.maxProfit(new int[]{7,1,5,3,6,4}));
@@ -35,6 +37,26 @@ public class DailyQuestion202310 {
     }
 
     public int maxProfit(int[] prices) {
+        int result = 0, min = prices[0], len = prices.length;
+        for (int i=1; i<len; i++){
+            if (prices[i] < prices[i-1]){
+                result = result +  prices[i-1] - min;
+                min = prices[i];
+            }
+        }
+        result = result + prices[len-1] - min;
+        return result;
+    }
+
+    // 121. 买卖股票的最佳时机
+
+    private static void maxProfit1Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit1(new int[]{7,1,5,3,6,4}));
+        System.out.println(dq.maxProfit1(new int[]{7,6,4,3,1}));
+        System.out.println(dq.maxProfit1(StringUtils.randomIntArray(1000, 1, 9999)));
+    }
+
+    public int maxProfit1(int[] prices) {
         int max,min=0,result=0;
         Stack<Integer> stack = new Stack<>();
         for (int price : prices){
