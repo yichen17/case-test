@@ -46,14 +46,12 @@ public class DailyQuestion202310 {
 
     public int maxProfit6(int[] prices, int fee) {
         int len = prices.length;
-        int[] buy = new int[len];
-        int[] sell = new int[len];
-        buy[0] = -prices[0];
+        int buy = -prices[0] ,sell = 0;
         for (int i=1; i<len; i++){
-            buy[i] = Math.max(buy[i-1], sell[i-1] - prices[i]);
-            sell[i] = Math.max(sell[i-1], buy[i] + prices[i] - fee);
+            buy = Math.max(buy, sell - prices[i]);
+            sell = Math.max(sell, buy + prices[i] - fee);
         }
-        return sell[len-1];
+        return sell;
     }
 
     //309. 买卖股票的最佳时机含冷冻期
