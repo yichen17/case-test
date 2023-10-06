@@ -32,12 +32,28 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         maxProfit5Test(dq);
         StringUtils.divisionLine();
+        maxProfit6Test(dq);
+        StringUtils.divisionLine();
     }
 
     // 714. 买卖股票的最佳时机含手续费
 
-    public int maxProfit(int[] prices, int fee) {
-        return 0;
+    private static void maxProfit6Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit6(new int[]{1, 3, 2, 8, 4, 9}, 2));
+        System.out.println(dq.maxProfit6(new int[]{1,3,7,5,10,3}, 3));
+        System.out.println(dq.maxProfit6(StringUtils.randomIntArray(1000, 1, 9999), 300));
+    }
+
+    public int maxProfit6(int[] prices, int fee) {
+        int len = prices.length;
+        int[] buy = new int[len];
+        int[] sell = new int[len];
+        buy[0] = -prices[0];
+        for (int i=1; i<len; i++){
+            buy[i] = Math.max(buy[i-1], sell[i-1] - prices[i]);
+            sell[i] = Math.max(sell[i-1], buy[i] + prices[i] - fee);
+        }
+        return sell[len-1];
     }
 
     //309. 买卖股票的最佳时机含冷冻期
