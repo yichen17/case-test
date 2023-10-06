@@ -43,49 +43,35 @@ public class DailyQuestion202310 {
     //309. 买卖股票的最佳时机含冷冻期
 
     private static void maxProfit5Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit5(new int[]{1,2,4}));
         System.out.println(dq.maxProfit5(new int[]{1,3,2,4,1,5,3,6,2,7}));
         System.out.println(dq.maxProfit5(new int[]{1,2,3,0,2}));
         System.out.println(dq.maxProfit5(new int[]{1}));
         System.out.println(dq.maxProfit5(StringUtils.randomIntArray(900, 1, 900)));
     }
 
+    /**
+     * 为啥我这不行呢？？
+     * @param prices
+     * @return
+     */
     public int maxProfit5(int[] prices) {
-        int result = 0, len = prices.length;
-        int i=0, p ,q, prev;
-        // 找到最近的最小值
-        while (i < len-1 && prices[i] >= prices[i+1]){
-            i++;
+        if (prices.length == 1){
+            return 0;
         }
-        while (i < len){
-            // 初始化，标记最小值
-            p = prev = q = prices[i];
-            // 找到峰值 q
-            while (i < len && prices[i] >= q){
-                prev = q;
-                q = prices[i];
-                i++;
-            }
-            // 最后一个为顶峰或者是倒数第二个为顶峰，
-            if (i == len || i + 1 == len){
-                result += q - p;
-                break;
-            }
-            // 峰值后面至少有2个节点
-            // 峰值后两个节点降序  升序且前半落差大
-            if (prices[i] >= prices[i+1] || (q - prev >= prices[i+1] - prices[i])){
-                result += q - p;
-                i++;
-                // 找到最小值
-                while (i < len-1 && prices[i] >= prices[i+1]){
-                    i++;
-                }
-            }
-            // 升序且后半落差大
-            else {
-                result += prev - p;
-            }
+        int len = prices.length;
+        int[] buy = new int[len];
+        int[] sell = new int[len];
+        buy[0] = -prices[0];
+        // cao、我是傻逼
+//        buy[1] = -Math.max(prices[0], prices[1]);
+        buy[1] = Math.max(-prices[0], -prices[1]);
+        sell[1] = Math.max(0, prices[1] - prices[0]);
+        for (int i=2; i<len; i++){
+            buy[i] = Math.max(buy[i-1], sell[i-2] - prices[i]);
+            sell[i] = Math.max(sell[i-1], buy[i] + prices[i]);
         }
-        return result;
+        return sell[len-1];
     }
 
     // 188. 买卖股票的最佳时机 IV  在3的基础上改，很快
