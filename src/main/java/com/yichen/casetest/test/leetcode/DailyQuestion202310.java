@@ -24,19 +24,141 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         maxProfit1Test(dq);
         StringUtils.divisionLine();
-        maxProfitTest(dq);
+        maxProfit2Test(dq);
+        StringUtils.divisionLine();
+        maxProfit3Test(dq);
+        StringUtils.divisionLine();
+        maxProfit4Test(dq);
+        StringUtils.divisionLine();
+        maxProfit5Test(dq);
         StringUtils.divisionLine();
     }
 
-    // 122. 买卖股票的最佳时机 II
+    // 714. 买卖股票的最佳时机含手续费
 
-    private static void maxProfitTest(DailyQuestion202310 dq){
-        System.out.println(dq.maxProfit(new int[]{7,1,5,3,6,4}));
-        System.out.println(dq.maxProfit(new int[]{7,6,4,3,1}));
-        System.out.println(dq.maxProfit(StringUtils.randomIntArray(1000, 1, 9999)));
+    public int maxProfit(int[] prices, int fee) {
+        return 0;
     }
 
-    public int maxProfit(int[] prices) {
+    //309. 买卖股票的最佳时机含冷冻期
+
+    private static void maxProfit5Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit5(new int[]{1,3,2,4,1,5,3,6,2,7}));
+        System.out.println(dq.maxProfit5(new int[]{1,2,3,0,2}));
+        System.out.println(dq.maxProfit5(new int[]{1}));
+        System.out.println(dq.maxProfit5(StringUtils.randomIntArray(900, 1, 900)));
+    }
+
+    public int maxProfit5(int[] prices) {
+        int result = 0, len = prices.length;
+        int i=0, p ,q, prev;
+        // 找到最近的最小值
+        while (i < len-1 && prices[i] >= prices[i+1]){
+            i++;
+        }
+        while (i < len){
+            // 初始化，标记最小值
+            p = prev = q = prices[i];
+            // 找到峰值 q
+            while (i < len && prices[i] >= q){
+                prev = q;
+                q = prices[i];
+                i++;
+            }
+            // 最后一个为顶峰或者是倒数第二个为顶峰，
+            if (i == len || i + 1 == len){
+                result += q - p;
+                break;
+            }
+            // 峰值后面至少有2个节点
+            // 峰值后两个节点降序  升序且前半落差大
+            if (prices[i] >= prices[i+1] || (q - prev >= prices[i+1] - prices[i])){
+                result += q - p;
+                i++;
+                // 找到最小值
+                while (i < len-1 && prices[i] >= prices[i+1]){
+                    i++;
+                }
+            }
+            // 升序且后半落差大
+            else {
+                result += prev - p;
+            }
+        }
+        return result;
+    }
+
+    // 188. 买卖股票的最佳时机 IV  在3的基础上改，很快
+
+    private static void maxProfit4Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit4(2, new int[]{2,4,1}));
+        System.out.println(dq.maxProfit4(2, new int[]{3,2,6,5,0,3}));
+        System.out.println(dq.maxProfit4(50, StringUtils.randomIntArray(900, 1, 900)));
+    }
+
+    public int maxProfit4(int k, int[] prices) {
+        int[][] dp = new int[k][2];
+        for (int i=0; i<k; i++){
+            dp[i][0] = -prices[0];
+        }
+        for (int j=1; j<prices.length; j++){
+            int price = prices[j];
+            dp[0][0] = Math.max(dp[0][0], -price);
+            dp[0][1] = Math.max(dp[0][0] + price, dp[0][1]);
+            for (int i=1; i<k; i++){
+                dp[i][0] = Math.max(dp[i][0], dp[i-1][1] - price);
+                dp[i][1] = Math.max(dp[i][1], dp[i][0] + price);
+            }
+        }
+        return dp[k-1][1];
+    }
+
+    // 123. 买卖股票的最佳时机 III
+
+    private static void maxProfit3Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit3(new int[]{1,2,4,2,5,7,2,4,9,0}));
+//        System.out.println(dq.maxProfit3(new int[]{3,3,5,0,0,3,1,4}));
+//        System.out.println(dq.maxProfit3(new int[]{1,2,3,4,5}));
+//        System.out.println(dq.maxProfit3(new int[]{7,6,4,3,1}));
+//        System.out.println(dq.maxProfit3(StringUtils.randomIntArray(1000, 1, 9999)));
+    }
+
+
+
+
+    /**
+     * cao，对着题解都看不太懂。。？？
+     * 怎么推算出来的还有待研究哎，两者的关系是怎么得出来的。
+     * @param prices
+     * @return
+     */
+    public int maxProfit3(int[] prices) {
+        int n = prices.length;
+        int buy1 = -prices[0], sell1 = 0;
+        int buy2 = -prices[0], sell2 = 0;
+        for (int i = 1; i < n; ++i) {
+            // 取最大值时因为是负数
+            buy1 = Math.max(buy1, -prices[i]);
+            sell1 = Math.max(sell1, buy1 + prices[i]);
+            // 第一次卖出赚的尽可能多，第二次买入尽可能低  动态平衡，前者尽可能多，后者尽可能少
+            buy2 = Math.max(buy2, sell1 - prices[i]);
+            sell2 = Math.max(sell2, buy2 + prices[i]);
+            System.out.printf("prices:%sbuy1:%s,sell1:%s,buy2:%s,sell2:%s%n", prices[i], buy1, sell1, buy2, sell2);
+        }
+        return sell2;
+    }
+
+
+
+    // 122. 买卖股票的最佳时机 II
+
+    private static void maxProfit2Test(DailyQuestion202310 dq){
+        System.out.println(dq.maxProfit2(new int[]{7,1,5,3,6,4}));
+        System.out.println(dq.maxProfit2(new int[]{7,6,4,3,1}));
+        System.out.println(dq.maxProfit2(StringUtils.randomIntArray(1000, 1, 9999)));
+    }
+
+    public int maxProfit2(int[] prices) {
         int result = 0, min = prices[0], len = prices.length;
         for (int i=1; i<len; i++){
             if (prices[i] < prices[i-1]){
