@@ -34,6 +34,47 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         maxProfit6Test(dq);
         StringUtils.divisionLine();
+        stockSpannerTest();
+        StringUtils.divisionLine();
+    }
+
+    // 901. 股票价格跨度
+
+    private static void stockSpannerTest(){
+        StockSpanner stockSpanner = new StockSpanner();
+        System.out.println(stockSpanner.next(100));
+        System.out.println(stockSpanner.next(80));
+        System.out.println(stockSpanner.next(60));
+        System.out.println(stockSpanner.next(70));
+        System.out.println(stockSpanner.next(60));
+        System.out.println(stockSpanner.next(75));
+        System.out.println(stockSpanner.next(85));
+    }
+
+    private static class StockSpanner {
+
+        Map<Integer, Integer> map;
+        int pos;
+        Stack<Integer> stack;
+
+        public StockSpanner() {
+            map = new HashMap<>();
+            stack = new Stack<>();
+            pos = 0;
+        }
+
+        public int next(int price) {
+
+            while (!stack.isEmpty() && map.get(stack.peek()) <= price){
+                int item = stack.pop();
+                map.remove(item);
+            }
+            int result = stack.isEmpty() ? pos : pos - stack.peek();
+            stack.push(pos);
+            map.put(pos, price);
+            pos++;
+            return result;
+        }
     }
 
     // 714. 买卖股票的最佳时机含手续费
