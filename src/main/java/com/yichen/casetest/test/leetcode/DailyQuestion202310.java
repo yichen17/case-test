@@ -36,6 +36,87 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         stockSpannerTest();
         StringUtils.divisionLine();
+        stockPriceTest();
+        StringUtils.divisionLine();
+
+    }
+
+    // 2034. 股票价格波动
+
+    private static void stockPriceTest(){
+        StockPrice stockPrice = new StockPrice();
+        stockPrice.update(1, 10);
+        stockPrice.update(2, 5);
+        System.out.println(stockPrice.current());
+        System.out.println(stockPrice.maximum());
+        stockPrice.update(1, 3);
+        System.out.println(stockPrice.maximum());
+        stockPrice.update(4,2);
+        System.out.println(stockPrice.minimum());
+
+    }
+
+    private static class StockPrice {
+
+        private static class StockPriceNode{
+            public int timestamp;
+            public int price;
+
+            public StockPriceNode(int timestamp, int price) {
+                this.timestamp = timestamp;
+                this.price = price;
+            }
+        }
+
+        TreeSet<StockPriceNode> set;
+        Map<Integer, StockPriceNode> timestamp2price;
+        int current;
+
+        public StockPrice() {
+            set = new TreeSet<>(new Comparator<StockPriceNode>() {
+                @Override
+                public int compare(StockPriceNode o1, StockPriceNode o2) {
+                    if (o1.price != o2.price){
+                        return o1.price - o2.price;
+                    }
+                    return o1.timestamp - o2.timestamp;
+                }
+            });
+            timestamp2price = new HashMap<>();
+            current = -1;
+        }
+
+        public void update(int timestamp, int price) {
+            if (current == -1){
+                current = timestamp;
+            }
+            else {
+                current = Math.max(current, timestamp);
+            }
+            StockPriceNode his = timestamp2price.getOrDefault(timestamp, null);
+            if (his != null){
+                set.remove(his);
+                his.price = price;
+                set.add(his);
+            }
+            else {
+                StockPriceNode newNode = new StockPriceNode(timestamp, price);
+                set.add(newNode);
+                timestamp2price.put(timestamp, newNode);
+            }
+        }
+
+        public int current() {
+            return timestamp2price.get(current).price;
+        }
+
+        public int maximum() {
+            return set.last().price;
+        }
+
+        public int minimum() {
+            return set.first().price;
+        }
     }
 
     // 901. 股票价格跨度
