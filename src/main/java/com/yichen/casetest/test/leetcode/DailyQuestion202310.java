@@ -38,7 +38,35 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         stockPriceTest();
         StringUtils.divisionLine();
+        splitNum(dq);
+        StringUtils.divisionLine();
+    }
 
+    // 2578. 最小和分割
+
+    private static void splitNum(DailyQuestion202310 dq){
+        System.out.println(dq.splitNum(4325));
+        System.out.println(dq.splitNum(687));
+    }
+
+    public int splitNum(int num) {
+        StringBuilder p = new StringBuilder();
+        StringBuilder q = new StringBuilder();
+        List<Integer> items = new ArrayList<>();
+        while (num > 0){
+            items.add(num % 10);
+            num /= 10;
+        }
+        Collections.sort(items);
+        for (int i=0; i<items.size(); i++){
+            if (i % 2 == 0){
+                p.append(items.get(i));
+            }
+            else {
+                q.append(items.get(i));
+            }
+        }
+        return Integer.parseInt(q.toString()) + Integer.parseInt(p.toString());
     }
 
     // 2034. 股票价格波动
