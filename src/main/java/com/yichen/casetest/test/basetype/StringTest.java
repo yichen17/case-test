@@ -29,6 +29,20 @@ public class StringTest {
         indexSubstring();
         StringUtils.divisionLine();
         indexTest();
+        StringUtils.divisionLine();
+        strCompare();
+    }
+
+    /**
+     * 字符串比较逻辑
+     * 先比较每一位字符，有不同结束，如果有效长度内字符串都一样，则比对两者的长度
+     */
+    private static void strCompare(){
+        String p = "1";
+        String q = "10";
+        System.out.println(p.compareTo(q));
+        q = "11";
+        System.out.println(p.compareTo(q));
     }
 
 

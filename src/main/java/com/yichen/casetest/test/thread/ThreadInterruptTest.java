@@ -14,11 +14,10 @@ public class ThreadInterruptTest {
 
     private static final Object object = new Object();
 
-    public static void main(String[] args) {
-//        testInterrupt();
+    public static void main(String[] args) throws Exception{
+        testInterrupt();
 //        StringUtils.divisionLine();
-        testInterrupt2();
-
+//        testInterrupt2();
     }
 
     /**
@@ -87,7 +86,7 @@ public class ThreadInterruptTest {
      * 3、如果中断线程后，没有执行触发点，那么也不会被中断
      * 4、Thread.interrupted() 会重置 interrupt状态
      */
-    private static void testInterrupt(){
+    private static void testInterrupt() throws Exception{
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -97,10 +96,14 @@ public class ThreadInterruptTest {
                     System.out.println("t1 end");
                 }
                 catch (InterruptedException e){
+                    System.out.println("t1 err");
                     if (Thread.interrupted()){
                         System.out.println("t1 interrupt");
                     }
 //                    System.out.println("t1 " + e.getMessage());
+                }
+                finally {
+                    System.out.println("t1 finally");
                 }
             }
         });
@@ -114,10 +117,14 @@ public class ThreadInterruptTest {
                     System.out.println("t2 end");
                 }
                 catch (InterruptedException e){
+                    System.out.println("t2 err");
                     if (Thread.interrupted()){
                         System.out.println("t2 interrupt");
                     }
 //                    System.out.println("t2 " + e.getMessage());
+                }
+                finally {
+                    System.out.println("t2 finally");
                 }
             }
         });
@@ -131,13 +138,17 @@ public class ThreadInterruptTest {
 
         t1.start();
         t2.start();
+        Thread.sleep(1000);
         System.out.println(11);
         System.out.println(22);
         t1.interrupt();
+//        Thread.sleep(1000);
         System.out.println("==>" + t1.isInterrupted());
         System.out.println(33);
         System.out.println(44);
         t2.interrupt();
+        // 不sleep的话，主线程执行快
+//        Thread.sleep(1000);
         System.out.println("==>" + t2.isInterrupted());
         System.out.println(55);
         System.out.println(66);

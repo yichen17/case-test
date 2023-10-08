@@ -1,4 +1,4 @@
-package com.yichen.casetest.test;
+package com.yichen.casetest.test.endecrypt;
 
 import org.apache.commons.codec.binary.Base64;
 
