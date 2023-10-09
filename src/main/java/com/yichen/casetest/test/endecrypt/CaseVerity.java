@@ -63,13 +63,13 @@ class CaseVerity {
 
 
         FileWriter file = new FileWriter("/opt/homebrew/var/db/redis/a.txt");
-        file.write("唯我独狂");
-
-//        file.write("shanliang");
-//        file.write((char)1);
 //        file.write("唯我独狂");
-//        file.write((char)1);
-//        file.write("6666");
+
+        file.write("shanliang");
+        file.write((char)1);
+        file.write("唯我独狂");
+        file.write((char)1);
+        file.write("6666");
 
         file.flush();
         file.close();
