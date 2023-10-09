@@ -1,5 +1,6 @@
 package com.yichen.casetest.test.endecrypt;
 
+import com.yichen.casetest.utils.FileUtils;
 import com.yichen.casetest.utils.StringUtils;
 
 import java.io.FileWriter;
@@ -17,6 +18,20 @@ class CaseVerity {
         char1Show();
         StringUtils.divisionLine();
 //        transfer();
+        StringUtils.divisionLine();
+        damageEncoding();
+    }
+
+    /**
+     * 损坏型编码转换
+     * 各个编码之间的关系理解   https://senitco.github.io/2017/06/06/character-encoding/
+     * @throws Exception
+     */
+    private static void damageEncoding() throws Exception{
+        String p = FileUtils.convertEncoding("替换结果", "gbk", "utf8");
+        System.out.println(p);
+        String q = FileUtils.convertEncoding(p, "utf8", "gbk");
+        System.out.println(q);
     }
 
     /**
