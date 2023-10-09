@@ -36,6 +36,18 @@ public class FileUtils {
     }
 
     /**
+     * 损坏型编码转换
+     * 各个编码之间的关系理解   https://senitco.github.io/2017/06/06/character-encoding/
+     * @throws Exception
+     */
+    private static void damageEncoding() throws Exception{
+        String p = FileUtils.convertEncoding("替换结果", "gbk", "utf8");
+        System.out.println(p);
+        String q = FileUtils.convertEncoding(p, "utf8", "gbk");
+        System.out.println(q);
+    }
+
+    /**
      * 编码格式转换
      * @param originStr 原始字符串
      * @param fromEncoding 原始编码格式
