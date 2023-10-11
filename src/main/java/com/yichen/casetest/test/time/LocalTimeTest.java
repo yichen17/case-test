@@ -1,6 +1,7 @@
 package com.yichen.casetest.test.time;
 
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +18,13 @@ public class LocalTimeTest {
 
     public static void main(String[] args)throws Exception {
         test();
+        dateTimeTest();
+    }
+
+    private static void dateTimeTest() {
+        DateTime plus2hour = DateTime.now().plusHours(2);
+        System.out.println(plus2hour);
+
     }
 
     private static void test() throws Exception{

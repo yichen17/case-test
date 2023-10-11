@@ -2,6 +2,7 @@ package com.yichen.casetest.test;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Constructor;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -14,8 +15,17 @@ import java.util.concurrent.CountDownLatch;
 public class BaseTest {
 
     public static void main(String[] args) throws Exception {
-        testResult();
-        testCountDownLatch();
+//        testResult();
+//        testCountDownLatch();
+
+        Constructor<ArthasTest> constructor = ArthasTest.class.getDeclaredConstructor(int.class);
+        System.out.println(constructor.getName());
+    }
+
+    private static class ArthasTest{
+        ArthasTest(int n){
+            System.out.println(n);
+        }
     }
 
     public static void testCountDownLatch() throws Exception{

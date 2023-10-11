@@ -40,6 +40,62 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         splitNum(dq);
         StringUtils.divisionLine();
+        topStudentsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2512. 奖励最顶尖的 K 名学生
+
+    private static void topStudentsTest(DailyQuestion202310 dq){
+        StringUtils.rowPrintList(dq.topStudents(new String[]{"smart","brilliant","studious"}, new String[]{"not"},
+                new String[]{"this student is studious","the student is smart"}, new int[]{1,2}, 2));
+        StringUtils.rowPrintList(dq.topStudents(new String[]{"smart","brilliant","studious"}, new String[]{"not"},
+                new String[]{"this student is not studious","the student is smart"}, new int[]{1,2}, 2));
+    }
+
+    public List<Integer> topStudents(String[] positive_feedback, String[] negative_feedback, String[] report, int[] student_id, int k) {
+        Set<String> positive = new HashSet<>(Arrays.asList(positive_feedback));
+        Set<String> negative = new HashSet<>(Arrays.asList(negative_feedback));
+        int[] scores = new int[report.length];
+        for (int i=0; i<report.length; i++){
+            String[] items = report[i].split(" ");
+            int score = 0;
+            for (String item : items){
+                if (positive.contains(item)){
+                    score += 3;
+                }
+                if (negative.contains(item)){
+                    score -= 1;
+                }
+            }
+            scores[i] = score;
+        }
+        // 维护最小堆
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if (scores[o1] != scores[o2]){
+                    return scores[o1] - scores[o2];
+                }
+                return student_id[o2] - student_id[o1];
+            }
+        });
+        for (int i=0; i<report.length; i++){
+            if (priorityQueue.size() < k){
+                priorityQueue.add(i);
+                continue;
+            }
+            int top = priorityQueue.peek();
+            if (scores[top] < scores[i] || (scores[top] == scores[i] && student_id[top] > student_id[i])){
+                priorityQueue.poll();
+                priorityQueue.offer(i);
+            }
+        }
+        List<Integer> result = new LinkedList<>();
+        while (!priorityQueue.isEmpty()){
+            result.add(0, student_id[priorityQueue.poll()]);
+        }
+        return result;
     }
 
     // 2578. 最小和分割
