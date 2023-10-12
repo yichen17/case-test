@@ -42,6 +42,34 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         topStudentsTest(dq);
         StringUtils.divisionLine();
+        findTheArrayConcValTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2562. 找出数组的串联值
+    // Integer.parseInt("" + nums[i] + nums[j])
+    // 和 Integer.parseInt(Integer.toString(nums[i]) + Integer.toString(nums[j]))
+    // 两者之间的差异，以及为什么后者执行快一些呢？？
+
+    private static void findTheArrayConcValTest(DailyQuestion202310 dq){
+        System.out.println(dq.findTheArrayConcVal(new int[]{7,52,2,4}));
+        System.out.println(dq.findTheArrayConcVal(new int[]{5,14,13,8,12}));
+    }
+
+    public long findTheArrayConcVal(int[] nums) {
+        long result = 0;
+        int left = 0, right = nums.length-1;
+        while (left <= right){
+            if (left == right){
+                result += nums[left];
+            }
+            else {
+                result += Long.parseLong("" + nums[left] + nums[right]);
+            }
+            left ++;
+            right --;
+        }
+        return result;
     }
 
     // 2512. 奖励最顶尖的 K 名学生
