@@ -218,8 +218,16 @@ public class StringUtils {
 
     private static Random random = new Random();
 
-    public static int[] randomIntArray(int length, int low, int high){
-        if (length <= 0 ){
+    /**
+     * 随机构造数组
+     * @param length 数组总长度
+     * @param size 随机生成的数据大小
+     * @param low 数据范围 最小值
+     * @param high 数据范围最大值 不包含
+     * @return
+     */
+    public static int[] randomIntArray4SizeAndLength(int length, int size, int low, int high){
+        if (size <= 0 || size > length){
             return new int[0];
         }
         if (high < low){
@@ -227,14 +235,18 @@ public class StringUtils {
         }
         int[] result = new int[length];
         int width = high - low;
-        for (int i=0; i<length; i++){
+        for (int i=0; i<size; i++){
             result[i] = random.nextInt(width) + low;
         }
         if (log.isDebugEnabled()){
-            log.debug("randomIntArray生成数据结果{}", Arrays.stream(result)
+            log.debug("randomIntArray4SizeAndLength生成数据结果{}", Arrays.stream(result)
                     .mapToObj(String::valueOf).collect(Collectors.joining(",")));
         }
         return result;
+    }
+
+    public static int[] randomIntArray(int length, int low, int high){
+        return randomIntArray4SizeAndLength(length, length, low, high);
     }
 
     public static Integer[] randomIntArrayWrapper(int length, int low, int high){
@@ -427,6 +439,7 @@ public class StringUtils {
         for (int j=0; j<horizontal; j++){
             builder.append(chars[random.nextInt(chars.length)]);
         }
+        log.debug("randomArrayInSpecificCharacters {}", builder);
         return builder.toString();
     }
 
@@ -529,12 +542,12 @@ public class StringUtils {
         int times;
         for(int i=0; i<size; i++){
             times = random.nextInt(500);
-            result[i] = new String(randomSwap(chars, times));
+            result[i] = new String(randomSwapCharArray(chars, times));
         }
         return result;
     }
 
-    public static String randomSwap(char[] chars, int times){
+    public static String randomSwapCharArray(char[] chars, int times){
         while (times>0){
             times--;
             randomSwapCharArray(chars);
@@ -550,6 +563,23 @@ public class StringUtils {
         temp = chars[a];
         chars[a]= chars[b];
         chars[b] = temp;
+    }
+
+    public static void randomSwapIntArray(int[] data, int times){
+        while (times>0){
+            times--;
+            randomSwapIntArray(data);
+        }
+    }
+
+    private static void randomSwapIntArray(int[] data){
+        int a,b,len=data.length;
+        int temp;
+        a = random.nextInt(len);
+        b = random.nextInt(len);
+        temp = data[a];
+        data[a]= data[b];
+        data[b] = temp;
     }
 
     /**

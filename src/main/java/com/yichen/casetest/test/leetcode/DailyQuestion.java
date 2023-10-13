@@ -1899,7 +1899,7 @@ public class DailyQuestion {
         System.out.println(dq.canChange("R_L_", "__LR"));
         System.out.println(dq.canChange("_R", "R_"));
         String s = StringUtils.randomArrayInSpecificCharacters(new char[]{'L', 'R', '_'}, 10000);
-        String s1 = StringUtils.randomSwap(s.toCharArray(), 100);
+        String s1 = StringUtils.randomSwapCharArray(s.toCharArray(), 100);
         System.out.println(dq.canChange(s, s1));
     }
 
