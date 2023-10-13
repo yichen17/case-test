@@ -16,6 +16,9 @@ import java.util.stream.IntStream;
 @Slf4j
 public class DailyQuestion202310 {
 
+    private static final int mod = 1000000007;
+    private static final Random random = new Random();
+
     public static void main(String[] args) {
         DailyQuestion202310 dq = new DailyQuestion202310();
         earliestFullBloomTest(dq);
@@ -44,6 +47,180 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         findTheArrayConcValTest(dq);
         StringUtils.divisionLine();
+        avoidFloodTest(dq);
+        StringUtils.divisionLine();
+        sumDistanceTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1488. 避免洪水泛滥
+
+    private static void avoidFloodTest(DailyQuestion202310 dq){
+        StringUtils.printIntArray(dq.avoidFlood(new int[]{1,2,3,4}));
+        StringUtils.printIntArray(dq.avoidFlood(new int[]{1,2,0,0,2,1}));
+        StringUtils.printIntArray(dq.avoidFlood(new int[]{1,2,0,1,2}));
+        int[] data = StringUtils.randomIntArray4SizeAndLength(1600, 1000, 0, 1000);
+        StringUtils.randomSwapIntArray(data, 5000);
+        StringUtils.printIntArray(data);
+        StringUtils.printIntArray(dq.avoidFlood(data));
+    }
+
+    public int[] avoidFlood(int[] rains) {
+        int len = rains.length;
+        int[] result = new int[len];
+        Set<Integer> set = new HashSet<>();
+        List<Integer> remove = new LinkedList<>();
+        Map<Integer, Integer> pre = new HashMap<>();
+        for (int i=0; i<len; i++){
+            if (rains[i] == 0){
+                remove.add(i);
+                continue;
+            }
+            result[i] = -1;
+            // 如果历史已经有过了
+            if (!set.add(rains[i])){
+                if (remove.isEmpty()){
+                    return new int[0];
+                }
+                int j, l = remove.size();
+                for (j=0; j<remove.size(); j++){
+                    if (remove.get(j) < pre.get(rains[i])){
+                        continue;
+                    }
+                    result[remove.remove(j)] = rains[i];
+                    break;
+                }
+                if (j == l){
+                    return new int[0];
+                }
+            }
+            pre.put(rains[i], i);
+        }
+        while (!remove.isEmpty()){
+            result[remove.remove(0)] = 1;
+        }
+        return result;
+    }
+
+    // 2731. 移动机器人  cao，我是废物
+
+    private static void sumDistanceTest(DailyQuestion202310 dq){
+        int times = random.nextInt(mod);
+        log.info("times {}", times);
+        System.out.println(dq.sumDistance(StringUtils.randomIntArray(1000,-1000, 1000),
+                StringUtils.randomArrayInSpecificCharacters(new char[]{'R', 'L'}, 1000), 100));
+        System.out.println(dq.sumDistance(new int[]{-2,0,2}, "RLL", 3));
+        System.out.println(dq.sumDistance(new int[]{1,0}, "RL", 2 ));
+    }
+
+    private static final char left = 'L';
+    private static final char right = 'R';
+
+    public int sumDistance(int[] nums, String s, int d) {
+        Map<Character, Integer> dirMap = new HashMap<>(4);
+        dirMap.put(left, -1);
+        dirMap.put(right, 1);
+        int len = nums.length;
+        long pre = 0;
+        int result = 0;
+        char[] dir = s.toCharArray();
+        this.sort(nums, dir);
+        long[] pos = new long[len];
+        for (int i=0; i<len; i++){
+            pos[i] = nums[i];
+        }
+        while (d > 0){
+            // 判断是否有序
+            boolean LROrder = false;
+            int r;
+            int leftCount = 0, rightCount = 0;
+            for (r=0; r<len; r++){
+                if (dir[r] == left){
+                    leftCount++;
+                    continue;
+                }
+                rightCount++;
+                // 已经有序了
+                if (LROrder){
+                    break;
+                }
+                if (dir[r] == right && !LROrder){
+                    LROrder = true;
+                }
+            }
+            // 已经有序，直接计算结果
+            if (r == len){
+                for (int i=1; i<len; i++){
+                    pre = pre + (pos[i] - pos[i-1]) * i;
+                    result = (int)((result + pre) % mod);
+                }
+                result = (int) ((result + (2L * leftCount * rightCount * d) % mod ) % mod);
+                return result;
+            }
+            d--;
+            for (int i=0; i<len; i++){
+                // 判断是否会相撞，想撞转向
+                if (i != len-1){
+                    if ((pos[i] + dirMap.get(dir[i])) == (pos[i+1] + dirMap.get(dir[i+1]))){
+                        pos[i] += dirMap.get(dir[i]);
+                        pos[i+1] += dirMap.get(dir[i+1]);
+                        dir[i] = dir[i] == left ? right : left;
+                        dir[i+1] = dir[i+1] == left ? right : left;
+                        i += 2;
+                        continue;
+                    }
+                    if (pos[i] + dirMap.get(dir[i]) == pos[i+1]){
+                        dir[i] = dir[i] == left ? right : left;
+                        dir[i+1] = dir[i+1] == left ? right : left;
+                        i += 2;
+                        continue;
+                    }
+                }
+                // 正常移动
+                pos[i] += dirMap.get(dir[i]);
+            }
+        }
+        for (int i=1; i<len; i++){
+            pre = pre + (pos[i] - pos[i-1]) * i;
+            result = (int)((result + pre) % mod);
+        }
+        return result;
+    }
+
+    private void sort(int[] nums, char[] chars){
+        this.sort(nums, chars, 0, nums.length-1);
+    }
+
+    private void sort(int[] nums, char[] chars, int left, int right){
+        if (left >= right){
+            return;
+        }
+        int p = left, q = right;
+        while (p < q){
+            while (p <  q && nums[p] <= nums[q]){
+                q--;
+            }
+            this.swap(nums, chars, p, q);
+            while (p < q && nums[p] <= nums[q]){
+                p ++;
+            }
+            this.swap(nums, chars, p, q);
+            q--;
+        }
+        this.sort(nums, chars, left, p-1);
+        this.sort(nums, chars, p+1, right);
+    }
+
+    private void swap(int[] nums, char[] chars, int a, int b){
+        if (a == b){
+            return;
+        }
+        int p = nums[a];
+        char q = chars[a];
+        nums[a] = nums[b];
+        chars[a] = chars[b];
+        nums[b] = p;
+        chars[b] = q;
     }
 
     // 2562. 找出数组的串联值
