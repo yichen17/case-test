@@ -51,6 +51,24 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         sumDistanceTest(dq);
         StringUtils.divisionLine();
+        singleNumberTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 136. 只出现一次的数字
+
+    private static void singleNumberTest(DailyQuestion202310 dq){
+        System.out.println(dq.singleNumber(new int[]{2, 2, 1}));
+        System.out.println(dq.singleNumber(new int[]{4,1,2,1,2}));
+        System.out.println(dq.singleNumber(new int[]{1}));
+    }
+
+    public int singleNumber(int[] nums) {
+        int n = 0;
+        for (int num : nums){
+            n = n ^ num;
+        }
+        return n;
     }
 
     // 1488. 避免洪水泛滥
