@@ -53,18 +53,39 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         singleNumber1Test(dq);
         StringUtils.divisionLine();
-        singleNumberTest(dq);
+        singleNumber2Test(dq);
         StringUtils.divisionLine();
+        singleNumber(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 260. 只出现一次的数字 III
+
+    private static void singleNumber(DailyQuestion202310 dq){
+        StringUtils.printIntArray(dq.singleNumber(new int[]{1,2,1,3,2,5}));
+        StringUtils.printIntArray(dq.singleNumber(new int[]{1,0}));
+        StringUtils.printIntArray(dq.singleNumber(new int[]{-1, 0}));
+    }
+
+    public int[] singleNumber(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int i=0; i<nums.length; i++){
+            if (!set.add(nums[i])){
+                set.remove(nums[i]);
+            }
+        }
+        Iterator<Integer> iterator = set.iterator();
+        return new int[]{iterator.next(), iterator.next()};
     }
 
     // 137. 只出现一次的数字 II
 
-    private static void singleNumberTest(DailyQuestion202310 dq){
-        System.out.println(dq.singleNumber(new int[]{2,2,3,2}));
-        System.out.println(dq.singleNumber(new int[]{0,1,0,1,0,1,99}));
+    private static void singleNumber2Test(DailyQuestion202310 dq){
+        System.out.println(dq.singleNumber2(new int[]{2,2,3,2}));
+        System.out.println(dq.singleNumber2(new int[]{0,1,0,1,0,1,99}));
     }
 
-    public int singleNumber(int[] nums) {
+    public int singleNumber2(int[] nums) {
         int[] dp = new int[32];
         for (int num : nums){
             for (int i=1; i<=32; i++){
