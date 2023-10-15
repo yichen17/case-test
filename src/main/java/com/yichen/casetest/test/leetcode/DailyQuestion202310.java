@@ -51,19 +51,44 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         sumDistanceTest(dq);
         StringUtils.divisionLine();
+        singleNumber1Test(dq);
+        StringUtils.divisionLine();
         singleNumberTest(dq);
         StringUtils.divisionLine();
     }
 
-    // 136. 只出现一次的数字
+    // 137. 只出现一次的数字 II
 
     private static void singleNumberTest(DailyQuestion202310 dq){
-        System.out.println(dq.singleNumber(new int[]{2, 2, 1}));
-        System.out.println(dq.singleNumber(new int[]{4,1,2,1,2}));
-        System.out.println(dq.singleNumber(new int[]{1}));
+        System.out.println(dq.singleNumber(new int[]{2,2,3,2}));
+        System.out.println(dq.singleNumber(new int[]{0,1,0,1,0,1,99}));
     }
 
     public int singleNumber(int[] nums) {
+        int[] dp = new int[32];
+        for (int num : nums){
+            for (int i=1; i<=32; i++){
+                dp[i-1] += (num >> (32 - i)) & 1;
+            }
+        }
+        int result = 0;
+        for (int i=1; i<=32; i++){
+            if (dp[i-1]%3 == 1){
+                result += (1 << (32 - i));
+            }
+        }
+        return result;
+    }
+
+    // 136. 只出现一次的数字
+
+    private static void singleNumber1Test(DailyQuestion202310 dq){
+        System.out.println(dq.singleNumber1(new int[]{2, 2, 1}));
+        System.out.println(dq.singleNumber1(new int[]{4,1,2,1,2}));
+        System.out.println(dq.singleNumber1(new int[]{1}));
+    }
+
+    public int singleNumber1(int[] nums) {
         int n = 0;
         for (int num : nums){
             n = n ^ num;
