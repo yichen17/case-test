@@ -57,6 +57,26 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         singleNumber(dq);
         StringUtils.divisionLine();
+        sumOfMultiplesTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2652. 倍数求和
+
+    private static void sumOfMultiplesTest(DailyQuestion202310 dq){
+        System.out.println(dq.sumOfMultiples(7));
+        System.out.println(dq.sumOfMultiples(10));
+        System.out.println(dq.sumOfMultiples(9));
+    }
+
+    public int sumOfMultiples(int n) {
+        int result = 0;
+        for (int i=1; i<=n; i++){
+            if (i % 3 == 0 || i % 5 == 0 || i % 7 == 0){
+                result += i;
+            }
+        }
+        return result;
     }
 
     // 260. 只出现一次的数字 III
