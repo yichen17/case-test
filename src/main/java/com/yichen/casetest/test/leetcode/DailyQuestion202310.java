@@ -72,28 +72,16 @@ public class DailyQuestion202310 {
 
     public long maxKelements(int[] nums, int k) {
         long result = 0L;
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1-o2;
-            }
-        });
-        for (int num : nums){
-            if (priorityQueue.size() >= k && priorityQueue.peek() < num){
-                priorityQueue.poll();
-            }
-            if (priorityQueue.size() < k){
-                priorityQueue.offer(num);
-            }
-        }
-
+        Arrays.sort(nums);
         PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
                 return o2-o1;
             }
         });
-        pq.addAll(priorityQueue);
+        for (int i=nums.length-1, len = nums.length; i>=0 && len - i <= k; i--){
+            pq.offer(nums[i]);
+        }
         while (k>0){
             if (pq.isEmpty() || pq.peek() == 0){
                 break;
