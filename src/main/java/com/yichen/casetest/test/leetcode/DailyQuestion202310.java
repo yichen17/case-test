@@ -59,6 +59,52 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         sumOfMultiplesTest(dq);
         StringUtils.divisionLine();
+        maxKelementsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2530. 执行 K 次操作后的最大分数
+
+    private static void maxKelementsTest(DailyQuestion202310 dq){
+        System.out.println(dq.maxKelements(new int[]{10,10,10,10,10}, 5));
+        System.out.println(dq.maxKelements(new int[]{1,10,3,3,3}, 3));
+    }
+
+    public long maxKelements(int[] nums, int k) {
+        long result = 0L;
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1-o2;
+            }
+        });
+        for (int num : nums){
+            if (priorityQueue.size() >= k && priorityQueue.peek() < num){
+                priorityQueue.poll();
+            }
+            if (priorityQueue.size() < k){
+                priorityQueue.offer(num);
+            }
+        }
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+        pq.addAll(priorityQueue);
+        while (k>0){
+            if (pq.isEmpty() || pq.peek() == 0){
+                break;
+            }
+            k--;
+            int max = pq.poll();
+            result += max;
+            pq.offer(max % 3 == 0 ? max/3 : max/3+1);
+        }
+
+        return result;
     }
 
     // 2652. 倍数求和
