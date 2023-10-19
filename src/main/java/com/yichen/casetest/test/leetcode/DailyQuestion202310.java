@@ -1,5 +1,6 @@
 package com.yichen.casetest.test.leetcode;
 
+import com.yichen.casetest.utils.MathUtils;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,7 +62,42 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         maxKelementsTest(dq);
         StringUtils.divisionLine();
+        tupleSameProductTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 1726. 同积元组
+
+    private static void tupleSameProductTest(DailyQuestion202310 dq){
+        System.out.println(dq.tupleSameProduct(new int[]{2,3,4,6}));
+        System.out.println(dq.tupleSameProduct(new int[]{1,2,4,5,10}));
+        System.out.println(dq.tupleSameProduct(StringUtils.randomNoRepeat(1000, 2, 9999)));
+    }
+
+    public int tupleSameProduct(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int start = 0, i = 1, target, len = nums.length;
+        while (start < len){
+            for(; i<len; i++){
+                target = nums[start] * nums[i];
+                map.put(target, map.getOrDefault(target, 0) + 1);
+            }
+            start++;
+            i = start+1;
+        }
+        int result = 0;
+        // 计算结果
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() < 2){
+                continue;
+            }
+            // 计算组合数量
+            result += MathUtils.combination(entry.getValue(), 2);
+        }
+        return result * 8;
+    }
+
+
 
     // 2530. 执行 K 次操作后的最大分数
 
