@@ -64,6 +64,37 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         tupleSameProductTest(dq);
         StringUtils.divisionLine();
+        categorizeBoxTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2525. 根据规则将箱子分类
+
+    private static void categorizeBoxTest(DailyQuestion202310 dq){
+        System.out.println(dq.categorizeBox(1000, 35, 700, 300));
+        System.out.println(dq.categorizeBox(200, 50, 800, 50));
+    }
+
+    private static final int TEN_THOUSAND = 10_000;
+    private static final int ONE_BILLION = 1_000_000_000;
+
+    public String categorizeBox(int length, int width, int height, int mass) {
+        long volume = (long) length * width * height;
+        boolean isBuiky = length >= TEN_THOUSAND || width >= TEN_THOUSAND
+                || height >= TEN_THOUSAND || volume >= ONE_BILLION;
+        boolean isHeavy = mass >= 100;
+        if (isBuiky && isHeavy){
+            return "Both";
+        }
+        else if (isHeavy){
+            return "Heavy";
+        }
+        else if (isBuiky){
+            return "Bulky";
+        }
+        else {
+            return "Neither";
+        }
     }
 
     // 1726. 同积元组
