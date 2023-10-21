@@ -66,7 +66,63 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         categorizeBoxTest(dq);
         StringUtils.divisionLine();
+        countPairsTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 2316. 统计无向图中无法互相到达点对数
+
+    private static void countPairsTest(DailyQuestion202310 dq){
+        System.out.println(dq.countPairs(3, StringUtils.convert2Array("[[0,1],[0,2],[1,2]]")));
+        // 4 2 1
+        System.out.println(dq.countPairs(7, StringUtils.convert2Array("[[0,2],[0,5],[2,4],[1,6],[5,4]]")));
+        System.out.println(dq.countPairs(1000, StringUtils.constructEdges(0, 1000, 2000, false, true, false)));
+    }
+
+    public long countPairs(int n, int[][] edges) {
+        List<Integer>[] dp = new List[n];
+        for (int i=0; i<dp.length; i++){
+            dp[i] = new ArrayList<>();
+        }
+        for (int[] edge : edges){
+            int p = edge[0], q = edge[1];
+            dp[p].add(q);
+            dp[q].add(p);
+        }
+        Set<Integer> visited = new HashSet<>();
+        int preSize;
+        List<Integer> subCircle = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            // 如果为空或者已经dfs访问过了
+            if (dp[i].isEmpty() || visited.contains(i)){
+                continue;
+            }
+            preSize = visited.size();
+            this.bfs(dp, visited, i);
+            subCircle.add(visited.size() - preSize);
+        }
+        long result = 0;
+        preSize = n;
+        for(int i=0; i<subCircle.size(); i++){
+            result = result + (long) (preSize - subCircle.get(i)) * subCircle.get(i);
+            preSize -= subCircle.get(i);
+        }
+        if (preSize != 0){
+            result = result + (long) (preSize - 1) * preSize / 2;
+        }
+        return result;
+    }
+
+    private void bfs(List<Integer>[] dp, Set<Integer> visited, int start){
+        if (!visited.add(start)){
+            return;
+        }
+        for(int i=0; i<dp[start].size(); i++){
+            this.bfs(dp, visited, dp[start].get(i));
+        }
+    }
+
+
 
     // 2525. 根据规则将箱子分类
 

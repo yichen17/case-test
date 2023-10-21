@@ -1,6 +1,9 @@
 package com.yichen.casetest.test.basetype;
 
 import com.yichen.casetest.utils.StringUtils;
+import io.netty.util.collection.IntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +26,21 @@ public class MapTest {
         StringUtils.divisionLine();
         treeSetTest();
         StringUtils.divisionLine();
+        mapOptimize();
+        StringUtils.divisionLine();
+    }
+
+    /**
+     * 使用基本类型，不进行基本类型和包装类型之间的转换，节省时空开销
+     */
+    private static void mapOptimize(){
+        IntObjectHashMap<String> intObjectHashMap = new IntObjectHashMap<>();
+        intObjectHashMap.put(18, "shanliang");
+        intObjectHashMap.put(20, "banyu");
+
+        IntSet intSet = new IntArraySet();
+
+
     }
 
     /**

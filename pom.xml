@@ -461,6 +461,14 @@
             <version>2.3</version>
         </dependency>
 
+        <!-- 简单工具类 -->
+        <dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.5.12</version>
+        </dependency>
+        <!-- 简单工具类end -->
+
     </dependencies>
 
     <build>
