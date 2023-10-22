@@ -68,6 +68,39 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         countPairsTest(dq);
         StringUtils.divisionLine();
+        maxSatisfactionTest(dq);
+        StringUtils.divisionLine("maxSatisfactionTest");
+    }
+
+    // 1402. 做菜顺序
+
+    private static void maxSatisfactionTest(DailyQuestion202310 dq){
+        System.out.println(dq.maxSatisfaction(new int[]{-1,-8,0,5,-9}));
+        System.out.println(dq.maxSatisfaction(new int[]{4,3,2}));
+        System.out.println(dq.maxSatisfaction(new int[]{-1,-4,-5}));
+        System.out.println(dq.maxSatisfaction(StringUtils.randomIntArray(400, -999, 999)));
+    }
+
+    public int maxSatisfaction(int[] satisfaction) {
+        Arrays.sort(satisfaction);
+        int start = -1, count=0, result=0, len=satisfaction.length;
+        for (int i=0; i<len; i++){
+            if (satisfaction[i] < 0){
+                continue;
+            }
+            if (start == -1){
+                start = i;
+            }
+            count += satisfaction[i];
+            result += satisfaction[i] * (i - start + 1);
+        }
+        for (int i=start-1; i>=0; i--){
+            if (satisfaction[i] + count >= 0){
+                count += satisfaction[i];
+                result += count;
+            }
+        }
+        return result;
     }
 
     // 2316. 统计无向图中无法互相到达点对数
