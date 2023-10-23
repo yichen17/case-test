@@ -20,6 +20,15 @@ public class BaseTest {
 
         Constructor<ArthasTest> constructor = ArthasTest.class.getDeclaredConstructor(int.class);
         System.out.println(constructor.getName());
+
+        typeTrans();
+
+    }
+
+    private static void typeTrans(){
+        int a = 0;
+        double b = (double) a;
+        System.out.println(b);
     }
 
     private static class ArthasTest{

@@ -1,12 +1,11 @@
 package com.yichen.casetest.utils;
 
+import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Qiuxinchao
@@ -18,10 +17,11 @@ import java.util.Set;
 public class FileUtils {
 
     /**
-     * 同类功能文件合并，例如两个账户文件合并
-     * 1、文件编码格式转换
-     * 2、空行剔除跳过
-     * 3、去除重复的，有差异的放到最后，特殊表示出来
+     * 默认所有文件的编码格式都是utf-8<br/>
+     * 同类功能文件合并，例如两个账户文件合并<br/>
+     * 1、文件编码格式转换<br/>
+     * 2、空行剔除跳过<br/>
+     * 3、去除重复的，有差异的放到最后，特殊表示出来<br/>
      * @param filePath1 第一个文件路径
      * @param filePath2 第二个文件路径
      * @return 是否合并成功
@@ -36,6 +36,115 @@ public class FileUtils {
             return false;
         }
         return true;
+    }
+
+    private static void doMergeFileBase(String filePath1, String filePath2, String mergeFilePath) throws Exception {
+        Map<String, String> map1 = readFileItems(checkFileAndGetStream(filePath1));
+        Map<String, String> map2 = readFileItems(checkFileAndGetStream(filePath2));
+        // 合并结果 一致的放在前面  不一样的放在后面  某一方有的认为一致
+        List<Map.Entry<String, String>> sameList = new ArrayList<>(32);
+        List<Pair<Map.Entry<String, String>, String>> diffList = new ArrayList<>(32);
+        for (Map.Entry<String, String> entry : map1.entrySet()) {
+            String val = map2.get(entry.getKey());
+            // map1独有
+            if (StringUtils.isEmpty(val) || val.equals(entry.getValue())){
+                sameList.add(entry);
+                map2.remove(entry.getKey());
+                continue;
+            }
+            diffList.add(new Pair<>(entry, val));
+            map2.remove(entry.getKey());
+        }
+        sameList.addAll(map2.entrySet());
+
+        try(FileOutputStream fileOutputStream = new FileOutputStream(mergeFilePath)) {
+            sameList.forEach(p -> {
+                try {
+                    fileOutputStream.write(p.getKey().getBytes("utf8"));
+                    fileOutputStream.write(new byte[]{'\n'});
+                    fileOutputStream.write(p.getValue().getBytes("utf8"));
+                    fileOutputStream.write(new byte[]{'\n', '\n'});
+                    fileOutputStream.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            if (!diffList.isEmpty()){
+                fileOutputStream.write("================================= diff =================================\n".getBytes());
+                diffList.forEach(p -> {
+                    try {
+                        fileOutputStream.write(p.getKey().getKey().getBytes("utf8"));
+                        fileOutputStream.write("\n===> type1\n".getBytes());
+                        fileOutputStream.write(p.getKey().getValue().getBytes("utf8"));
+                        fileOutputStream.write("===> type2\n".getBytes());
+                        fileOutputStream.write(p.getValue().getBytes());
+                        fileOutputStream.write(new byte[]{'\n', '\n'});
+                        fileOutputStream.flush();
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+        }
+    }
+
+    private static Map<String, String> readFileItems(FileInputStream fileInputStream) throws Exception {
+        Map<String, String> mapItems = new HashMap<>(32);
+        if (Objects.isNull(fileInputStream)){
+            return mapItems;
+        }
+        StringBuilder builder = new StringBuilder();
+        StringBuilder items = new StringBuilder();
+        int val;
+        boolean title = true;
+        String titleStr = null;
+        while ((val = fileInputStream.read()) != -1) {
+            if (val == '\n'){
+                // 直接起头空行或者数据间隔多个空行
+                if (title && builder.length() == 0){
+                    continue;
+                }
+                // title上有数据，保存
+                if (title){
+                    title = false;
+                    builder.append("\n");
+                    titleStr = convertEncoding(builder.toString(), "latin1", "utf8").trim();
+                    builder = new StringBuilder();
+                    continue;
+                }
+                // 数据间隔空行 保存数据
+                if (builder.length() == 0){
+                    mapItems.put(titleStr, convertEncoding(items.toString(), "latin1", "utf8"));
+                    titleStr = null;
+                    items = new StringBuilder();
+                    title = true;
+                    continue;
+                }
+                // 正常结果数据
+                builder.append("\n");
+                items.append(builder);
+                builder = new StringBuilder();
+                continue;
+            }
+            builder.append((char) val);
+        }
+        // 兜底，如果最后一个之后没有换行
+        if (StringUtils.isNotEmpty(titleStr)  && (items.length() != 0 || builder.length() != 0)){
+            items.append(builder);
+            mapItems.put(titleStr, convertEncoding(items.toString(), "latin1", "utf8"));
+        }
+        fileInputStream.close();
+        return mapItems;
+    }
+
+    private static FileInputStream checkFileAndGetStream(String filePath) throws FileNotFoundException{
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()){
+            return null;
+        }
+        return new FileInputStream(file);
     }
 
     /**
@@ -130,7 +239,7 @@ public class FileUtils {
     public static void main(String[] args) throws Exception {
         String s = "/opt/homebrew/var/db/redis/a.txt";
 
-        readFileLine(s);
+//        readFileLine(s);
 
 //        fileWriteByBinary(s);
 //        fileWriteByEncoding(s);
@@ -138,10 +247,25 @@ public class FileUtils {
 //        System.out.println(convertEncoding("狂杀一条街", "gbk", "utf8"));
 //        System.out.println(convertEncoding("¿ñÉ±Ò»Ìõ½Ö", "utf8", "gbk"));
 
+//        arraySort();
+
+//        manualReadFile(s);
+
+        doMergeFileBase(s, "/opt/homebrew/var/db/redis/b.txt", "/opt/homebrew/var/db/redis/a.txt");
+
+    }
+
+    private static void manualReadFile(String filePath) throws Exception {
+        Map<String, String> map = readFileItems(checkFileAndGetStream(filePath));
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.printf("%s%n%s============================================%n", entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static void arraySort(){
         int[] array = new int[]{2,1,3,4,9,8,7};
         Arrays.sort(array);
         System.out.println(Arrays.toString(array));
-
     }
 
     private static void readFileLine(String s) throws Exception{
