@@ -72,6 +72,34 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine("maxSatisfactionTest");
         countSeniorsTest(dq);
         StringUtils.divisionLine();
+        numRollsToTargetTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1155. 掷骰子等于目标和的方法数
+
+    private static void numRollsToTargetTest(DailyQuestion202310 dq){
+        System.out.println(dq.numRollsToTarget(1, 6, 3));
+        System.out.println(dq.numRollsToTarget(2, 6, 7));
+        System.out.println(dq.numRollsToTarget(30, 30, 500));
+        System.out.println(dq.numRollsToTarget(30, 30, 520));
+    }
+
+    public int numRollsToTarget(int n, int k, int target) {
+        int[][] dp = new int[n+1][target+1];
+        dp[n][target] = 1;
+        for(int i=n-1; i>=0; i--){
+            for(int j=1; j<=target; j++){
+                for (int p=1; p<=k; p++){
+                    if (j < p ){
+                        continue;
+                    }
+                    dp[i][j-p] += dp[i+1][j];
+                    dp[i][j-p] %= mod;
+                }
+            }
+        }
+        return dp[0][0];
     }
 
     // 2678. 老人的数目
