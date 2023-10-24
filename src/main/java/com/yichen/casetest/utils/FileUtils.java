@@ -28,8 +28,7 @@ public class FileUtils {
      */
     public static boolean mergeFile(String filePath1, String filePath2, String mergeFilePath){
         try {
-
-
+            doMergeFileBase(filePath1, filePath2, mergeFilePath);
         }
         catch (Exception e){
             log.error("文件合并异常{}", e.getMessage(), e);
