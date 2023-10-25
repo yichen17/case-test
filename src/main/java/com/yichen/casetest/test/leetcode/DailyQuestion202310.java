@@ -74,6 +74,51 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         numRollsToTargetTest(dq);
         StringUtils.divisionLine();
+        punishmentNumberTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2698. 求一个整数的惩罚数
+
+    private static void punishmentNumberTest(DailyQuestion202310 dq){
+        System.out.println(dq.punishmentNumber(10));
+        System.out.println(dq.punishmentNumber(37));
+    }
+
+    public int punishmentNumber(int n) {
+        int result = 0;
+        for (int i=1; i<=n; i++){
+            if (check(i, i*i)){
+                result += i * i;
+            }
+        }
+        return result;
+    }
+
+    private boolean check(int i,int target){
+        return this.check(0, i, String.valueOf(target));
+    }
+
+    private boolean check(int pos, int count, String data){
+        if (pos >= data.length()){
+            return count == 0;
+        }
+        if (data.charAt(pos) == '0'){
+            return this.check(pos+1, count, data);
+        }
+        int val = 0;
+        boolean result = false;
+        for(int i=pos; i<data.length(); i++){
+            val = val * 10 + data.charAt(i) - '0';
+            if (val > count){
+                break;
+            }
+            result = this.check(i + 1, count - val, data);
+            if (result){
+                break;
+            }
+        }
+        return result;
     }
 
     // 1155. 掷骰子等于目标和的方法数
