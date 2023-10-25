@@ -76,6 +76,27 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         punishmentNumberTest(dq);
         StringUtils.divisionLine();
+        countDigitsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2520. 统计能整除数字的位数
+
+    private static void countDigitsTest(DailyQuestion202310 dq){
+        System.out.println(dq.countDigits(7));
+        System.out.println(dq.countDigits(121));
+        System.out.println(dq.countDigits(1248));
+    }
+
+    public int countDigits(int num) {
+        int result = 0;
+        String s = String.valueOf(num);
+        for (int i=0; i<s.length(); i++){
+            if (num % (s.charAt(i) - '0') == 0){
+                result++;
+            }
+        }
+        return result;
     }
 
     // 2698. 求一个整数的惩罚数
