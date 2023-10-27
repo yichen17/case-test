@@ -78,6 +78,32 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         countDigitsTest(dq);
         StringUtils.divisionLine();
+        maxAreaTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1465. 切割后面积最大的蛋糕
+
+    private static void maxAreaTest(DailyQuestion202310 dq){
+        System.out.println(dq.maxArea(5, 4, new int[]{1,2,4}, new int[]{1,3}));
+        System.out.println(dq.maxArea(5,4,new int[]{3,1}, new int[]{1}));
+        System.out.println(dq.maxArea(5,4,new int[]{3}, new int[]{3}));
+        System.out.println(dq.maxArea(100000000, 100000000,
+                StringUtils.randomNoRepeat(100000, 1, 100000000), StringUtils.randomNoRepeat(5000, 1, 100000000)));
+    }
+
+    public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {
+        return (int)((long) this.getMax(horizontalCuts, h) * this.getMax(verticalCuts, w) % mod);
+    }
+
+    private int getMax(int[] data, int limit){
+        Arrays.sort(data);
+        int len = data.length;
+        int max = Math.max(data[0], limit - data[len-1]);
+        for(int i=1; i<len; i++){
+            max = Math.max(max, data[i] - data[i-1]);
+        }
+        return max;
     }
 
     // 2520. 统计能整除数字的位数
