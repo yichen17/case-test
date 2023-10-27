@@ -88,8 +88,8 @@ public class DailyQuestion202310 {
         System.out.println(dq.maxArea(5, 4, new int[]{1,2,4}, new int[]{1,3}));
         System.out.println(dq.maxArea(5,4,new int[]{3,1}, new int[]{1}));
         System.out.println(dq.maxArea(5,4,new int[]{3}, new int[]{3}));
-        System.out.println(dq.maxArea(100000000, 100000000,
-                StringUtils.randomNoRepeat(100000, 1, 100000000), StringUtils.randomNoRepeat(5000, 1, 100000000)));
+//        System.out.println(dq.maxArea(100000000, 100000000,
+//                StringUtils.randomNoRepeat(100000, 1, 100000000), StringUtils.randomNoRepeat(5000, 1, 100000000)));
     }
 
     public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {
