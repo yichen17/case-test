@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
  * @describe 10月的每日一题
  */
 @Slf4j
-public class DailyQuestion202310 {
+class DailyQuestion202310 {
 
     private static final int mod = 1000000007;
     private static final Random random = new Random();
@@ -80,7 +80,38 @@ public class DailyQuestion202310 {
         StringUtils.divisionLine();
         maxAreaTest(dq);
         StringUtils.divisionLine();
+        pickGiftsTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 2558. 从数量最多的堆取走礼物
+
+    private static void pickGiftsTest(DailyQuestion202310 dq){
+        System.out.println(dq.pickGifts(new int[]{25,64,9,4,100}, 4));
+        System.out.println(dq.pickGifts(new int[]{1,1,1,1}, 4));
+        System.out.println(dq.pickGifts(StringUtils.randomIntArray(500, 1, 100000000), 400));
+    }
+
+    public long pickGifts(int[] gifts, int k) {
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a,b) -> {
+            return b-a;
+        });
+        for(int gift : gifts){
+            priorityQueue.offer(gift);
+        }
+        while (k > 0 && !priorityQueue.isEmpty()){
+            k--;
+            priorityQueue.offer((int)Math.sqrt(1.0 * priorityQueue.poll()));
+//            priorityQueue.offer(MathUtils.sqrtFloor(priorityQueue.poll()));
+        }
+        long result = 0;
+        while (!priorityQueue.isEmpty()){
+            result += priorityQueue.poll();
+        }
+        return result;
+    }
+
+
 
     // 1465. 切割后面积最大的蛋糕
 

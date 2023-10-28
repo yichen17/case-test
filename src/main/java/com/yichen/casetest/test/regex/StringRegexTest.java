@@ -24,6 +24,8 @@ public class StringRegexTest {
         test3();
         StringUtils.divisionLine();
         test4();
+        StringUtils.divisionLine();
+        test5();
     }
 
     private static void test1() {
@@ -69,6 +71,14 @@ public class StringRegexTest {
         log.info("{}", "<span></span>".matches("<([a-z]+)><\\/\\1>"));
         // 忽略大小写
         log.info("{} {}", "asd".matches("(?i)ASD"), "asd".matches("Asd"));
+    }
+
+    private static final Pattern numberCheck = Pattern.compile("^[0-9]+$");
+    private static void test5(){
+        System.out.println(numberCheck.matcher("123").matches());
+        System.out.println(numberCheck.matcher("123X").matches());
+        System.out.println(numberCheck.matcher("123X22").matches());
+        System.out.println(numberCheck.matcher("ab").matches());
     }
 
 

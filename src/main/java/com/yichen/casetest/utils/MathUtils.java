@@ -47,6 +47,38 @@ public class MathUtils {
         return n * permutation(n - 1, r - 1);
     }
 
+    /**
+     * 自己实现的平方根比库的垃圾。。。
+     * @param num
+     * @return
+     */
+    public static int sqrtFloor(int num) {
+        if (num < 0){
+            return -1;
+        }
+
+        if (num == 0 || num == 1) {
+            return num;
+        }
+
+        int left = 1;
+        int right = num;
+        int result = 0;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (mid <= num / mid) {
+                result = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return result;
+    }
+
 
     public static void main(String[] args) {
         System.out.println(permutation(4,2));
