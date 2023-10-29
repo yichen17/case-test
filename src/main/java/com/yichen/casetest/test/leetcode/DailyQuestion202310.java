@@ -82,6 +82,31 @@ class DailyQuestion202310 {
         StringUtils.divisionLine();
         pickGiftsTest(dq);
         StringUtils.divisionLine();
+        hIndexTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 274. H 指数
+
+    private static void hIndexTest(DailyQuestion202310 dq){
+        System.out.println(dq.hIndex(new int[]{3,0,6,1,5}));
+        System.out.println(dq.hIndex(new int[]{1,3,1}));
+        System.out.println(dq.hIndex(StringUtils.randomIntArray(2000, 0, 999)));
+    }
+
+    public int hIndex(int[] citations) {
+        int[] buckets = new int[1001];
+        for (int citation : citations){
+            buckets[citation]++;
+        }
+        int count = 0;
+        for (int i=1000; i>=0; i--){
+            if (count + buckets[i] >= i){
+                return i;
+            }
+            count += buckets[i];
+        }
+        return 0;
     }
 
     // 2558. 从数量最多的堆取走礼物
