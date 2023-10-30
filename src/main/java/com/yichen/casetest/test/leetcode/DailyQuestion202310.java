@@ -82,19 +82,53 @@ class DailyQuestion202310 {
         StringUtils.divisionLine();
         pickGiftsTest(dq);
         StringUtils.divisionLine();
+        hIndex1Test(dq);
+        StringUtils.divisionLine("hIndex1Test");
         hIndexTest(dq);
-        StringUtils.divisionLine();
+        StringUtils.divisionLine("hIndexTest");
+    }
+
+    // 275. H 指数 II    思路有点混乱。。。唉
+
+    private static void hIndexTest(DailyQuestion202310 dq){
+        System.out.println(dq.hIndex(new int[]{0,1,3,5,6}));
+        System.out.println(dq.hIndex(new int[]{1,2,100}));
+        int[] data = StringUtils.randomIntArray(2000, 0, 999);
+        Arrays.sort(data);
+        StringUtils.printIntArray(data);
+        System.out.println(dq.hIndex(data));
+    }
+
+    public int hIndex(int[] citations) {
+        if (citations[0] >= citations.length){
+            return citations.length;
+        }
+        int left = 0, len = citations.length, right = citations.length-1,mid;
+        while (left <= right){
+            mid = (left+right) >> 1;
+            if (citations[mid] == len - mid){
+                left = mid;
+                break;
+            }
+            else if (citations[mid] > len - mid){
+                right = mid - 1;
+            }
+            else {
+                left = mid + 1;
+            }
+        }
+        return Math.min(citations[left], len - left);
     }
 
     // 274. H 指数
 
-    private static void hIndexTest(DailyQuestion202310 dq){
-        System.out.println(dq.hIndex(new int[]{3,0,6,1,5}));
-        System.out.println(dq.hIndex(new int[]{1,3,1}));
-        System.out.println(dq.hIndex(StringUtils.randomIntArray(2000, 0, 999)));
+    private static void hIndex1Test(DailyQuestion202310 dq){
+        System.out.println(dq.hIndex1(new int[]{3,0,6,1,5}));
+        System.out.println(dq.hIndex1(new int[]{1,3,1}));
+        System.out.println(dq.hIndex1(StringUtils.randomIntArray(2000, 0, 999)));
     }
 
-    public int hIndex(int[] citations) {
+    public int hIndex1(int[] citations) {
         int[] buckets = new int[1001];
         for (int citation : citations){
             buckets[citation]++;
