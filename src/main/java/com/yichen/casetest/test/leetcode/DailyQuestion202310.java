@@ -86,6 +86,115 @@ class DailyQuestion202310 {
         StringUtils.divisionLine("hIndex1Test");
         hIndexTest(dq);
         StringUtils.divisionLine("hIndexTest");
+        smallestMissingValueSubtreeTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2003. 每棵子树内缺失的最小基因值   超出空间限制，待优化
+
+    private static void smallestMissingValueSubtreeTest(DailyQuestion202310 dq){
+        StringUtils.printIntArray(dq.smallestMissingValueSubtree(new int[]{-1,0,0,2}, new int[]{1,2,3,4}));
+        StringUtils.printIntArray(dq.smallestMissingValueSubtree(new int[]{-1,0,1,0,3,3}, new int[]{5,4,6,2,1,3}));
+        StringUtils.printIntArray(dq.smallestMissingValueSubtree(new int[]{-1,2,3,0,2,4,1}, new int[]{2,3,4,5,6,7,8}));
+        StringUtils.printIntArray(dq.smallestMissingValueSubtree(new int[]{-1,0,45,99,2,52,5,41,88,64,71,54,91,66,9,0,73,41,10,17,99,31,96,17,87,67,72,46,22,6,53,1,57,27,20,22,6,53,30,79,12,0,30,59,2,98,56,49,31,0,72,50,31,54,71,57,11,2,45,53,7,6,41,86,31,9,18,17,37,6,56,0,53,61,43,79,67,32,54,86,67,36,93,56,17,56,54,47,52,2,15,10,87,61,69,15,61,26,56,18}, new int[]{32,77,26,71,43,41,57,84,66,37,99,38,59,73,47,33,94,58,36,65,93,28,20,79,12,68,34,45,87,64,19,8,53,9,92,10,40,13,16,48,98,5,42,15,23,88,83,2,31,6,81,27,82,67,95,96,76,61,30,14,21,25,97,7,24,100,18,55,11,72,51,80,89,17,60,22,52,44,91,4,85,56,35,86,63,29,78,70,69,54,50,39,46,1,62,49,74,3,90,75}));
+//        StringUtils.printIntArray(dq.smallestMissingValueSubtree(StringUtils.treeArray(1000), StringUtils.randomNoRepeat(1000, 0, 10000)));
+    }
+
+    private int[] genes;
+    public int[] smallestMissingValueSubtree(int[] parents, int[] nums) {
+        int len = parents.length;
+        this.genes = nums;
+        int[] result = new int[len];
+        // 比特位标记空位置
+        int[] marks = new int[(len+31)/32];
+        // 构造树节点 填充对应的基因
+        Node[] nodes = new Node[len];
+        for (int i=0; i<len; i++){
+            nodes[i] = new Node();
+        }
+        nodes[0].pos = 0;
+        // 构造父子关系
+        for (int i=1; i<len; i++){
+            nodes[parents[i]].children.add(nodes[i]);
+            nodes[i].pos = i;
+        }
+        // 比特位排序，后续遍历节点计算最小基因数  顺带填充结果
+        this.dfs(result, marks, nodes[0]);
+        return result;
+    }
+
+    /**
+     *
+     * @param result 最终处理结果
+     * @param marks 标记处理前结果
+     * @param root 处理节点
+     * @return 标记处理后的结果
+     */
+    private int[] dfs(int[] result, int[] marks, Node root){
+        int[] combine = new int[marks.length];
+        // 优先处理字节点，且字节点相互隔离。都处理完之后字节点汇总，在处理父节点
+        for (int i=0; i<root.children.size(); i++){
+            this.merge(combine, dfs(result, Arrays.copyOf(marks, marks.length), root.children.get(i)));
+        }
+        // 父节点置入
+        this.fillMarks(combine, this.genes[root.pos]);
+        // 填充结果
+        result[root.pos] = this.getPos(combine);
+        return combine;
+    }
+
+    private void merge(int[] combine, int[] data){
+        for(int i=0; i<combine.length; i++){
+            combine[i] |= data[i];
+        }
+    }
+
+    private void fillMarks(int[] marks, int pos){
+        // 跨界忽略
+        if (pos >= 32 * marks.length){
+            return;
+        }
+        int divisor = 0;
+        while (pos > 32){
+            divisor++;
+            pos -= 32;
+        }
+        int remainder = pos;
+        int d = 1;
+        while (32 - remainder > 0){
+            remainder++;
+            d = d << 1;
+        }
+        marks[divisor] |= d;
+    }
+
+    private int getPos(int[] marks){
+        int result = 1;
+        for(int mark : marks){
+            if (mark == 0xffffffff){
+                result += 32;
+                continue;
+            }
+            int i= 0x80000000;
+            while ((mark & i) != 0){
+                i = i >>> 1;
+                result++;
+            }
+            break;
+        }
+        return result;
+    }
+
+    private static class Node{
+        public List<Node> children;
+        /**
+         * 节点数组坐标
+         */
+        public Integer pos;
+
+        public Node() {
+            this.children = new ArrayList<>();
+        }
     }
 
     // 275. H 指数 II    思路有点混乱。。。唉
