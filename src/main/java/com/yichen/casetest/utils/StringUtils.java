@@ -73,6 +73,13 @@ public class StringUtils {
         return result;
     }
 
+    public static int[] treeArray(int len){
+        int[] result = new int[len];
+        result[0] = -1;
+        Set<Integer> set = new HashSet<>();
+        return null;
+    }
+
     /**
      * 构建随机不重复数字，
      * @return
@@ -240,6 +247,23 @@ public class StringUtils {
         }
         if (log.isDebugEnabled()){
             log.debug("randomIntArray4SizeAndLength生成数据结果{}", Arrays.stream(result)
+                    .mapToObj(String::valueOf).collect(Collectors.joining(",")));
+        }
+        return result;
+    }
+
+    public static int[] randomIntArrayNotSelf(int length, int low, int high){
+        int[] result = new int[length];
+        int width = high - low;
+        int r;
+        for(int i=0; i<length; i++){
+            while ((r = random.nextInt(width) + low) == i){
+
+            }
+            result[i] = r;
+        }
+        if (log.isDebugEnabled()){
+            log.debug("randomIntArrayNotSelf {}", Arrays.stream(result)
                     .mapToObj(String::valueOf).collect(Collectors.joining(",")));
         }
         return result;

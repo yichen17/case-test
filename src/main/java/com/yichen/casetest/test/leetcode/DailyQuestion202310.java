@@ -88,7 +88,54 @@ class DailyQuestion202310 {
         StringUtils.divisionLine("hIndexTest");
         smallestMissingValueSubtreeTest(dq);
         StringUtils.divisionLine();
+        maximumInvitationsTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 2127. 参加会议的最多员工数  错误解法，我是垃圾
+
+    private static void maximumInvitationsTest(DailyQuestion202310 dq){
+        System.out.println(dq.maximumInvitations(new int[]{2,2,1,2}));
+        System.out.println(dq.maximumInvitations(new int[]{1,2,0}));
+        System.out.println(dq.maximumInvitations(new int[]{3,0,1,4,1}));
+        System.out.println(dq.maximumInvitations(StringUtils.randomIntArrayNotSelf(1000, 0, 100)));
+    }
+
+    public int maximumInvitations(int[] favorite) {
+        int len = favorite.length;
+        Map<Integer, Integer> visited = new HashMap<>();
+        LinkedList<Integer> path = new LinkedList<>();
+        int[] dp = new int[len];
+        Arrays.fill(dp, -1);
+        for (int i=0; i<len; i++){
+            if (dp[i] != -1){
+                continue;
+            }
+            if (dp[favorite[i]] != -1){
+                dp[i] = dp[favorite[i]] + 1;
+                continue;
+            }
+            int j=i, pos=0;
+            while (!visited.containsKey(j)){
+                path.add(j);
+                visited.put(j, pos++);
+                j = favorite[j];
+            }
+            int circleLen = pos - visited.get(j);
+            int node;
+            dp[j] = circleLen;
+            while ((node = path.removeLast()) != j){
+                dp[node] = circleLen;
+            }
+            while (!path.isEmpty()){
+                dp[path.removeLast()] = ++circleLen;
+            }
+            visited.clear();
+        }
+        return Arrays.stream(dp).max().orElse(0);
+    }
+
+
 
     // 2003. 每棵子树内缺失的最小基因值   超出空间限制，待优化
 

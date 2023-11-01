@@ -23,6 +23,18 @@ public class BaseTest {
 
         typeTrans();
 
+        transCompare();
+
+        Boolean c = null;
+        System.out.println(Boolean.TRUE.equals(c));
+
+    }
+
+    private static void transCompare(){
+        int[] data = {1, 2, 3};
+        String a = "" + data[0] + data[1];
+        String b = Integer.toString(data[0]) + Integer.toString(data[1]);
+        System.out.printf("%s %s%n", a, b);
     }
 
     private static void typeTrans(){
