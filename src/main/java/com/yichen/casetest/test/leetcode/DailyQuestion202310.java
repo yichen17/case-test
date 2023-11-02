@@ -98,41 +98,55 @@ class DailyQuestion202310 {
         System.out.println(dq.maximumInvitations(new int[]{2,2,1,2}));
         System.out.println(dq.maximumInvitations(new int[]{1,2,0}));
         System.out.println(dq.maximumInvitations(new int[]{3,0,1,4,1}));
+        System.out.println(dq.maximumInvitations(new int[]{1,0,0,2,1,4,7,8,9,6,7,10,8}));
         System.out.println(dq.maximumInvitations(StringUtils.randomIntArrayNotSelf(1000, 0, 100)));
     }
 
     public int maximumInvitations(int[] favorite) {
         int len = favorite.length;
-        Map<Integer, Integer> visited = new HashMap<>();
-        LinkedList<Integer> path = new LinkedList<>();
-        int[] dp = new int[len];
-        Arrays.fill(dp, -1);
+        int result = 0;
+        List<Integer>[] listMap = new List[len];
         for (int i=0; i<len; i++){
-            if (dp[i] != -1){
+            listMap[i] = new LinkedList<>();
+        }
+        // 保存映射关系
+        for (int i=0; i<len; i++){
+            listMap[favorite[i]].add(i);
+        }
+        Set<Integer> visited = new HashSet<>();
+        LinkedList<Integer> path = new LinkedList<>();
+        for (int i=0; i<len; i++){
+            if (visited.contains(i)){
                 continue;
             }
-            if (dp[favorite[i]] != -1){
-                dp[i] = dp[favorite[i]] + 1;
-                continue;
-            }
-            int j=i, pos=0;
-            while (!visited.containsKey(j)){
+            Set<Integer> repeat = new HashSet<>();
+            int j = i, node, count = 1;
+            while (repeat.add(j)){
                 path.add(j);
-                visited.put(j, pos++);
                 j = favorite[j];
             }
-            int circleLen = pos - visited.get(j);
-            int node;
-            dp[j] = circleLen;
+            Queue<Integer> queue = new LinkedList<>();
             while ((node = path.removeLast()) != j){
-                dp[node] = circleLen;
+                queue.addAll(listMap[node]);
+                visited.add(node);
+                count++;
             }
-            while (!path.isEmpty()){
-                dp[path.removeLast()] = ++circleLen;
+            queue.addAll(listMap[j]);
+            visited.add(j);
+            count = count == 2 ? 2 : 0;
+            while (!queue.isEmpty()){
+                node = queue.poll();
+                if (visited.contains(node)){
+                    continue;
+                }
+                visited.add(node);
+                count = count == 0 ? 0 : count + 1;
+                queue.addAll(listMap[node]);
             }
-            visited.clear();
+            result = Math.max(result, count);
+            path.clear();
         }
-        return Arrays.stream(dp).max().orElse(0);
+        return result;
     }
 
 
