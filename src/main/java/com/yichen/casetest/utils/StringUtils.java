@@ -429,9 +429,16 @@ public class StringUtils {
     }
 
     public static <T> void rowPrintList(List<T> items){
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
         for(T item : items){
-            log.info("{}", item);
+            builder.append(item).append(",");
         }
+        if (builder.length() > 1){
+            builder.deleteCharAt(builder.length()-1);
+        }
+        builder.append("]");
+        log.info("rowPrintList {}", builder);
     }
 
     public static <T> String printArray(T[] array){
