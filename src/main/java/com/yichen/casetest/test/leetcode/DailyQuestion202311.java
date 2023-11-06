@@ -20,7 +20,120 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         findRepeatedDnaSequencesTest(dq);
         StringUtils.divisionLine();
+        maximumScoreAfterOperationsTest(dq);
+        StringUtils.divisionLine();
+        maxProductTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 318. 最大单词长度乘积   用数组可以节省时间和空间。。。
+
+    private static void maxProductTest(DailyQuestion202311 dq){
+        System.out.println(dq.maxProduct(new String[]{"a", "b"}));
+        System.out.println(dq.maxProduct(new String[]{"abcw","baz","foo","bar","xtfn","abcdef"}));
+        System.out.println(dq.maxProduct(new String[]{"a","ab","abc","d","cd","bcd","abcd"}));
+        System.out.println(dq.maxProduct(new String[]{"a","aa","aaa","aaaa"}));
+    }
+
+    public int maxProduct(String[] words) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i=0; i<words.length; i++){
+            map.put(i, create(words[i]));
+        }
+        int result = 0;
+        for (int i=0; i<words.length; i++){
+            for (int j=i+1; j<words.length; j++){
+                if ((map.get(i) & map.get(j)) == 0){
+                    result = Math.max(result, words[i].length() * words[j].length());
+                }
+            }
+        }
+        return result;
+    }
+
+    private int create(String n){
+        int result = 0;
+        for (int i=0; i<n.length(); i++){
+            result |= 1 << (n.charAt(i) - 'a');
+        }
+        return result;
+    }
+
+
+
+
+    // 100118. 在树上执行操作以后得到的最大分数   直接构造树，逻辑更简单     链式的场景没考虑到。。。
+
+    private static void maximumScoreAfterOperationsTest(DailyQuestion202311 dq){
+//        System.out.println(dq.maximumScoreAfterOperations(StringUtils.convert2Array("[[0,1],[0,2],[0,3],[2,4],[4,5]]"), new int[]{5,2,5,2,1,1}));
+//        System.out.println(dq.maximumScoreAfterOperations(StringUtils.convert2Array("[[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]]"), new int[]{20,10,9,7,4,3,5}));
+        System.out.println(dq.maximumScoreAfterOperations(StringUtils.convert2Array("[[0,1],[0,2],[0,3]]"), new int[]{1000000000,1000000000,1000000000,1000000000}));
+    }
+
+    public long maximumScoreAfterOperations(int[][] edges, int[] values) {
+        Set<Integer> chooseSet = new HashSet<>();
+        long max = 0L;
+        int len = values.length;
+        List<Integer>[] degree = new List[len];
+        for (int i=0; i<len; i++){
+            degree[i] = new ArrayList<>();
+        }
+        for(int[] edge : edges){
+            degree[edge[0]].add(edge[1]);
+            degree[edge[1]].add(edge[0]);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        while (!queue.isEmpty()){
+            int item = queue.poll();
+            if (chooseSet.contains(item)){
+                continue;
+            }
+            long subCount = 0L;
+            for (int v : degree[item]){
+                if (chooseSet.contains(v)){
+                    continue;
+                }
+                subCount += values[v];
+            }
+            // 叶子节点
+            if (subCount == 0){
+                continue;
+            }
+            chooseSet.add(item);
+            if (values[item] < subCount){
+                max += this.getAllSub(values, item, chooseSet, degree);
+            }
+            // 用子节点
+            else {
+                max += values[item];
+                queue.addAll(degree[item]);
+            }
+        }
+        return max;
+    }
+
+    private long getAllSub(int[] values, int pos, Set<Integer> chooseSet, List<Integer>[] degree){
+        long result = 0L;
+        Queue<Integer> queue = new LinkedList<>();
+        for (int item : degree[pos]){
+            if (chooseSet.add(item)){
+                queue.offer(item);
+            }
+        }
+        while (!queue.isEmpty()){
+            int val = queue.poll();
+            result += values[val];
+            for (int item : degree[val]){
+                if (chooseSet.add(item)){
+                    queue.offer(item);
+                }
+            }
+        }
+        return result;
+    }
+
+
 
     // 187. 重复的DNA序列
 
