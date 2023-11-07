@@ -26,6 +26,21 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
     }
 
+    // 2586. 统计范围内的元音字符串数
+
+    private static final List<Character> vowels = Arrays.asList('a', 'e', 'i', 'o', 'u');;
+    public int vowelStrings(String[] words, int left, int right) {
+        int result = 0;
+        for (int i = left; i <= right; i++) {
+            String word = words[i];
+            if (vowels.contains(word.charAt(0))
+                    && vowels.contains(word.charAt(word.length()-1))){
+                result++;
+            }
+        }
+        return result;
+    }
+
     // 318. 最大单词长度乘积   用数组可以节省时间和空间。。。
 
     private static void maxProductTest(DailyQuestion202311 dq){
