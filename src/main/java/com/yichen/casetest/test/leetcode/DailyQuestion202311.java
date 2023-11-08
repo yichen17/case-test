@@ -24,6 +24,34 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         maxProductTest(dq);
         StringUtils.divisionLine();
+        findTheLongestBalancedSubstringTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2609. 最长平衡子字符串
+
+    private static void findTheLongestBalancedSubstringTest(DailyQuestion202311 dq){
+        System.out.println(dq.findTheLongestBalancedSubstring("01000111"));
+        System.out.println(dq.findTheLongestBalancedSubstring("00111"));
+        System.out.println(dq.findTheLongestBalancedSubstring("111"));
+    }
+
+    public int findTheLongestBalancedSubstring(String s) {
+        int p = 0, q = 0, i = 0, len = s.length(), result = 0;
+        while (i < len) {
+            while (i < len && s.charAt(i) == '0'){
+                p++;
+                i++;
+            }
+            while (i < len && s.charAt(i) == '1'){
+                q++;
+                i++;
+            }
+            result = Math.max(result, Math.min(p, q) * 2);
+            p = 0;
+            q = 0;
+        }
+        return result;
     }
 
     // 2586. 统计范围内的元音字符串数
