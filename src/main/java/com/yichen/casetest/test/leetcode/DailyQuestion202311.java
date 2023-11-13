@@ -26,6 +26,67 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         findTheLongestBalancedSubstringTest(dq);
         StringUtils.divisionLine();
+        numArrayTest();
+        StringUtils.divisionLine();
+    }
+
+    // 715. Range 模块
+
+    private  static class RangeModule {
+
+        public RangeModule() {
+
+        }
+
+        public void addRange(int left, int right) {
+
+        }
+
+        public boolean queryRange(int left, int right) {
+            return false;
+        }
+
+        public void removeRange(int left, int right) {
+
+        }
+    }
+
+    // 307. 区域和检索 - 数组可修改
+
+    private static void numArrayTest(){
+        NumArray numArray = new NumArray(new int[]{1,3,5});
+        System.out.println(numArray.sumRange(0, 2));
+        numArray.update(1,2);
+        System.out.println(numArray.sumRange(0, 2));
+    }
+
+    private static class NumArray {
+
+        private final int[] preCount;
+        private final int[] nums;
+
+        public NumArray(int[] nums) {
+            this.nums = nums;
+            this.preCount = new int[nums.length+1];
+            this.doPreCount(0);
+        }
+
+        private void doPreCount(int start){
+            int count = preCount[start];
+            for(int i=start+1; i<=nums.length; i++){
+                count += nums[i-1];
+                preCount[i] = count;
+            }
+        }
+
+        public void update(int index, int val) {
+            nums[index] = val;
+            this.doPreCount(index);
+        }
+
+        public int sumRange(int left, int right) {
+            return preCount[right+1] - preCount[left];
+        }
     }
 
     // 2609. 最长平衡子字符串
