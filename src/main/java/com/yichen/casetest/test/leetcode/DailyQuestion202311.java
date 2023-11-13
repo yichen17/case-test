@@ -28,6 +28,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         numArrayTest();
         StringUtils.divisionLine();
+        successfulPairsTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -49,6 +51,37 @@ public class DailyQuestion202311 {
         public void removeRange(int left, int right) {
 
         }
+    }
+
+    // 2300. 咒语和药水的成功对数
+
+    private static void successfulPairsTest(DailyQuestion202311 dq){
+        StringUtils.printIntArray(dq.successfulPairs(new int[]{5,1,3}, new int[]{1,2,3,4,5}, 7));
+        StringUtils.printIntArray(dq.successfulPairs(new int[]{3,1,2}, new int[]{8,5,8}, 16));
+    }
+
+    public int[] successfulPairs(int[] spells, int[] potions, long success) {
+        int len = spells.length;
+        int[] result = new int[len];
+        Arrays.sort(potions);
+        for (int i=0; i<len; i++){
+            result[i] = this.getPos(spells[i], potions, success);
+        }
+        return result;
+    }
+
+    private int getPos(int spell, int[] potions, long target){
+        int left = 0, right = potions.length-1, mid;
+        while (left <= right){
+            mid = (left + right) >> 1;
+            if ((long) potions[mid] * spell < target){
+                left = mid + 1;
+            }
+            else {
+                right = mid - 1;
+            }
+        }
+        return potions.length - left;
     }
 
     // 307. 区域和检索 - 数组可修改
