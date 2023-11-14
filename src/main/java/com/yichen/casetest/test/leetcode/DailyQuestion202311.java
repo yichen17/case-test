@@ -30,6 +30,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         successfulPairsTest(dq);
         StringUtils.divisionLine();
+        findTheCityTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -51,6 +53,65 @@ public class DailyQuestion202311 {
         public void removeRange(int left, int right) {
 
         }
+    }
+
+    // 1334. 阈值距离内邻居最少的城市  floyd算法 Dijkstra算法  我是垃圾，都还给老师了。。
+
+    private static void findTheCityTest(DailyQuestion202311 dq){
+        System.out.println(dq.findTheCity(4, StringUtils.convert2Array("[[0,1,3],[1,2,1],[1,3,4],[2,3,1]]"), 4));
+        System.out.println(dq.findTheCity(5, StringUtils.convert2Array("[[0,1,2],[0,4,8],[1,2,3],[1,4,2],[2,3,1],[3,4,1]]"), 2));
+    }
+
+    private int distanceThreshold;
+
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        List<Integer>[] dir = new List[n];
+        for (int i=0; i<n; i++){
+            dir[i] = new LinkedList<>();
+        }
+        for (int[] edge : edges){
+            dir[edge[0]].add((edge[1] << 20) | edge[2]);
+            dir[edge[1]].add((edge[0]) << 20 | edge[2]);
+        }
+        this.distanceThreshold = distanceThreshold;
+        Set<Integer> visited = new HashSet<>();
+        Set<Integer> choose = new HashSet<>();
+        Integer minLen = null, result = 0;
+        for (int i=n-1; i>=0; i--){
+            this.dfs(dir, visited, choose, i, 0);
+            if (minLen == null || choose.size() < minLen){
+                minLen = choose.size();
+                result = i;
+            }
+            visited.clear();
+            choose.clear();
+        }
+        return result;
+    }
+
+    private final int weightBit = 0xfffff;
+    private void dfs(List<Integer>[] dir, Set<Integer> visited, Set<Integer> choose, int i, int count){
+        if (!visited.add(i)){
+            choose.addAll(visited);
+            return;
+        }
+        boolean allNotMatch = true;
+        int nextPos, weight;
+        for (int num : dir[i]){
+            nextPos = num >> 20;
+            weight = num & weightBit;
+            if (visited.contains(nextPos)){
+                continue;
+            }
+            if (weight + count <= this.distanceThreshold){
+                allNotMatch = false;
+                this.dfs(dir, visited, choose, nextPos, count + weight);
+            }
+        }
+        if (allNotMatch){
+            choose.addAll(visited);
+        }
+        visited.remove(i);
     }
 
     // 2300. 咒语和药水的成功对数
