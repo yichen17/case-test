@@ -32,6 +32,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         findTheCityTest(dq);
         StringUtils.divisionLine();
+        maximizeSumTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -55,6 +57,24 @@ public class DailyQuestion202311 {
         }
     }
 
+    // 2656. K 个元素的最大和
+
+    private static void maximizeSumTest(DailyQuestion202311 dq){
+        System.out.println(dq.maximizeSum(new int[]{1,2,3,4,5}, 3));
+        System.out.println(dq.maximizeSum(new int[]{5,5,5}, 2));
+    }
+
+
+    public int maximizeSum(int[] nums, int k) {
+        int max = nums[0];
+        for (int i=1; i<nums.length; i++){
+            max = Math.max(max, nums[i]);
+        }
+        int result = max * k;
+        k--;
+        result += (k+1)*k/2;
+        return result;
+    }
     // 1334. 阈值距离内邻居最少的城市  floyd算法 Dijkstra算法  我是垃圾，都还给老师了。。
 
     private static void findTheCityTest(DailyQuestion202311 dq){
