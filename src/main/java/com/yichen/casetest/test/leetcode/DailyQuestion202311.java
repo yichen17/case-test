@@ -34,6 +34,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         maximizeSumTest(dq);
         StringUtils.divisionLine();
+        longestAlternatingSubarrayTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -55,6 +57,40 @@ public class DailyQuestion202311 {
         public void removeRange(int left, int right) {
 
         }
+    }
+
+    // 2760. 最长奇偶子数组
+
+    private static void longestAlternatingSubarrayTest(DailyQuestion202311 dq){
+        System.out.println(dq.longestAlternatingSubarray(new int[]{4,10,3}, 10));
+        System.out.println(dq.longestAlternatingSubarray(new int[]{3,2,5,4}, 5));
+        System.out.println(dq.longestAlternatingSubarray(new int[]{1,2}, 3));
+        System.out.println(dq.longestAlternatingSubarray(new int[]{2,3,4,5}, 4));
+        System.out.println(dq.longestAlternatingSubarray(StringUtils.randomIntArray(90, 1, 99), 40));
+    }
+
+    public int longestAlternatingSubarray(int[] nums, int threshold) {
+        boolean even = true;
+        int result = 0, count, i=0;
+        while (i < nums.length){
+            if  (nums[i] % 2 != 0 || nums[i] > threshold){
+                i++;
+                continue;
+            }
+            count = 0;
+            while (i< nums.length){
+                if (nums[i] <= threshold && ((even && nums[i] % 2 == 0) || (!even && nums[i] % 2 == 1))){
+                    count++;
+                    i++;
+                    even = !even;
+                    continue;
+                }
+                break;
+            }
+            result = Math.max(result, count);
+            even = true;
+        }
+        return result;
     }
 
     // 2656. K 个元素的最大和
