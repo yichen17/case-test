@@ -36,6 +36,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         longestAlternatingSubarrayTest(dq);
         StringUtils.divisionLine();
+        maximumSumQueriesTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -57,6 +59,43 @@ public class DailyQuestion202311 {
         public void removeRange(int left, int right) {
 
         }
+    }
+
+    // 2736. 最大和查询
+
+    private static void maximumSumQueriesTest(DailyQuestion202311 dq){
+        StringUtils.printIntArray(dq.maximumSumQueries(new int[]{4,3,1,2}, new int[]{2,4,9,5}, StringUtils.convert2Array("[[4,1],[1,3],[2,5]]")));
+        StringUtils.printIntArray(dq.maximumSumQueries(new int[]{3,2,5}, new int[]{2,3,4}, StringUtils.convert2Array("[[4,4],[3,2],[1,1]]")));
+        StringUtils.printIntArray(dq.maximumSumQueries(new int[]{2,1}, new int[]{2,3}, StringUtils.convert2Array("[[3,3]]")));
+    }
+
+    public int[] maximumSumQueries(int[] nums1, int[] nums2, int[][] queries) {
+        int len = nums1.length;
+        Integer[] dp = new Integer[len];
+        for (int i=0; i<len; i++){
+            dp[i] = i;
+        }
+        Arrays.sort(dp, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return nums1[o1] - nums1[o2];
+            }
+        });
+        int[] result = new int[queries.length];
+        for (int i=0; i<queries.length; i++){
+            int p = queries[i][0], q = queries[i][1];
+            result[i] = -1;
+            for (int j=len-1; j>=0; j--){
+                // 最大值小于值，跳出
+                if (nums1[dp[j]] < p){
+                    break;
+                }
+                if (nums1[dp[j]] >= p && nums2[dp[j]] >= q){
+                    result[i] = Math.max(result[i], nums1[dp[j]] + nums2[dp[j]]);
+                }
+            }
+        }
+        return result;
     }
 
     // 2760. 最长奇偶子数组
