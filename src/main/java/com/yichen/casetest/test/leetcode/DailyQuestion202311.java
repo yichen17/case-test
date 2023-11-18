@@ -74,33 +74,25 @@ public class DailyQuestion202311 {
     public int maximumSum(int[] nums) {
         int result = -1;
         Integer[] dp = new Integer[nums.length];
-        for (int i=0; i<nums.length; i++){
-            dp[i] = nums[i];
-        }
-
-        Arrays.sort(dp, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                int p = getBitCount(o1);
-                int q = getBitCount(o2);
-                if (p != q){
-                    return p - q;
-                }
-                return o1 - o2;
+        Map<Integer, PriorityQueue<Integer>> map = new HashMap<>();
+        for (int num : nums){
+            int pos = getBitCount(num);
+            Queue<Integer> queue = map.computeIfAbsent(pos, k -> new PriorityQueue<>());
+            if (queue.size() < 2){
+                queue.offer(num);
+                continue;
             }
-        });
-
-        int i=0, len=dp.length;
-        while (i<len){
-            int start = i;
-            while (i < len && getBitCount(dp[start]) == getBitCount(dp[i])){
-                i++;
-            }
-            if (i-1 > start){
-                result =  Math.max(result, dp[i-2] + dp[i-1]);
+            if (queue.peek() < num){
+                queue.poll();
+                queue.offer(num);
             }
         }
-
+        for (PriorityQueue<Integer> items : map.values()) {
+            if (items == null || items.size() != 2){
+                continue;
+            }
+            result = Math.max(result, items.poll() + items.poll());
+        }
         return result;
     }
 
