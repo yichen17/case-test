@@ -38,6 +38,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         maximumSumQueriesTest(dq);
         StringUtils.divisionLine();
+        maximumSumTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -61,6 +63,56 @@ public class DailyQuestion202311 {
         }
     }
 
+    // 2342. 数位和相等数对的最大和
+
+    private static void maximumSumTest(DailyQuestion202311 dq){
+        System.out.println(dq.maximumSum(new int[]{18,43,36,13,7}));
+        System.out.println(dq.maximumSum(new int[]{10,12,19,14}));
+        System.out.println(dq.maximumSum(StringUtils.randomIntArray(1000, 1, 10000)));
+    }
+
+    public int maximumSum(int[] nums) {
+        int result = -1;
+        Integer[] dp = new Integer[nums.length];
+        for (int i=0; i<nums.length; i++){
+            dp[i] = nums[i];
+        }
+
+        Arrays.sort(dp, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                int p = getBitCount(o1);
+                int q = getBitCount(o2);
+                if (p != q){
+                    return p - q;
+                }
+                return o1 - o2;
+            }
+        });
+
+        int i=0, len=dp.length;
+        while (i<len){
+            int start = i;
+            while (i < len && getBitCount(dp[start]) == getBitCount(dp[i])){
+                i++;
+            }
+            if (i-1 > start){
+                result =  Math.max(result, dp[i-2] + dp[i-1]);
+            }
+        }
+
+        return result;
+    }
+
+    private int getBitCount(int n){
+        int result = 0;
+        while (n > 0){
+            result += n%10;
+            n = n/10;
+        }
+        return result;
+    }
+
     // 2736. 最大和查询
 
     private static void maximumSumQueriesTest(DailyQuestion202311 dq){
@@ -70,32 +122,57 @@ public class DailyQuestion202311 {
     }
 
     public int[] maximumSumQueries(int[] nums1, int[] nums2, int[][] queries) {
-        int len = nums1.length;
-        Integer[] dp = new Integer[len];
-        for (int i=0; i<len; i++){
-            dp[i] = i;
+        int n = nums1.length;
+        int[][] sortedNums = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            sortedNums[i][0] = nums1[i];
+            sortedNums[i][1] = nums2[i];
         }
-        Arrays.sort(dp, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return nums1[o1] - nums1[o2];
+        Arrays.sort(sortedNums, (a, b) -> b[0] - a[0]);
+        int q = queries.length;
+        int[][] sortedQueries = new int[q][3];
+        for (int i = 0; i < q; i++) {
+            sortedQueries[i][0] = i;
+            sortedQueries[i][1] = queries[i][0];
+            sortedQueries[i][2] = queries[i][1];
+        }
+        Arrays.sort(sortedQueries, (a, b) -> b[1] - a[1]);
+        List<int[]> stack = new ArrayList<int[]>();
+        int[] answer = new int[q];
+        Arrays.fill(answer, -1);
+        int j = 0;
+        for (int[] query : sortedQueries) {
+            int i = query[0], x = query[1], y = query[2];
+            while (j < n && sortedNums[j][0] >= x) {
+                int[] pair = sortedNums[j];
+                int num1 = pair[0], num2 = pair[1];
+                while (!stack.isEmpty() && stack.get(stack.size() - 1)[1] <= num1 + num2) {
+                    stack.remove(stack.size() - 1);
+                }
+                if (stack.isEmpty() || stack.get(stack.size() - 1)[0] < num2) {
+                    stack.add(new int[]{num2, num1 + num2});
+                }
+                j++;
             }
-        });
-        int[] result = new int[queries.length];
-        for (int i=0; i<queries.length; i++){
-            int p = queries[i][0], q = queries[i][1];
-            result[i] = -1;
-            for (int j=len-1; j>=0; j--){
-                // 最大值小于值，跳出
-                if (nums1[dp[j]] < p){
-                    break;
-                }
-                if (nums1[dp[j]] >= p && nums2[dp[j]] >= q){
-                    result[i] = Math.max(result[i], nums1[dp[j]] + nums2[dp[j]]);
-                }
+            int k = binarySearch(stack, y);
+            if (k < stack.size()) {
+                answer[i] = stack.get(k)[1];
             }
         }
-        return result;
+        return answer;
+    }
+
+    public int binarySearch(List<int[]> list, int target) {
+        int low = 0, high = list.size();
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (list.get(mid)[0] >= target) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
     }
 
     // 2760. 最长奇偶子数组
