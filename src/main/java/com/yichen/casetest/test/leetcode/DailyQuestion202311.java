@@ -40,6 +40,8 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         maximumSumTest(dq);
         StringUtils.divisionLine();
+        maximumXorProductTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 715. Range 模块
@@ -61,6 +63,88 @@ public class DailyQuestion202311 {
         public void removeRange(int left, int right) {
 
         }
+    }
+
+    // 周赛 100119 最大异或乘积  位运算别理解成 ==0 和 ==1 应该是 ==0 和 > 0
+
+    private static void maximumXorProductTest(DailyQuestion202311 dq){
+        System.out.println(dq.maximumXorProduct(53449611838892L, 712958946092406L, 6));
+        System.out.println(dq.maximumXorProduct(12L, 5L, 4));
+        System.out.println(dq.maximumXorProduct(6L, 7L, 5));
+        System.out.println(dq.maximumXorProduct(1L, 6L, 3));
+    }
+    private static final int MOD = 1_000_000_007;
+    public int maximumXorProduct(long a, long b, int n) {
+        Boolean compare = null;
+        boolean defaultSelect = false;
+        for (int i=n-1; i>=0; i--){
+            long tmp = 1L << i;
+            if ((a & tmp) == 0 && (b & tmp) == 0){
+                a |= tmp;
+                b |= tmp;
+            }
+            else if ((a & tmp) >0 && (b & tmp) > 0){
+
+            }
+            else {
+                for (int j = 63; j!=i && compare == null; j--){
+                    long t = 1L << j;
+                    if ((a & t) >0 && (b & t) == 0){
+                        compare = true;
+                        break;
+                    }
+                    if ((a & t) == 0 && (b & t) >0){
+                        compare = false;
+                        break;
+                    }
+                }
+                if (compare == null){
+                    defaultSelect = true;
+                    compare = false;
+                }
+
+                // a大且当前为a大，b大且当前为a大
+                if (compare && (b & tmp) == 0){
+                    b |= tmp;
+                    a &= ~tmp;
+                }
+                else if (!compare && (b & tmp) > 0){
+                    b &= ~tmp;
+                    a |= tmp;
+                }
+                else if (compare && (b & tmp) > 0){
+                    b |= tmp;
+                    a &= ~tmp;
+                }
+                else if (!compare && (b & tmp) == 0){
+                    a |= tmp;
+                    b &= ~tmp;
+                }
+                if (defaultSelect){
+                    compare = true;
+                    defaultSelect = false;
+                }
+            }
+        }
+        return (int) ((a % MOD) * (b % MOD) % MOD);
+    }
+
+
+    // 周赛 100122 区分黑球与白球
+    public long minimumSteps(String s) {
+        long result = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for (int i=0; i<s.length(); i++){
+            if (s.charAt(i) == '1'){
+                pq.offer(i);
+                continue;
+            }
+            if (!pq.isEmpty() && pq.peek() < i){
+                result += i - pq.poll();
+                pq.offer(i);
+            }
+        }
+        return result;
     }
 
     // 2342. 数位和相等数对的最大和
@@ -108,6 +192,7 @@ public class DailyQuestion202311 {
     // 2736. 最大和查询
 
     private static void maximumSumQueriesTest(DailyQuestion202311 dq){
+        StringUtils.printIntArray(dq.maximumSumQueries(new int[]{3,4,5,2,1}, new int[]{6,4,1,3,4}, StringUtils.convert2Array("[[4,5]]")));
         StringUtils.printIntArray(dq.maximumSumQueries(new int[]{4,3,1,2}, new int[]{2,4,9,5}, StringUtils.convert2Array("[[4,1],[1,3],[2,5]]")));
         StringUtils.printIntArray(dq.maximumSumQueries(new int[]{3,2,5}, new int[]{2,3,4}, StringUtils.convert2Array("[[4,4],[3,2],[1,1]]")));
         StringUtils.printIntArray(dq.maximumSumQueries(new int[]{2,1}, new int[]{2,3}, StringUtils.convert2Array("[[3,3]]")));
