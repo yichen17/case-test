@@ -42,7 +42,60 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         maximumXorProductTest(dq);
         StringUtils.divisionLine();
+        maxSubArrayTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 53. 最大子数组和
+
+    private static void maxSubArrayTest(DailyQuestion202311 dq){
+        System.out.println(dq.maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+        System.out.println(dq.maxSubArray(new int[]{1}));
+        System.out.println(dq.maxSubArray(new int[]{5,4,-1,7,8}));
+        System.out.println(dq.maxSubArray(new int[]{-2, -1}));
+        System.out.println(dq.maxSubArray(StringUtils.randomIntArray(1000, -1000, 1000)));
+    }
+
+    public int maxSubArray(int[] nums) {
+        int result = nums[0];
+        int count = nums[0];
+        for (int i=1; i<nums.length; i++){
+            int num = nums[i];
+            if (count + num < num){
+                count = num;
+            }
+            else {
+                count += num;
+            }
+            result = Math.max(result, count);
+        }
+        return result;
+    }
+
+
+    // 689. 三个无重叠子数组的最大和
+
+    private static void maxSumOfThreeSubarraysTest(DailyQuestion202311 dq){
+        StringUtils.printIntArray(dq.maxSumOfThreeSubarrays(new int[]{1,2,1,2,6,7,5,1}, 2));
+        StringUtils.printIntArray(dq.maxSumOfThreeSubarrays(new int[]{1,2,1,2,1,2,1,2,1}, 2));
+    }
+
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int[] result = new int[3];
+        // 计算前缀和、dp动态规划
+
+
+
+        return result;
+    }
+
+    // 2258. 逃离火灾
+
+    public int maximumMinutes(int[][] grid) {
+        return 0;
+    }
+
+
 
     // 715. Range 模块
 
