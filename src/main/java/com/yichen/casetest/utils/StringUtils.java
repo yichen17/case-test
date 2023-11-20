@@ -366,6 +366,41 @@ public class StringUtils {
         log.info("{}", builder);
     }
 
+    /**
+     * 数值权重分配
+     * @param row
+     * @param column
+     * @param low
+     * @param high
+     * @return
+     */
+    public static int[][] constructTwoDimensionArray(int row, int column, int low, int high){
+        int[][] result = new int[row][column];
+        int width = high - low;
+        for (int i=0; i<row; i++){
+            for (int j=0; j<column; j++){
+                result[i][j] = low + random.nextInt(width);
+            }
+        }
+        result[0][0] = 0;
+        result[row-1][column-1]=0;
+        arrayTwoDimensionPrintNormal(result);
+        return result;
+    }
+
+    public static int[][] constructTwoDimensionArray(int row, int column, int[] items){
+        int[][] result = new int[row][column];
+        for (int i=0; i<row; i++){
+            for (int j=0; j<column; j++){
+                result[i][j] = items[random.nextInt(items.length)];
+            }
+        }
+        result[0][0] = 0;
+        result[row-1][column-1]=0;
+        arrayTwoDimensionPrintNormal(result);
+        return result;
+    }
+
     public static int[][] constructEdges(int start, int limit, int size, boolean selfCycle, boolean greater, boolean duplicate){
         int[][] result = new int[size][2];
         Set<Integer> set = new HashSet<>();
