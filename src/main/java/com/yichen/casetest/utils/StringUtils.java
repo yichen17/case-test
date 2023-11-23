@@ -382,8 +382,8 @@ public class StringUtils {
                 result[i][j] = low + random.nextInt(width);
             }
         }
-        result[0][0] = 0;
-        result[row-1][column-1]=0;
+//        result[0][0] = 0;
+//        result[row-1][column-1]=0;
         arrayTwoDimensionPrintNormal(result);
         return result;
     }
@@ -395,8 +395,8 @@ public class StringUtils {
                 result[i][j] = items[random.nextInt(items.length)];
             }
         }
-        result[0][0] = 0;
-        result[row-1][column-1]=0;
+//        result[0][0] = 0;
+//        result[row-1][column-1]=0;
         arrayTwoDimensionPrintNormal(result);
         return result;
     }
@@ -596,7 +596,7 @@ public class StringUtils {
             s.insert(s.length()-1, "]");
         }
         s.replace(s.length()-1, s.length(), "]");
-        log.info("leetcode version print {}\n", s);
+        log.info("leetcode version print {}", s);
     }
 
     /**

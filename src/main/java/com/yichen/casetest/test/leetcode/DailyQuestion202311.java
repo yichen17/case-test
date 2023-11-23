@@ -44,10 +44,62 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         maxSubArrayTest(dq);
         StringUtils.divisionLine();
-//        maximunMinutes(dq);
-//        StringUtils.divisionLine();
+        maximunMinutes(dq);
+        StringUtils.divisionLine();
         minDeletionTest(dq);
         StringUtils.divisionLine();
+        entityParserTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1410. HTML 实体解析器
+
+    private static void entityParserTest(DailyQuestion202311 dq){
+        System.out.println(dq.entityParser("&amp; is an HTML entity but &ambassador; is not."));
+        System.out.println(dq.entityParser("and I quote: &quot;...&quot;"));
+        System.out.println(dq.entityParser("&amp;gt;"));
+    }
+
+    public String entityParser(String text) {
+        Map<String, String> maps = new HashMap<>();
+        maps.put("&quot;", "\"");
+        maps.put("&apos;", "'");
+        maps.put("&amp;", "&");
+        maps.put("&gt;", ">");
+        maps.put("&lt;", "<");
+        maps.put("&frasl;", "/");
+        StringBuilder result = new StringBuilder(), compareData = new StringBuilder();
+        for (int i=0; i<text.length(); i++){
+            if (text.charAt(i) == '&' ){
+                if (compareData.length() != 0){
+                    result.append(compareData);
+                    compareData = new StringBuilder();
+                }
+                compareData.append(text.charAt(i));
+                continue;
+            }
+            if (compareData.length() != 0){
+                compareData.append(text.charAt(i));
+                if (compareData.length() < 3){
+
+                }
+                else if (compareData.length() < 8){
+                    if (maps.containsKey(compareData.toString())){
+                        result.append(maps.get(compareData.toString()));
+                        compareData = new StringBuilder();
+                    }
+                }
+                else {
+                    result.append(compareData);
+                    compareData = new StringBuilder();
+                }
+            }
+            else {
+                result.append(text.charAt(i));
+            }
+        }
+        result.append(compareData);
+        return result.toString();
     }
 
     // 2216. 美化数组的最少删除数
@@ -122,100 +174,37 @@ public class DailyQuestion202311 {
     // 2258. 逃离火灾
 
     private static void maximunMinutes(DailyQuestion202311 dq){
-        System.out.println(dq.maximumMinutes(StringUtils.convert2Array("[[0,0,0],[2,2,0],[1,2,0]]")));
+//        System.out.println(dq.maximumMinutes(StringUtils.convert2Array("[[0,0,0],[0,1,0],[0,0,0]]")));
+//        System.out.println(dq.maximumMinutes(StringUtils.convert2Array("[[0,0,0],[2,2,0],[1,2,0]]")));
         System.out.println(dq.maximumMinutes(StringUtils.convert2Array("[[0,2,0,0,0,0,0],[0,0,0,2,2,1,0],[0,2,0,0,1,2,0],[0,0,2,2,2,0,2],[0,0,0,0,0,0,0]]")));
         System.out.println(dq.maximumMinutes(StringUtils.convert2Array("[[0,0,0,0],[0,1,2,0],[0,2,0,0]]")));
 //        int[][] grid = StringUtils.constructTwoDimensionArray(100, 100, 0, 3);
-        int[][] grid = StringUtils.constructTwoDimensionArray(100, 100, new int[]{0,0,0,0,0,0,1,1,2});
+
+//        int i = 0;
+//        while (i < 10000){
+//            int[][] grid = StringUtils.constructTwoDimensionArray(200, 200, new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0});
+//            int result = dq.maximumMinutes(grid);
+//            if (result > 5){
+//                StringUtils.arrayTwoDimensionPrintNormal(grid);
+//                break;
+//            }
+//            i++;
+//        }
+
+        int[][] grid = new int[100][200];
+        grid[50][100] = 1;
+        StringUtils.arrayTwoDimensionPrintNormal(grid);
         System.out.println(dq.maximumMinutes(grid));
+
     }
 
     public int maximumMinutes(int[][] grid) {
-        int result = -2;
-        Set<Integer> fired = new HashSet<>();
-        Queue<Integer> queue = new LinkedList<>();
-        int row = grid.length, column = grid[0].length;
-        for (int i=0; i<row; i++){
-            for (int j=0; j<column; j++){
-                if (grid[i][j] == 2){
-                    fired.add((i << 10) | j);
-                }
-                else if (grid[i][j] == 1){
-                    int pos = (i << 10) | j;
-                    queue.offer(pos);
-                    fired.add(pos);
-                }
-            }
-        }
-        while (!queue.isEmpty()){
-            if (safeGo(grid, fired, new HashSet<>(), 0, 0)){
-                result++;
-            }
-            else {
-                return result == -2 ? -1 : result;
-            }
-            int len = queue.size();
-            while (len > 0){
-                len--;
-                int pos = queue.poll();
-                int y = pos & 0x000003ff;
-                int x = pos >> 10;
-                int p;
-                if ((p = x+1) < row && fired.add((p << 10) | y)){
-                    queue.offer((p << 10) | y);
-                }
-                if ((p = x-1) >= 0 && fired.add((p << 10) | y)){
-                    queue.offer((p << 10) | y);
-                }
-                if ((p =y+1) < column && fired.add((x << 10) | p)){
-                    queue.offer((x << 10) | p);
-                }
-                if ((p = y-1) >= 0&& fired.add((x << 10) | p)){
-                    queue.offer((x << 10) | p);
-                }
-            }
-        }
-        return 1_000_000_000;
+
+
+
+        return 0;
     }
 
-    private boolean safeGo(int[][] grid, Set<Integer> fired, Set<Integer> visited, int x, int y){
-        int row = grid.length, column = grid[0].length;
-        if (!visited.add((x << 10) | y)){
-            return false;
-        }
-        if (x == row-1 && y == column-1){
-            return true;
-        }
-        if (x >= row || x < 0 || y < 0 || y == column){
-            return false;
-        }
-        int p, q;
-        if ((p = x+1) < row && !fired.contains(q = (p << 10) | y)){
-            if (this.safeGo(grid, fired, visited, p, y)){
-                return true;
-            }
-            visited.remove(q);
-        }
-        if ((p = x-1) >= 0 && !fired.contains(q = (p << 10) | y)){
-            if (this.safeGo(grid, fired, visited, p, y)){
-                return true;
-            }
-            visited.remove(q);
-        }
-        if ((p =y+1) < column && !fired.contains(q = (x << 10) | p)){
-            if (this.safeGo(grid, fired, visited, x, p)){
-                return true;
-            }
-            visited.remove(q);
-        }
-        if ((p = y-1) >= 0&& !fired.contains(q = (x << 10) | p)){
-            if (this.safeGo(grid, fired, visited, x, p)){
-                return true;
-            }
-            visited.remove(q);
-        }
-        return false;
-    }
 
 
 
