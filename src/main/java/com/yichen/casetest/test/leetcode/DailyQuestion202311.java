@@ -52,6 +52,30 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         smallestInfiniteSetTest();
         StringUtils.divisionLine();
+        countPairsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2824. 统计和小于目标的下标对数目
+
+    private static void countPairsTest(DailyQuestion202311 dq){
+        System.out.println(dq.countPairs(Arrays.asList(-1,1,2,3,1), 2));
+        System.out.println(dq.countPairs(Arrays.asList(-6,2,5,-2,-7,-1,3), -2));
+        System.out.println(dq.countPairs(Arrays.asList(StringUtils.randomIntArrayWrapper(45, -50, 50)), 10));
+    }
+    public int countPairs(List<Integer> nums, int target) {
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+        int result = 0;
+        for (Integer num : nums){
+            result += treeMap.headMap(target - num).values().stream().mapToInt(Integer::intValue).sum();
+            if (treeMap.containsKey(num)){
+                treeMap.put(num, treeMap.get(num) + 1);
+            }
+            else {
+                treeMap.put(num, 1);
+            }
+        }
+        return result;
     }
 
     // 2336. 无限集中的最小数字
