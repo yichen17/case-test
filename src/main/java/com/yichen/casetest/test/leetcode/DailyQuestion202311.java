@@ -50,6 +50,48 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         entityParserTest(dq);
         StringUtils.divisionLine();
+        smallestInfiniteSetTest();
+        StringUtils.divisionLine();
+    }
+
+    // 2336. 无限集中的最小数字
+
+    private static void smallestInfiniteSetTest(){
+        SmallestInfiniteSet smallestInfiniteSet = new SmallestInfiniteSet();
+        smallestInfiniteSet.addBack(2);
+        System.out.println(smallestInfiniteSet.popSmallest());
+        System.out.println(smallestInfiniteSet.popSmallest());
+        System.out.println(smallestInfiniteSet.popSmallest());
+        smallestInfiniteSet.addBack(1);
+        System.out.println(smallestInfiniteSet.popSmallest());
+        System.out.println(smallestInfiniteSet.popSmallest());
+        System.out.println(smallestInfiniteSet.popSmallest());
+    }
+
+    private static class SmallestInfiniteSet {
+
+        boolean[] data;
+        int pos;
+
+        public SmallestInfiniteSet() {
+            data = new boolean[1000];
+        }
+
+        public int popSmallest() {
+            while (pos < 1000 && data[pos]){
+                pos++;
+            }
+            if (pos >= 1000){
+                return -1;
+            }
+            data[pos] = true;
+            return pos+1;
+        }
+
+        public void addBack(int num) {
+            data[num-1] = false;
+            pos = Math.min(num-1, pos);
+        }
     }
 
     // 1410. HTML 实体解析器
