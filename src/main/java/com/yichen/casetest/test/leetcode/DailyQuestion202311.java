@@ -54,6 +54,43 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         countPairsTest(dq);
         StringUtils.divisionLine();
+        closeStringsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1657. 确定两个字符串是否接近
+
+    private static void closeStringsTest(DailyQuestion202311 dq){
+        System.out.println(dq.closeStrings("abc", "bca"));
+        System.out.println(dq.closeStrings("a", "aa"));
+        System.out.println(dq.closeStrings("cabbba", "abbccc"));
+        System.out.println(dq.closeStrings("cabbba", "aabbss"));
+        System.out.println(dq.closeStrings("aaabb", "bbbaa"));
+    }
+
+    public boolean closeStrings(String word1, String word2) {
+        if (word1.length() != word2.length()){
+            return false;
+        }
+        int[] p = new int[26];
+        int[] q = new int[26];
+        for (int i=0; i<word1.length(); i++){
+            p[word1.charAt(i) - 'a']++;
+            q[word2.charAt(i) - 'a']++;
+        }
+        for (int i=0; i<26; i++){
+            if ((p[i] > 0 && q[i] == 0) || (p[i] == 0 && q[i] > 0)){
+                return false;
+            }
+        }
+        Arrays.sort(p);
+        Arrays.sort(q);
+        for (int i=0; i<26; i++){
+            if (p[i] != q[i]){
+                return false;
+            }
+        }
+        return true;
     }
 
     // 2824. 统计和小于目标的下标对数目
