@@ -56,7 +56,95 @@ public class DailyQuestion202311 {
         StringUtils.divisionLine();
         closeStringsTest(dq);
         StringUtils.divisionLine();
+        frontMiddleBackQueueTest();
+        StringUtils.divisionLine();
     }
+
+    // 1670. 设计前中后队列
+
+    private static void frontMiddleBackQueueTest(){
+        FrontMiddleBackQueue frontMiddleBackQueue = new FrontMiddleBackQueue();
+        frontMiddleBackQueue.pushFront(1);
+        frontMiddleBackQueue.pushBack(2);
+        frontMiddleBackQueue.pushMiddle(3);
+        frontMiddleBackQueue.pushMiddle(4);
+        System.out.println(frontMiddleBackQueue.popFront());
+        System.out.println(frontMiddleBackQueue.popMiddle());
+        System.out.println(frontMiddleBackQueue.popMiddle());
+        System.out.println(frontMiddleBackQueue.popBack());
+        System.out.println(frontMiddleBackQueue.popFront());
+    }
+
+    private static class FrontMiddleBackQueue {
+
+        // 确保left >= right
+        LinkedList<Integer> left, right;
+
+        public FrontMiddleBackQueue() {
+            left = new LinkedList<>();
+            right = new LinkedList<>();
+        }
+
+        public void pushFront(int val) {
+            left.offerFirst(val);
+        }
+
+        public void pushMiddle(int val) {
+            if (left.size() > right.size()){
+                while (left.size() > right.size()){
+                    right.offerFirst(left.pollLast());
+                }
+            }
+            else if (left.size() < right.size()){
+                while (left.size() + 1 < right.size()){
+                    left.offerLast(right.pollFirst());
+                }
+            }
+            left.offerLast(val);
+        }
+
+        public void pushBack(int val) {
+            right.offerLast(val);
+        }
+
+        public int popFront() {
+            if (left.isEmpty() && right.isEmpty()){
+                return -1;
+            }
+            if (!left.isEmpty()){
+                return left.pollFirst();
+            }
+            return right.pollFirst();
+        }
+
+        public int popMiddle() {
+            if (right.isEmpty() && left.isEmpty()){
+                return -1;
+            }
+            if (left.size() < right.size()){
+                while (left.size() < right.size()){
+                    left.offerLast(right.pollFirst());
+                }
+            }
+            else if (left.size() > right.size()){
+                while (left.size() > right.size() + 1){
+                    right.offerFirst(left.pollLast());
+                }
+            }
+            return left.pollLast();
+        }
+
+        public int popBack() {
+            if (right.isEmpty() && left.isEmpty()){
+                return -1;
+            }
+            if (!right.isEmpty()){
+                return right.pollLast();
+            }
+            return left.pollLast();
+        }
+    }
+
 
     // 1657. 确定两个字符串是否接近
 
