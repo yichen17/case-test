@@ -19,6 +19,32 @@ public class DailyQuestion202312 {
         DailyQuestion202312 dq = new DailyQuestion202312();
         carPoolingTest(dq);
         StringUtils.divisionLine();
+        maxScoreTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1423. 可获得的最大点数
+
+    private static void maxScoreTest(DailyQuestion202312 dq){
+        System.out.println(dq.maxScore(new int[]{1,2,3,4,5,6,1}, 3));
+        System.out.println(dq.maxScore(new int[]{2,2,2}, 2));
+        System.out.println(dq.maxScore(new int[]{9,7,7,9,7,7,9}, 7));
+        System.out.println(dq.maxScore(new int[]{1,1000,1}, 1));
+        System.out.println(dq.maxScore(new int[]{1,79,80,1,1,1,200,1}, 3));
+    }
+
+    public int maxScore(int[] cardPoints, int k) {
+        int total = 0, len = cardPoints.length;
+        int[] preSum = new int[len+1];
+        for (int i=0; i<len; i++){
+            total += cardPoints[i];
+            preSum[i+1] = total;
+        }
+        int result = 0;
+        for (int i=0; i<=k; i++){
+            result = Math.max(result, total - preSum[len-k+i] + preSum[i]);
+        }
+        return result;
     }
 
     // 1094. 拼车
