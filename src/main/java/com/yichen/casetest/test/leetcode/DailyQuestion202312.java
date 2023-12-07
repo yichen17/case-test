@@ -3,9 +3,7 @@ package com.yichen.casetest.test.leetcode;
 import com.yichen.casetest.utils.StringUtils;
 import javafx.util.Pair;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * @author banYu
@@ -23,7 +21,64 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         bstToGstTest(dq);
         StringUtils.divisionLine();
+        minReorderTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 1466. 重新规划路线
+
+    private static void minReorderTest(DailyQuestion202312 dq){
+        System.out.println(dq.minReorder(6, StringUtils.convert2Array("[[0,1],[1,3],[2,3],[4,0],[4,5]]")));
+        System.out.println(dq.minReorder(5, StringUtils.convert2Array("[[1,0],[1,2],[3,2],[3,4]]")));
+        System.out.println(dq.minReorder(3, StringUtils.convert2Array("[[1,0],[2,0]]")));
+    }
+
+    public int minReorder(int n, int[][] connections) {
+        Set<Integer>[] inDirs = new Set[n];
+        Set<Integer>[] outDirs = new Set[n];
+        for (int i=0; i<n; i++){
+            inDirs[i] = new HashSet<>();
+            outDirs[i] = new HashSet<>();
+        }
+        for(int[] connection : connections){
+            inDirs[connection[1]].add(connection[0]);
+            outDirs[connection[0]].add(connection[1]);
+        }
+        int result = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        Set<Integer> visited = new HashSet<>();
+        visited.add(0);
+        while (!queue.isEmpty()){
+            int item = queue.poll();
+            // 正常指向
+            for (int c : inDirs[item]){
+                if (visited.add(c)){
+                    queue.offer(c);
+                }
+            }
+            // 需要改变指向的
+            for (int c : outDirs[item]){
+                if (visited.add(c)){
+                    result++;
+                    queue.offer(c);
+                }
+            }
+        }
+        return result;
+    }
+
+    // 2477. 到达首都的最少油耗
+
+
+
+    public long minimumFuelCost(int[][] roads, int seats) {
+
+        long result = 0L;
+        return result;
+    }
+
+
 
     // 1038. 从二叉搜索树到更大和树
 
