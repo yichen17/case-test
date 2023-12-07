@@ -47,31 +47,25 @@ public class DailyQuestion202312 {
         int result = 0;
         Queue<Integer> queue = new LinkedList<>();
         queue.offer(0);
-        Set<Integer> visited = new HashSet<>();
-        visited.add(0);
         while (!queue.isEmpty()){
             int item = queue.poll();
             // 正常指向
             for (int c : inDirs[item]){
-                if (visited.add(c)){
-                    queue.offer(c);
-                }
+                queue.offer(c);
+                outDirs[c].remove(item);
             }
             // 需要改变指向的
             for (int c : outDirs[item]){
-                if (visited.add(c)){
-                    result++;
-                    queue.offer(c);
-                }
+                result++;
+                queue.offer(c);
+                inDirs[c].remove(item);
             }
         }
         return result;
     }
 
     // 2477. 到达首都的最少油耗
-
-
-
+    
     public long minimumFuelCost(int[][] roads, int seats) {
 
         long result = 0L;
