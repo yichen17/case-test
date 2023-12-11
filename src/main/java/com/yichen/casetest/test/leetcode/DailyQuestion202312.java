@@ -23,6 +23,29 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         minReorderTest(dq);
         StringUtils.divisionLine();
+        climbStairsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 70. 爬楼梯
+
+    private static void climbStairsTest(DailyQuestion202312 dq){
+        System.out.println(dq.climbStairs(2));
+        System.out.println(dq.climbStairs(3));
+        System.out.println(dq.climbStairs(45));
+    }
+
+    public int climbStairs(int n) {
+        if (n <=2){
+            return n;
+        }
+        int[] dp = new int[n+1];
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i=3; i<=n; i++){
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+        return dp[n];
     }
 
     // 1466. 重新规划路线
@@ -65,7 +88,7 @@ public class DailyQuestion202312 {
     }
 
     // 2477. 到达首都的最少油耗
-    
+
     public long minimumFuelCost(int[][] roads, int seats) {
 
         long result = 0L;
