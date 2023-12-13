@@ -1,4 +1,4 @@
-package com.yichen.casetest.test.expressLanguage;
+package com.yichen.casetest.test.ognl.base;
 
 import lombok.extern.slf4j.Slf4j;
 import ognl.MemberAccess;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @describe
  */
 @Slf4j
- class CustomizeMemberAccess implements MemberAccess {
+public class CustomizeMemberAccess implements MemberAccess {
     public boolean allowPrivateAccess          = false;
     public boolean allowProtectedAccess        = false;
     public boolean allowPackageProtectedAccess = false;

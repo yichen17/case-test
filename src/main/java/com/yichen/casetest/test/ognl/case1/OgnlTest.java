@@ -1,5 +1,6 @@
-package com.yichen.casetest.test.expressLanguage;
+package com.yichen.casetest.test.ognl.case1;
 
+import com.yichen.casetest.test.ognl.base.CustomizeMemberAccess;
 import com.yichen.casetest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import ognl.Ognl;
@@ -21,7 +22,7 @@ import java.math.BigDecimal;
  *          https://docs.spring.io/spring-framework/reference/core/expressions.html
  */
 @Slf4j
-public class OgnlTest {
+ class OgnlTest {
     public static void main(String[] args) throws Exception{
         simpleCase();
         StringUtils.divisionLine();

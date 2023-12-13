@@ -1,4 +1,4 @@
-package com.yichen.casetest.test.expressLanguage;
+package com.yichen.casetest.test.ognl.case1;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OgnlTestDto {
+ class OgnlTestDto {
 
     private Integer age;
     private String name;
