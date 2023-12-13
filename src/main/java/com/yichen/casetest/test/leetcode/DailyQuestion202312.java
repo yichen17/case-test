@@ -25,7 +25,43 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         climbStairsTest(dq);
         StringUtils.divisionLine();
+        makeSmallestPalindromeTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 1631. 最小体力消耗路径
+
+
+
+    public int minimumEffortPath(int[][] heights) {
+        return 0;
+    }
+
+    // 2697. 字典序最小回文串
+
+    private static void makeSmallestPalindromeTest(DailyQuestion202312 dq){
+        System.out.println(dq.makeSmallestPalindrome("egcfe"));
+        System.out.println(dq.makeSmallestPalindrome("abcd"));
+        System.out.println(dq.makeSmallestPalindrome("seven"));
+    }
+
+    public String makeSmallestPalindrome(String s) {
+        char[] charArray = s.toCharArray();
+        for (int i=0,j=charArray.length-1; i<j; i++,j--){
+            if (charArray[i] == charArray[j]){
+                continue;
+            }
+            else if (charArray[i] > charArray[j]){
+                charArray[i] = charArray[j];
+            }
+            else {
+                charArray[j] = charArray[i];
+            }
+        }
+        return new String(charArray);
+    }
+
+
 
     // 70. 爬楼梯
 
