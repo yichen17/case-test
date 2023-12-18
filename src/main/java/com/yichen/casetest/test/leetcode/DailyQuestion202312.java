@@ -27,6 +27,10 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         makeSmallestPalindromeTest(dq);
         StringUtils.divisionLine();
+        findPeakElementTest(dq);
+        StringUtils.divisionLine();
+        minCostClimbingStairsTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1631. 最小体力消耗路径
@@ -35,6 +39,77 @@ public class DailyQuestion202312 {
 
     public int minimumEffortPath(int[][] heights) {
         return 0;
+    }
+
+    // 2276. 统计区间中的整数数目
+    // 查询加插入场景   点查询-数组二分法，BFS   插入-双向链表     批量变更逻辑
+    // 维持线段，新插入的线段：1、与原有线段合并(大范围合并，双端蔓延)  2、独立的线段插入
+    // 值查询 找小于它的节点的范围是否包含它   TreeMap<>  key为下限、value为上限
+
+    private static class CountIntervals {
+
+
+
+        public CountIntervals() {
+
+        }
+
+        public void add(int left, int right) {
+
+        }
+
+        public int count() {
+            return 0;
+        }
+    }
+
+    // 746. 使用最小花费爬楼梯
+
+    private static void minCostClimbingStairsTest(DailyQuestion202312 dq){
+        System.out.println(dq.minCostClimbingStairs(new int[]{10,15,20}));
+        System.out.println(dq.minCostClimbingStairs(new int[]{1,100,1,1,1,100,1,1,100,1}));
+    }
+
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length];
+        dp[0] = cost[0]; dp[1] = cost[1];
+        for (int i=2; i<dp.length; i++){
+            dp[i] = Math.min(dp[i-1], dp[i-2]) + cost[i];
+        }
+        return Math.min(dp[dp.length-1], dp[dp.length-2]);
+    }
+
+    // 162. 寻找峰值
+
+    private static void findPeakElementTest(DailyQuestion202312 dq){
+        System.out.println(dq.findPeakElement(new int[]{1,2,3,1}));
+        System.out.println(dq.findPeakElement(new int[]{1,2,1,3,5,6,4}));
+        System.out.println(dq.findPeakElement(new int[]{1}));
+        System.out.println(dq.findPeakElement(new int[]{1,2}));
+        System.out.println(dq.findPeakElement(new int[]{2,1}));
+        System.out.println(dq.findPeakElement(new int[]{1,2,3}));
+        System.out.println(dq.findPeakElement(new int[]{3,2,1}));
+        System.out.println(dq.findPeakElement(new int[]{1,3,2}));
+    }
+
+    public int findPeakElement(int[] nums) {
+        int left = 0, right = nums.length-1, mid;
+        while (left < right){
+            mid = (left + right) >> 1;
+            // 当前为峰值
+            if ((mid-1<0 || nums[mid] > nums[mid-1]) && (mid+1 >= nums.length || nums[mid] > nums[mid+1])){
+                return mid;
+            }
+            // 递增
+            else if (mid-1 <0 || nums[mid] > nums[mid-1]){
+                left = mid+1;
+            }
+            // 递减
+            else {
+                right = mid-1;
+            }
+        }
+        return left;
     }
 
     // 2697. 字典序最小回文串
