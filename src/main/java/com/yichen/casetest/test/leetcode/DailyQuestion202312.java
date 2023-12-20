@@ -31,6 +31,10 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         minCostClimbingStairsTest(dq);
         StringUtils.divisionLine();
+        findPeakGridTest(dq);
+        StringUtils.divisionLine();
+        isAcronymTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1631. 最小体力消耗路径
@@ -62,6 +66,50 @@ public class DailyQuestion202312 {
             return 0;
         }
     }
+
+    // 2828. 判别首字母缩略词
+
+    private static void isAcronymTest(DailyQuestion202312 dq){
+        System.out.println(dq.isAcronym(Arrays.asList("alice","bob","charlie"), "abc"));
+        System.out.println(dq.isAcronym(Arrays.asList("an","apple"), "a"));
+        System.out.println(dq.isAcronym(Arrays.asList("never","gonna","give","up","on","you"), "ngguoy"));
+    }
+
+    public boolean isAcronym(List<String> words, String s) {
+        if (s.length() != words.size()){
+            return false;
+        }
+        for (int i=0; i<s.length(); i++){
+            if (words.get(i).charAt(0) != s.charAt(i)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 1901. 寻找峰值 II
+
+    private static void findPeakGridTest(DailyQuestion202312 dq){
+        StringUtils.printIntArray(dq.findPeakGrid(StringUtils.convert2Array("[[49,58,49,11,88,85,70,18,84,45,16,23,69],[51,68,17,94,29,1,97,3,39,60,87,93,70],[55,69,49,30,32,59,45,20,36,25,93,98,15],[5,85,54,79,99,3,31,27,9,13,77,5,58],[77,87,91,7,32,95,6,52,57,30,70,28,97],[100,8,18,65,38,30,94,74,41,74,77,99,87],[42,31,39,19,85,67,29,53,39,36,8,72,76],[95,23,81,87,55,72,64,7,45,83,86,49,68],[41,90,54,53,20,39,49,24,97,69,61,31,29],[39,91,19,60,8,72,53,54,72,68,18,50,32],[33,27,43,83,11,58,48,12,69,93,25,7,35],[49,87,78,6,10,25,98,76,93,86,72,28,62],[27,43,39,2,28,95,16,96,97,62,32,90,78],[91,27,51,31,71,42,100,37,49,60,69,84,46],[40,34,47,66,64,60,13,93,61,98,41,27,48]]")));
+        StringUtils.printIntArray(dq.findPeakGrid(StringUtils.convert2Array("[[47,30,35,8,25],[6,36,19,41,40],[24,37,13,46,5],[3,43,15,50,19],[6,15,7,25,18]]")));
+        StringUtils.printIntArray(dq.findPeakGrid(StringUtils.convert2Array("[[1,4],[3,2]]")));
+        StringUtils.printIntArray(dq.findPeakGrid(StringUtils.convert2Array("[[10,20,15],[21,30,14],[7,16,32]]")));
+    }
+
+    public int[] findPeakGrid(int[][] mat) {
+        int x = 0, y = 0;
+        for (int i=0; i<mat.length; i++){
+            for (int j=0; j<mat[0].length; j++){
+                if (mat[x][y] < mat[i][j]){
+                    x = i;
+                    y = j;
+                }
+            }
+        }
+        return new int[]{x,y};
+    }
+
+
 
     // 746. 使用最小花费爬楼梯
 
