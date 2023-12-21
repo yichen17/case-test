@@ -97,16 +97,26 @@ public class DailyQuestion202312 {
     }
 
     public int[] findPeakGrid(int[][] mat) {
-        int x = 0, y = 0;
-        for (int i=0; i<mat.length; i++){
-            for (int j=0; j<mat[0].length; j++){
-                if (mat[x][y] < mat[i][j]){
-                    x = i;
-                    y = j;
+        int left = 0, right = mat[0].length-1, mid, colMax, row=mat.length;
+        while (left <= right){
+            mid = (left + right) >> 1;
+            colMax = 0;
+            for (int i=1; i<row; i++){
+                if (mat[colMax][mid] < mat[i][mid]){
+                    colMax = i;
                 }
             }
+            if ((mid-1<0 || mat[colMax][mid] > mat[colMax][mid-1]) && (mid+1>=mat[0].length || mat[colMax][mid] > mat[colMax][mid+1])){
+                return new int[]{colMax, mid};
+            }
+            else if ((mid-1<0 || mat[colMax][mid] > mat[colMax][mid-1])){
+                left = mid+1;
+            }
+            else {
+                right = mid-1;
+            }
         }
-        return new int[]{x,y};
+        return null;
     }
 
 
