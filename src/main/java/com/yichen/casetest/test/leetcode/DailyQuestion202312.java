@@ -100,10 +100,12 @@ public class DailyQuestion202312 {
             stack.push(i);
         }
         // 右到左 升序计算
+        long result = ascend[len-1];
         stack = new Stack<>();
         stack.add(len-1);
         descend[len-1] = maxHeights.get(len-1);
         for (int i=len-2; i>=0; i--){
+            result = Math.max(result, ascend[i] + descend[i+1]);
             if (maxHeights.get(i+1) <= maxHeights.get(i)){
                 descend[i] = descend[i+1] + maxHeights.get(i);
                 stack.push(i);
@@ -116,11 +118,6 @@ public class DailyQuestion202312 {
             long preVal = stack.isEmpty() ? 0L : descend[stack.peek()];
             descend[i] = preVal + gap * maxHeights.get(i);
             stack.push(i);
-        }
-        // 结果组装
-        long result = ascend[len-1];
-        for (int i=0; i<len-1; i++){
-            result = Math.max(result, ascend[i] + descend[i+1]);
         }
         return result;
     }
