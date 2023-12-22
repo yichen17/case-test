@@ -35,6 +35,8 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         isAcronymTest(dq);
         StringUtils.divisionLine();
+        maximumSumOfHeightsTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1631. 最小体力消耗路径
@@ -65,6 +67,62 @@ public class DailyQuestion202312 {
         public int count() {
             return 0;
         }
+    }
+
+    // 2866. 美丽塔 II
+    //
+
+    private static void maximumSumOfHeightsTest(DailyQuestion202312 dq){
+        System.out.println(dq.maximumSumOfHeights(Arrays.asList(5,3,4,1,1)));
+        System.out.println(dq.maximumSumOfHeights(Arrays.asList(6,5,3,9,2,7)));
+        System.out.println(dq.maximumSumOfHeights(Arrays.asList(3,2,5,5,2,3)));
+    }
+
+    public long maximumSumOfHeights(List<Integer> maxHeights) {
+        int len = maxHeights.size();
+        long[] ascend = new long[len], descend = new long[len];
+        // 左到右， 升序计算
+        ascend[0] = maxHeights.get(0);
+        Stack<Integer> stack = new Stack<>();
+        stack.add(0);
+        for (int i = 1; i< len; i++){
+            if (maxHeights.get(i) >= maxHeights.get(i-1)){
+                ascend[i] = ascend[i-1] + maxHeights.get(i);
+                stack.push(i);
+                continue;
+            }
+            while (!stack.isEmpty() && maxHeights.get(stack.peek()) > maxHeights.get(i)){
+                stack.pop();
+            }
+            long gap = stack.isEmpty() ? i+1 : i - stack.peek();
+            long preVal = stack.isEmpty() ? 0L : ascend[stack.peek()];
+            ascend[i] = preVal + gap * maxHeights.get(i);
+            stack.push(i);
+        }
+        // 右到左 升序计算
+        stack = new Stack<>();
+        stack.add(len-1);
+        descend[len-1] = maxHeights.get(len-1);
+        for (int i=len-2; i>=0; i--){
+            if (maxHeights.get(i+1) <= maxHeights.get(i)){
+                descend[i] = descend[i+1] + maxHeights.get(i);
+                stack.push(i);
+                continue;
+            }
+            while (!stack.isEmpty() && maxHeights.get(stack.peek()) > maxHeights.get(i)){
+                stack.pop();
+            }
+            long gap = stack.isEmpty() ? len-i : stack.peek()-i;
+            long preVal = stack.isEmpty() ? 0L : descend[stack.peek()];
+            descend[i] = preVal + gap * maxHeights.get(i);
+            stack.push(i);
+        }
+        // 结果组装
+        long result = ascend[len-1];
+        for (int i=0; i<len-1; i++){
+            result = Math.max(result, ascend[i] + descend[i+1]);
+        }
+        return result;
     }
 
     // 2828. 判别首字母缩略词
