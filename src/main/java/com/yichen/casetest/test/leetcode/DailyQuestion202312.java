@@ -80,20 +80,24 @@ public class DailyQuestion202312 {
     }
 
     public int minStoneSum(int[] piles, int k) {
-        int total = 0;
         int[] dp = new int[10001];
         for (int pile : piles){
-            total += pile;
             dp[pile]++;
         }
         int pos = 10000;
         while (k>0 && pos != 1){
             while (k>0 && dp[pos] > 0){
-                total -= pos >> 1;
                 dp[pos]--;
                 dp[pos - (pos >> 1)]++;
                 k--;
             }
+            if (k>0){
+                pos--;
+            }
+        }
+        int total = 0;
+        while (pos>0){
+            total += pos * dp[pos];
             pos--;
         }
         return total;
