@@ -37,6 +37,8 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         maximumSumOfHeightsTest(dq);
         StringUtils.divisionLine();
+        minStoneSumTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1631. 最小体力消耗路径
@@ -67,6 +69,34 @@ public class DailyQuestion202312 {
         public int count() {
             return 0;
         }
+    }
+
+    // 1962. 移除石子使总数最小
+
+    private static void minStoneSumTest(DailyQuestion202312 dq){
+        System.out.println(dq.minStoneSum(new int[]{5,4,9}, 2));
+        System.out.println(dq.minStoneSum(new int[]{4,3,6,7}, 3));
+        System.out.println(dq.minStoneSum(StringUtils.randomIntArray(1000, 1, 10000), 50000));
+    }
+
+    public int minStoneSum(int[] piles, int k) {
+        int total = 0;
+        int[] dp = new int[10001];
+        for (int pile : piles){
+            total += pile;
+            dp[pile]++;
+        }
+        int pos = 10000;
+        while (k>0 && pos != 1){
+            while (k>0 && dp[pos] > 0){
+                total -= pos >> 1;
+                dp[pos]--;
+                dp[pos - (pos >> 1)]++;
+                k--;
+            }
+            pos--;
+        }
+        return total;
     }
 
     // 2866. 美丽塔 II
