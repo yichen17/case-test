@@ -84,18 +84,14 @@ public class DailyQuestion202312 {
     }
 
     public List<Integer> numOfBurgers(int tomatoSlices, int cheeseSlices) {
-        if (tomatoSlices * 1.0 / cheeseSlices < 2) {
+        if (tomatoSlices > cheeseSlices * 4 || tomatoSlices < cheeseSlices * 2) {
             return new ArrayList<>();
         }
-        for (int i = 0; i <= cheeseSlices; i++) {
-            if (2 * i + 4 * (cheeseSlices - i) == tomatoSlices) {
-                return Arrays.asList(cheeseSlices - i, i);
-            }
-            else if (2 * i + 4 * (cheeseSlices - i) < tomatoSlices) {
-                break;
-            }
+        int val = cheeseSlices * 4 - tomatoSlices;
+        if (val % 2 == 1) {
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+        return Arrays.asList(cheeseSlices - val / 2, val / 2);
     }
 
 
