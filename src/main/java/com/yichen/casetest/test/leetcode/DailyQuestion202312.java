@@ -43,6 +43,8 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         numOfBurgersTest(dq);
         StringUtils.divisionLine();
+        isWinnerTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1631. 最小体力消耗路径
@@ -71,6 +73,39 @@ public class DailyQuestion202312 {
         public int count() {
             return 0;
         }
+    }
+
+    // 2660. 保龄球游戏的获胜者
+
+    private static void isWinnerTest(DailyQuestion202312 dq){
+        System.out.println(dq.isWinner(new int[]{0,4,7,2,0}, new int[]{2,3,3,0,1}));
+        System.out.println(dq.isWinner(new int[]{4,10,7,9}, new int[]{6,5,2,3}));
+        System.out.println(dq.isWinner(new int[]{3,5,7,6}, new int[]{8,10,10,2}));
+        System.out.println(dq.isWinner(new int[]{2,3}, new int[]{4,1}));
+    }
+
+    public int isWinner(int[] player1, int[] player2) {
+        int p=0, q=0;
+        int pre11=0, pre12=0, pre21=0,pre22=0;
+        for(int i=0; i<player1.length; i++){
+            if (pre11 == 10 || pre12 == 10){
+                p += 2*player1[i];
+            }
+            else {
+                p+= player1[i];
+            }
+            if (pre21 == 10 || pre22 == 10){
+                q += 2*player2[i];
+            }
+            else {
+                q+= player2[i];
+            }
+            pre12 = pre11;
+            pre11 = player1[i];
+            pre22 = pre21;
+            pre21 = player2[i];
+        }
+        return p > q ? 1 : p == q ? 0 : 2;
     }
 
     // 1276. 不浪费原料的汉堡制作方案
@@ -104,7 +139,40 @@ public class DailyQuestion202312 {
     }
 
     public int minimumMountainRemovals(int[] nums) {
-        return 0;
+        int[] ascend = this.getLongSeqAsc(nums);
+        int[] descend = this.getLongSeqDesc(nums);
+        int result = Integer.MAX_VALUE;
+        for(int i=0; i<nums.length; i++){
+            if (ascend[i] > 0 && descend[i] > 0){
+                result = Math.min(result, nums.length - ascend[i] - descend[i] - 1);
+            }
+        }
+        return result;
+    }
+
+    private int[] getLongSeqDesc(int[] nums){
+        int[] dp = new int[nums.length];
+        for (int i=0; i<nums.length; i++){
+            for (int j=0; j<i; j++){
+                if (nums[j] < nums[i]){
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        return dp;
+    }
+
+
+    private int[] getLongSeqAsc(int[] nums){
+        int[] dp = new int[nums.length];
+        for (int i=nums.length-1; i>=0; i--){
+            for (int j=nums.length-1; j>i; j--){
+                if (nums[i] > nums[j]){
+                    dp[i] = Math.max(dp[i], dp[j]+1);
+                }
+            }
+        }
+        return dp;
     }
 
     // 1962. 移除石子使总数最小
