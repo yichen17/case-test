@@ -75,6 +75,16 @@ public class DailyQuestion202312 {
         }
     }
 
+    // 2706. 购买两块巧克力
+
+    public int buyChoco(int[] prices, int money) {
+        Arrays.sort(prices);
+        if (money >= prices[0] + prices[1]){
+            return money - prices[0] - prices[1];
+        }
+        return money;
+    }
+
     // 2660. 保龄球游戏的获胜者
 
     private static void isWinnerTest(DailyQuestion202312 dq){
