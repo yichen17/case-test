@@ -45,6 +45,8 @@ public class DailyQuestion202312 {
         StringUtils.divisionLine();
         isWinnerTest(dq);
         StringUtils.divisionLine();
+        dayOfTheWeekTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1631. 最小体力消耗路径
@@ -73,6 +75,24 @@ public class DailyQuestion202312 {
         public int count() {
             return 0;
         }
+    }
+
+    // 1185. 一周中的第几天
+
+    private static void dayOfTheWeekTest(DailyQuestion202312 dq){
+        System.out.println(dq.dayOfTheWeek(31, 8, 2019));
+        System.out.println(dq.dayOfTheWeek(18, 7, 1999));
+        System.out.println(dq.dayOfTheWeek(15, 8, 1993));
+    }
+
+    private static final String[] dayOfWeek = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+    public String dayOfTheWeek(int day, int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month-1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return dayOfWeek[calendar.get(Calendar.DAY_OF_WEEK)-1];
     }
 
     // 2706. 购买两块巧克力
