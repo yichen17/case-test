@@ -2,6 +2,8 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 
+import java.util.Stack;
+
 /**
  * @author banYu
  * @version 1.0
@@ -14,8 +16,42 @@ public class DailyQuestion202401 {
         DailyQuestion202401 dq = new DailyQuestion202401();
         minOperationsMaxProfitTest(dq);
         StringUtils.divisionLine();
+        removeNodesTest(dq);
+        StringUtils.divisionLine();
     }
 
+    // 2487. 从链表中移除节点
+
+    private static void removeNodesTest(DailyQuestion202401 dq){
+        ListNode.printPath(dq.removeNodes(ListNode.buildListedList("2,3")));
+        ListNode.printPath(dq.removeNodes(ListNode.buildListedList("5,2,13,3,8")));
+        ListNode.printPath(dq.removeNodes(ListNode.buildListedList("1,1,1,1")));
+        ListNode.printPath(dq.removeNodes(ListNode.buildListedList(StringUtils.randomIntArrayWrapper(10000, 1, 99999))));
+    }
+
+    public ListNode removeNodes(ListNode head) {
+        Stack<ListNode> stack = new Stack<>();
+        ListNode p = head, next, tail = null;
+        while (p != null){
+            next = p.next;
+            while (!stack.isEmpty() && stack.peek().val < p.val){
+                stack.pop();
+            }
+            stack.push(p);
+            p = next;
+        }
+        while (!stack.isEmpty()){
+            if (tail == null){
+                tail = stack.pop();
+                tail.next = null;
+                continue;
+            }
+            head = stack.pop();
+            head.next = tail;
+            tail = head;
+        }
+        return tail;
+    }
 
     // 1599. 经营摩天轮的最大利润
 
