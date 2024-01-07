@@ -18,6 +18,63 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         removeNodesTest(dq);
         StringUtils.divisionLine();
+        insertGreatestCommonDivisorsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2807. 在链表中插入最大公约数
+
+    private static void insertGreatestCommonDivisorsTest(DailyQuestion202401 dq){
+        ListNode.printPath(dq.insertGreatestCommonDivisors(ListNode.buildListedList(new Integer[]{18,6,10,3})));
+        ListNode.printPath(dq.insertGreatestCommonDivisors(ListNode.buildListedList(new Integer[]{7})));
+        ListNode.printPath(dq.insertGreatestCommonDivisors(ListNode.buildListedList(StringUtils.randomIntArrayWrapper(2000, 1, 999))));
+    }
+
+    public ListNode insertGreatestCommonDivisors(ListNode head) {
+        ListNode pre = null, pos = head;
+        while (pos != null){
+            if (pre == null){
+                pre = pos;
+                pos = pos.next;
+                continue;
+            }
+            ListNode midNode = new ListNode(this.getGreatestCommonDivisor(pre.val, pos.val));
+            midNode.next = pre.next;
+            pre.next = midNode;
+            pre = pos;
+            pos = pos.next;
+        }
+        return head;
+    }
+
+    private int getGreatestCommonDivisor(int a, int b){
+        if (a < b){
+            int tmp = a;
+            a = b;
+            b = tmp;
+        }
+        while (a % b != 0){
+            int remainder = a%b;
+            a=b;
+            b=remainder;
+        }
+        return b;
+    }
+
+    // 383. 赎金信
+
+    public boolean canConstruct(String ransomNote, String magazine) {
+        int[] f = new int[26];
+        for (int i=0; i<magazine.length(); i++){
+            f[magazine.charAt(i) - 'a']++;
+        }
+        for (int i=0; i<ransomNote.length(); i++){
+            f[ransomNote.charAt(i)-'a']--;
+            if (f[ransomNote.charAt(i) - 'a'] <0){
+                return false;
+            }
+        }
+        return true;
     }
 
     // 2487. 从链表中移除节点
