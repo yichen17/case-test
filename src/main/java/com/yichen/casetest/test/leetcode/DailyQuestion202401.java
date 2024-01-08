@@ -2,6 +2,8 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -20,7 +22,64 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         insertGreatestCommonDivisorsTest(dq);
         StringUtils.divisionLine();
+        numberOfBoomerangsTest(dq);
+        StringUtils.divisionLine();
+        minExtraCharTest(dq);
+        StringUtils.divisionLine();
+        String s = "12";
     }
+
+    // 447. 回旋镖的数量
+
+    private static void numberOfBoomerangsTest(DailyQuestion202401 dq){
+        System.out.println(dq.numberOfBoomerangs(StringUtils.convert2Array("[[0,0],[1,0],[2,0]]")));
+        System.out.println(dq.numberOfBoomerangs(StringUtils.convert2Array("[[1,1],[2,2],[3,3]]")));
+        System.out.println(dq.numberOfBoomerangs(StringUtils.convert2Array("[[1,1]]")));
+    }
+
+    public int numberOfBoomerangs(int[][] points) {
+        return 0;
+    }
+
+    // 2707. 字符串中的额外字符
+
+    private static void minExtraCharTest(DailyQuestion202401 dq){
+        System.out.println(dq.minExtraChar("leetscode", new String[]{"leet","code","leetcode"}));
+        System.out.println(dq.minExtraChar("sayhelloworld", new String[]{"hello","world"}));
+        System.out.println(dq.minExtraChar("hello", new String[]{"hel","ello"}));
+    }
+
+    public int minExtraChar(String s, String[] dictionary) {
+        Set<String> set = new HashSet<>();
+        int maxLen = 0;
+        for (String item : dictionary){
+            set.add(item);
+            maxLen = Math.max(maxLen, item.length());
+        }
+        int[] dp = new int[s.length()+1];
+        for (int i=0; i<dp.length; i++){
+            dp[i] = i+1;
+        }
+        for (int i=0; i<s.length(); i++){
+            this.calMinExtraChar(set, dp, i, s, maxLen);
+        }
+        return dp[s.length()-1];
+    }
+
+    private void calMinExtraChar(Set<String> set, int[] dp, int pos, String s, int maxLen){
+        for (int i=pos; i<s.length() && i<pos+maxLen; i++){
+            if (set.contains(s.substring(pos, i+1))){
+                int pre = pos == 0 ? 0 : dp[pos-1];
+                dp[i] = Math.min(dp[i], pre);
+            }
+        }
+        if (pos != 0){
+            dp[pos] = Math.min(dp[pos], dp[pos-1]+1);
+        }
+    }
+
+
+
 
     // 2807. 在链表中插入最大公约数
 
