@@ -26,8 +26,13 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         minExtraCharTest(dq);
         StringUtils.divisionLine();
-        String s = "12";
+        minLengthTest(dq);
+        StringUtils.divisionLine();
     }
+
+
+
+
 
     // 447. 回旋镖的数量
 
@@ -39,6 +44,27 @@ public class DailyQuestion202401 {
 
     public int numberOfBoomerangs(int[][] points) {
         return 0;
+    }
+
+    // 2696. 删除子串后的字符串最小长度
+
+    private static void minLengthTest(DailyQuestion202401 dq){
+        System.out.println(dq.minLength("ABFCACDB"));
+        System.out.println(dq.minLength("ACBBD"));
+    }
+
+    public int minLength(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (int i=0; i<s.length(); i++){
+            // 可以组合的移除
+            if (!stack.empty() && ((stack.peek() == 'A' && s.charAt(i) == 'B') || (stack.peek() == 'C' && s.charAt(i) == 'D'))){
+                stack.pop();
+                continue;
+            }
+            // 不能组合的加入
+            stack.push(s.charAt(i));
+        }
+        return stack.size();
     }
 
     // 2707. 字符串中的额外字符
