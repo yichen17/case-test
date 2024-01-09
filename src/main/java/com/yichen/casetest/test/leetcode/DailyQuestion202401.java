@@ -2,9 +2,7 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author banYu
@@ -22,11 +20,11 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         insertGreatestCommonDivisorsTest(dq);
         StringUtils.divisionLine();
-        numberOfBoomerangsTest(dq);
-        StringUtils.divisionLine();
         minExtraCharTest(dq);
         StringUtils.divisionLine();
         minLengthTest(dq);
+        StringUtils.divisionLine();
+        numberOfBoomerangsTest(dq);
         StringUtils.divisionLine();
     }
 
@@ -40,10 +38,24 @@ public class DailyQuestion202401 {
         System.out.println(dq.numberOfBoomerangs(StringUtils.convert2Array("[[0,0],[1,0],[2,0]]")));
         System.out.println(dq.numberOfBoomerangs(StringUtils.convert2Array("[[1,1],[2,2],[3,3]]")));
         System.out.println(dq.numberOfBoomerangs(StringUtils.convert2Array("[[1,1]]")));
+        System.out.println(dq.numberOfBoomerangs(StringUtils.constructTwoDimensionArray(400, 2, -300, 300)));
     }
 
     public int numberOfBoomerangs(int[][] points) {
-        return 0;
+        int result = 0;
+        for (int[] point : points){
+            Map<Integer, Integer> distinceMap = new HashMap<>();
+            for (int i=0; i<points.length; i++){
+                int distince = (points[i][0] - point[0]) * (points[i][0] - point[0]) + (points[i][1] - point[1]) * (points[i][1] - point[1]);
+                distinceMap.put(distince, distinceMap.getOrDefault(distince, 0) + 1);
+            }
+            for (Integer times : distinceMap.values()) {
+                if (times >= 2){
+                    result += (times-1) * times;
+                }
+            }
+        }
+        return result;
     }
 
     // 2696. 删除子串后的字符串最小长度
