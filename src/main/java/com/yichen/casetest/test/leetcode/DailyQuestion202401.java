@@ -28,6 +28,35 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         addMinimumTest(dq);
         StringUtils.divisionLine();
+        countWordsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2085. 统计出现过一次的公共字符串
+
+    private static void countWordsTest(DailyQuestion202401 dq){
+        System.out.println(dq.countWords(new String[]{"leetcode","is","amazing","as","is"}, new String[]{"amazing","leetcode","is"}));
+        System.out.println(dq.countWords(new String[]{"b","bb","bbb"}, new String[]{"a","aa","aaa"}));
+        System.out.println(dq.countWords(new String[]{"a","ab"}, new String[]{"a","a","a","ab"}));
+    }
+
+    public int countWords(String[] words1, String[] words2) {
+        Map<String, Integer> pMap = new HashMap<>();
+        for (String word : words1){
+            pMap.put(word, pMap.getOrDefault(word, 0) + 1);
+        }
+        Map<String, Integer> qMap = new HashMap<>();
+        for (String word : words2){
+            qMap.put(word, qMap.getOrDefault(word, 0) + 1);
+        }
+        int result = 0;
+        Integer val;
+        for (Map.Entry<String, Integer> item : pMap.entrySet()){
+            if (item.getValue() == 1 && (val = qMap.get(item.getKey())) != null && val == 1){
+                result++;
+            }
+        }
+        return result;
     }
 
 
