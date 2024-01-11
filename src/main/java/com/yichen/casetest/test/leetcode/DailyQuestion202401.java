@@ -26,10 +26,41 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         numberOfBoomerangsTest(dq);
         StringUtils.divisionLine();
+        addMinimumTest(dq);
+        StringUtils.divisionLine();
     }
 
 
 
+    // 2645. 构造有效字符串的最少插入数
+    // 某个点往后扫，只存在两种情况：1、有序状态，继续往后扫。2、乱序，重复场景，此时只能人为补充节点   ==>  我是傻逼，  ac bc的咋处理？？？
+    // 根据有序性处理
+
+    private static void addMinimumTest(DailyQuestion202401 dq){
+        System.out.println(dq.addMinimum("b"));
+        System.out.println(dq.addMinimum("aaa"));
+        System.out.println(dq.addMinimum("abc"));
+        System.out.println(dq.addMinimum(StringUtils.randomArrayInSpecificCharacters(new char[]{'a', 'b', 'c'},  50)));
+    }
+
+
+
+    public int addMinimum(String word) {
+        int result = 0, i=0;
+        Stack<Character> stack = new Stack<>();
+        while (true){
+            while (i<word.length() && (stack.isEmpty() || stack.peek() < word.charAt(i))){
+                stack.push(word.charAt(i));
+                i++;
+            }
+            result += 3 - stack.size();
+            stack.clear();
+            if (i == word.length()){
+                break;
+            }
+        }
+        return result;
+    }
 
 
     // 447. 回旋镖的数量
