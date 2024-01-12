@@ -30,6 +30,32 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         countWordsTest(dq);
         StringUtils.divisionLine();
+        canSeePersonsCountTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1944. 队列中可以看到的人数
+
+    private static void canSeePersonsCountTest(DailyQuestion202401 dq){
+        StringUtils.printIntArray(dq.canSeePersonsCount(new int[]{10,6,8,5,11,9}));
+        StringUtils.printIntArray(dq.canSeePersonsCount(new int[]{5,1,2,3,10}));
+        StringUtils.printIntArray(dq.canSeePersonsCount(StringUtils.randomNoRepeat(1000, 1, 9999)));
+    }
+
+    public int[] canSeePersonsCount(int[] heights) {
+        int len = heights.length, cnt;
+        int[] result = new int[len];
+        Deque<Integer> stack = new ArrayDeque<>();
+        for (int i=len-1; i>=0; i--){
+            cnt = 0;
+            while (!stack.isEmpty() && heights[stack.peek()] < heights[i]){
+                cnt++;
+                stack.pop();
+            }
+            result[i] = stack.isEmpty() ? cnt : cnt+1;
+            stack.push(i);
+        }
+        return result;
     }
 
     // 2085. 统计出现过一次的公共字符串

@@ -94,7 +94,7 @@ public class StringUtils {
                 result[i++] = r;
             }
         }
-        Arrays.sort(result);
+//        Arrays.sort(result);
         printIntArray(result);
         return result;
     }
