@@ -32,6 +32,58 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         canSeePersonsCountTest(dq);
         StringUtils.divisionLine();
+        repeatLimitedStringTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2182. 构造限制重复的字符串
+
+    private static void repeatLimitedStringTest(DailyQuestion202401 dq){
+        System.out.println(dq.repeatLimitedString("cczazcc", 3));
+        System.out.println(dq.repeatLimitedString("aababab", 2));
+        System.out.println(dq.repeatLimitedString("aaaabbbbbccccdddd", 2));
+        System.out.println(dq.repeatLimitedString(StringUtils.getLowerCaseLetters(10000), 100));
+    }
+
+    public String repeatLimitedString(String s, int repeatLimit) {
+        int[] dp = new int[26];
+        for (int i=0; i<s.length(); i++){
+            dp[25 - s.charAt(i) + 'a']++;
+        }
+        int p =0, q = 1;
+        StringBuilder sb = new StringBuilder();
+        while (p < 26){
+            // 小于最大次数，直接放进去
+            if (dp[p] <= repeatLimit){
+                while (dp[p] > 0){
+                    sb.append((char) ('a' - p + 25));
+                    dp[p]--;
+                }
+                p++;
+                continue;
+            }
+            // 大于最大次数，直接放进去
+            for (int i=0; i<repeatLimit; i++){
+                sb.append((char) ('a' - p + 25));
+                dp[p]--;
+            }
+            // 不符合条件时初始化
+            if (q <= p){
+                q = p+1;
+            }
+            // 往后找第一个大于0的字母
+            while (q < 26 && dp[q] == 0){
+                q++;
+            }
+            // 找不到下一个插入点了
+            if (q == 26){
+                break;
+            }
+            // 拼入节点
+            sb.append((char) ('a' - q + 25));
+            dp[q]--;
+        }
+        return sb.toString();
     }
 
     // 1944. 队列中可以看到的人数
