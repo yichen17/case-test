@@ -195,6 +195,21 @@ public class StringUtils {
     }
 
     /**
+     * 随机小写字符串
+     * @param len 长度
+     * @return
+     */
+    public static String getLowerCaseLetters(int len){
+        StringBuilder sb = new StringBuilder();
+        while (len>0){
+            len--;
+            sb.append((char) Math.round(Math.random() * 25 + 97));
+        }
+        log.debug("getLowerCaseLetters => {}", sb);
+        return sb.toString();
+    }
+
+    /**
      * 随机长度字符串
      * @param length
      * @return

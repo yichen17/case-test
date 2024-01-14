@@ -2,6 +2,9 @@ package com.yichen.casetest.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author banYu
  * @version 1.0
@@ -80,8 +83,35 @@ public class MathUtils {
     }
 
 
+    /**
+     * 获取所有bit组合数
+     * @param limit 总共bit数
+     * @param select 选取的bit数
+     * @return
+     */
+    public static List<Integer> getAllBitCombination(int limit, int select){
+        if (limit >= 31 || limit <= 0 || select <= 0 || limit < select){
+            return new LinkedList<>();
+        }
+        List<Integer> result = new LinkedList<>();
+        int val = (1 << select) - 1, r, t;
+        int max = 1 << limit;
+        while (val < max){
+            // 将符合条件的数加入结果集
+            result.add(val);
+            // 获取val中最右边的1
+            r = val & -val;
+            // 最右边的1进位左移，替换左边的第一个0槽位
+            t = val + r;
+            val = (((val ^ t) >> 2) / r) | t;
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         System.out.println(permutation(4,2));
+        StringUtils.divisionLine();
+        System.out.println(getAllBitCombination(4,2));;
     }
 
 }
