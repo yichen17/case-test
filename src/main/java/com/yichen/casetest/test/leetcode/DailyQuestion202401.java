@@ -36,6 +36,56 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         deleteDuplicatesTest(dq);
         StringUtils.divisionLine();
+//        List<Integer> selectOptions = new LinkedList<>();
+//        dq.getSelectOptions(2, 0, 0, selectOptions);
+        maximumRowsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2397. 被列覆盖的最多行数
+
+    private static void maximumRowsTest(DailyQuestion202401 dq){
+        System.out.println(dq.maximumRows(StringUtils.convert2Array("[[0,0,0],[1,0,1],[0,1,1],[0,0,1]]"), 2));
+        System.out.println(dq.maximumRows(StringUtils.convert2Array("[[1],[0]]"), 1));
+        System.out.println(dq.maximumRows(StringUtils.constructTwoDimensionArray(11, 11, new int[]{0, 1}), 7));
+    }
+
+    public int maximumRows(int[][] matrix, int numSelect) {
+        int[] nums = new int[matrix.length];
+        for (int j=0; j<matrix.length; j++){
+            int val = 0;
+            for (int i=0; i<matrix[j].length; i++){
+                val |= matrix[j][i] << (matrix[j].length -1 -i);
+            }
+            nums[j] = val;
+        }
+        int result = 0;
+        List<Integer> selectOptions = new LinkedList<>();
+        this.getSelectOptions(numSelect, 0, 0, selectOptions);
+        for (int selectOption : selectOptions){
+            int count = 0;
+            for (int num : nums){
+                if ((selectOption & num) == num){
+                    count++;
+                }
+            }
+            result = Math.max(result, count);
+        }
+        return result;
+    }
+
+    private void getSelectOptions(int n, int start, int val, List<Integer> result){
+        if (n == 0){
+            result.add(val);
+            return;
+        }
+        if (start >= 12){
+            return;
+        }
+        // 这个位置不填1
+        this.getSelectOptions(n,  start+1, val, result);
+        // 这个位置填1
+        this.getSelectOptions(n-1,  start+1, val | (1 << (11 - start)),result);
     }
 
     // 83. 删除排序链表中的重复元素
