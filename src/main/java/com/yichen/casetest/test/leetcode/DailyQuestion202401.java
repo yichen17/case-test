@@ -34,6 +34,34 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         repeatLimitedStringTest(dq);
         StringUtils.divisionLine();
+        deleteDuplicatesTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 83. 删除排序链表中的重复元素
+
+    private static void deleteDuplicatesTest(DailyQuestion202401 dq){
+        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("1,1,2")));
+        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("1,1,2,3,3")));
+        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("2,3,3,4,4,4,4,5")));
+    }
+
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode root = new ListNode(-1000);
+        root.next = head;
+        ListNode pre = root, next = head;
+        while (next != null){
+            if (pre.val == next.val){
+                pre.next = next.next;
+                next = next.next;
+                continue;
+            }
+            pre = pre.next;
+            next = next.next;
+        }
+        head = root.next;
+        root.next = null;
+        return head;
     }
 
     // 2182. 构造限制重复的字符串
