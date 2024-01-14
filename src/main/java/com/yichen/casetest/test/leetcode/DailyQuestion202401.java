@@ -60,16 +60,19 @@ public class DailyQuestion202401 {
             nums[j] = val;
         }
         int result = 0;
-        List<Integer> selectOptions = new LinkedList<>();
-        this.getSelectOptions(numSelect, 0, 0, selectOptions);
-        for (int selectOption : selectOptions){
+        int val = (1 << numSelect) - 1, c, r;
+        int max = 1 << 12;
+        while (val < max){
             int count = 0;
             for (int num : nums){
-                if ((selectOption & num) == num){
+                if ((val & num) == num){
                     count++;
                 }
             }
             result = Math.max(result, count);
+            c = val & -val;
+            r = val + c;
+            val = (((val ^ r) >> 2) / c) | r;
         }
         return result;
     }
