@@ -77,18 +77,26 @@ public class DailyQuestion202401 {
         return result;
     }
 
-    private void getSelectOptions(int n, int start, int val, List<Integer> result){
-        if (n == 0){
+    /**
+     *
+     * @param retain 剩余可选1的个数
+     * @param start 下一个可选坐标，范围[0,max)
+     * @param max 最大边界值
+     * @param val 路径val
+     * @param result 结果集
+     */
+    private void getSelectOptions(int retain, int start, int max, int val, List<Integer> result){
+        if (retain == 0){
             result.add(val);
             return;
         }
-        if (start >= 12){
+        if (start >= max){
             return;
         }
         // 这个位置不填1
-        this.getSelectOptions(n,  start+1, val, result);
+        this.getSelectOptions(retain,  start+1, max, val, result);
         // 这个位置填1
-        this.getSelectOptions(n-1,  start+1, val | (1 << (11 - start)),result);
+        this.getSelectOptions(retain-1,  start+1, max, val | (1 << (max - 1 - start)),result);
     }
 
     // 83. 删除排序链表中的重复元素
