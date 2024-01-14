@@ -30,8 +30,25 @@ import java.util.regex.Pattern;
     }
 
     protected static ListNode buildListedList(Integer[] params){
+        return buildSortedListedList(params, null);
+    }
+
+    protected static ListNode buildListedList(Integer[] params, Boolean descend){
+        return buildSortedListedList(params, descend);
+    }
+
+    protected static ListNode buildSortedListedList(Integer[] params, Boolean descend){
         if (Objects.isNull(params) || params.length == 0){
             return null;
+        }
+        if (Boolean.TRUE.equals(descend)){
+            Arrays.sort(params, (p,q)->(q-p));
+        }
+        else if (Boolean.FALSE.equals(descend)){
+            Arrays.sort(params, (p,q)->(p-q));
+        }
+        if (descend != null){
+            log.debug("buildSortedListedList处理后数据：{}", com.yichen.casetest.utils.StringUtils.printArray(params));
         }
         ListNode root = new ListNode(params[0]);
         ListNode pos = root;
@@ -41,7 +58,18 @@ import java.util.regex.Pattern;
         return root;
     }
 
+
     protected static ListNode buildListedList(String s){
+        return buildSortedList(s, null);
+    }
+
+    /**
+     * 构造有序列表
+     * @param s
+     * @param descend true-降序  false-升序  null无序
+     * @return
+     */
+    protected static ListNode buildSortedList(String s, Boolean descend){
         if (StringUtils.isEmpty(s)){
             return null;
         }
@@ -50,7 +78,7 @@ import java.util.regex.Pattern;
         for (int i=0; i< items.length; i++){
             params[i] = Integer.parseInt(items[i]);
         }
-        return buildListedList(params);
+        return buildListedList(params, descend);
     }
 
     /**

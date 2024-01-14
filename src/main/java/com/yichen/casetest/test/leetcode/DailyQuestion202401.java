@@ -34,12 +34,51 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         repeatLimitedStringTest(dq);
         StringUtils.divisionLine();
-        deleteDuplicatesTest(dq);
+        deleteDuplicates1Test(dq);
         StringUtils.divisionLine();
-//        List<Integer> selectOptions = new LinkedList<>();
-//        dq.getSelectOptions(2, 0, 0, selectOptions);
         maximumRowsTest(dq);
         StringUtils.divisionLine();
+        deleteDuplicatesTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 82. 删除排序链表中的重复元素 II
+
+    private static void deleteDuplicatesTest(DailyQuestion202401 dq){
+        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("1,2,3,3,4,4,5")));
+        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("1,1,1,2,3")));
+        ListNode.printPath(dq.deleteDuplicates(ListNode.buildSortedListedList(StringUtils.randomIntArrayWrapper(250, -99, 99), false)));
+    }
+
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy=null, p=null, q=head;
+        int count;
+        while (q!=null){
+            count=0;
+            while (q.next!=null && q.val == q.next.val){
+                count++;
+                q=q.next;
+            }
+            // 存在相同值节点，跳过
+            if (count!=0){
+                q = q.next;
+                continue;
+            }
+            // 首个节点
+            if (dummy == null){
+                dummy = q;
+                p =  dummy;
+                q = q.next;
+                continue;
+            }
+            p.next = q;
+            p = p.next;
+            q = q.next;
+        }
+        if (p!=null){
+            p.next = null;
+        }
+        return dummy;
     }
 
     // 2397. 被列覆盖的最多行数
@@ -101,13 +140,13 @@ public class DailyQuestion202401 {
 
     // 83. 删除排序链表中的重复元素
 
-    private static void deleteDuplicatesTest(DailyQuestion202401 dq){
-        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("1,1,2")));
-        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("1,1,2,3,3")));
-        ListNode.printPath(dq.deleteDuplicates(ListNode.buildListedList("2,3,3,4,4,4,4,5")));
+    private static void deleteDuplicates1Test(DailyQuestion202401 dq){
+        ListNode.printPath(dq.deleteDuplicates1(ListNode.buildListedList("1,1,2")));
+        ListNode.printPath(dq.deleteDuplicates1(ListNode.buildListedList("1,1,2,3,3")));
+        ListNode.printPath(dq.deleteDuplicates1(ListNode.buildListedList("2,3,3,4,4,4,4,5")));
     }
 
-    public ListNode deleteDuplicates(ListNode head) {
+    public ListNode deleteDuplicates1(ListNode head) {
         ListNode root = new ListNode(-1000);
         root.next = head;
         ListNode pre = root, next = head;
