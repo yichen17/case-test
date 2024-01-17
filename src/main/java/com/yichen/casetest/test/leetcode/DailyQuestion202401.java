@@ -40,6 +40,39 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         deleteDuplicatesTest(dq);
         StringUtils.divisionLine();
+        maximumNumberOfStringPairsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2744. 最大字符串配对数目
+
+    private static void maximumNumberOfStringPairsTest(DailyQuestion202401 dq){
+        System.out.println(dq.maximumNumberOfStringPairs(new String[]{"cd","ac","dc","ca","zz"}));
+        System.out.println(dq.maximumNumberOfStringPairs(new String[]{"ab","ba","cc"}));
+        System.out.println(dq.maximumNumberOfStringPairs(new String[]{"aa","ab"}));
+    }
+
+    public int maximumNumberOfStringPairs(String[] words) {
+        Set<String> set = new HashSet<>();
+        int result = 0;
+        for (String word : words){
+            if (set.contains(word)){
+                result++;
+                continue;
+            }
+            set.add(this.getReverseStr(word));
+        }
+        return result;
+    }
+
+    private String getReverseStr(String s){
+        char[] chars = s.toCharArray();
+        for (int i=0, j=chars.length-1; i<j; i++,j--){
+            char tmp = chars[i];
+            chars[i] = chars[j];
+            chars[j] = tmp;
+        }
+        return new String(chars);
     }
 
     // 82. 删除排序链表中的重复元素 II
