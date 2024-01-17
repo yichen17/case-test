@@ -75,11 +75,6 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
         <!-- redis 所需要的依赖 -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.data</groupId>-->
@@ -468,6 +463,21 @@
             <version>8.5.12</version>
         </dependency>
         <!-- 简单工具类end -->
+
+
+        <!-- 单元测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.9.10</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- 单元测试 end-->
 
     </dependencies>
 
