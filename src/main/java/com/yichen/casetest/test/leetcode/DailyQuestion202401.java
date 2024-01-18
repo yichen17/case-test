@@ -42,6 +42,43 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         maximumNumberOfStringPairsTest(dq);
         StringUtils.divisionLine();
+        minimumRemovalTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2171. 拿出最少数目的魔法豆
+
+    private static void minimumRemovalTest(DailyQuestion202401 dq){
+        System.out.println(dq.minimumRemoval(new int[]{4,1,6,5}));
+        System.out.println(dq.minimumRemoval(new int[]{2,10,3,2}));
+        System.out.println(dq.minimumRemoval(StringUtils.randomIntArray(9999, 1, 3000)));
+    }
+
+    public long minimumRemoval(int[] beans) {
+        Map<Integer, Integer> timesMap = new HashMap<>();
+        long total = 0;
+        long result = 0L;
+        for (int bean : beans){
+            total += bean;
+            timesMap.put(bean, timesMap.getOrDefault(bean, 0) + 1);
+        }
+        ArrayList<Integer> keys = new ArrayList<>(timesMap.keySet());
+        keys.sort((p, q) -> (p - q));
+        int key = keys.get(keys.size()-1);
+        long pre = total - (long) key * timesMap.get(key), suf = 0, times = timesMap.get(key);
+        result = pre;
+        for (int i=keys.size()-2; i>=0; i--){
+            key = keys.get(i);
+            // 前面删除
+            pre -= (long) key * timesMap.get(key);
+            // 后面抚平
+            suf += times * (keys.get(i+1) - key);
+            // 次数打平
+            times += timesMap.get(key);
+            result = Math.min(result, pre + suf);
+        }
+
+        return result;
     }
 
     // 2744. 最大字符串配对数目
