@@ -44,6 +44,49 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         minimumRemovalTest(dq);
         StringUtils.divisionLine();
+        splitWordsBySeparatorTest(dq);
+        StringUtils.divisionLine();
+        minimumTimeTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2809. 使数组和小于等于 x 的最少时间
+
+    private static void minimumTimeTest(DailyQuestion202401 dq){
+        System.out.println(dq.minimumTime(Arrays.asList(1,2,3), Arrays.asList(1,2,3), 4));
+        System.out.println(dq.minimumTime(Arrays.asList(1,2,3), Arrays.asList(3,3,3), 4));
+        System.out.println(dq.minimumTime(Arrays.asList(1,2,3), Arrays.asList(3,3,3), 14));
+    }
+
+    public int minimumTime(List<Integer> nums1, List<Integer> nums2, int x) {
+        
+    }
+
+    // 2788. 按分隔符拆分字符串
+
+    private static void splitWordsBySeparatorTest(DailyQuestion202401 dq){
+        System.out.println(dq.splitWordsBySeparator(Arrays.asList("one.two.three","four.five","six"), '.'));
+        System.out.println(dq.splitWordsBySeparator(Arrays.asList("$easy$","$problem$"), '$'));
+        System.out.println(dq.splitWordsBySeparator(Arrays.asList("|||"), '|'));
+    }
+
+    public List<String> splitWordsBySeparator(List<String> words, char separator) {
+        List<String> result = new LinkedList<>();
+        int left, right;
+        for (String word : words){
+            left = 0;
+            while (left < word.length()){
+                right = left;
+                while (right < word.length() && word.charAt(right) != separator){
+                    right++;
+                }
+                if (left != right){
+                    result.add(word.substring(left, right));
+                }
+                left = right + 1;
+            }
+        }
+        return result;
     }
 
     // 2171. 拿出最少数目的魔法豆
