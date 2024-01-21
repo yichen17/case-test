@@ -57,7 +57,8 @@ public class DailyQuestion202401 {
     private static void splitArrayTest(DailyQuestion202401 dq){
         System.out.println(dq.splitArray(new int[]{7,2,5,10,8}, 2));
         System.out.println(dq.splitArray(new int[]{1,2,3,4,5}, 2));
-        System.out.println(dq.splitArray(new int[]{1,4,4}, 2));
+        System.out.println(dq.splitArray(new int[]{1,4,4}, 3));
+        System.out.println(dq.splitArray(StringUtils.randomIntArray(500, 1, 10000), 100));
     }
 
     public int splitArray(int[] nums, int m) {
@@ -73,10 +74,12 @@ public class DailyQuestion202401 {
                 dp[i][j] = Integer.MAX_VALUE;
             }
         }
-        dp[0][0] = 0;
         for (int i=1; i<=len; i++){
-            for (int j=1; j<=Math.min(i, m); j++){
-                for (int k=0; k<i; k++){
+            dp[i][1] = preSum[i];
+        }
+        for (int i=1; i<=len; i++){
+            for (int j=2; j<=Math.min(i, m); j++){
+                for (int k=1; k<i; k++){
                     dp[i][j] = Math.min(dp[i][j], Math.max(dp[k][j-1], preSum[i] - preSum[k]));
                 }
             }
