@@ -761,6 +761,15 @@ public class StringUtils {
 
     }
 
+    public static List<Integer> randomList(int size, int low, int high){
+        List<Integer> result = new LinkedList<>();
+        for (int i=0; i<size; i++){
+            result.add(low + random.nextInt(high - low));
+        }
+        log.debug("randomIntList {}", Arrays.toString(result.toArray()));
+        return result;
+    }
+
     // 测试序列化
 
     @Data

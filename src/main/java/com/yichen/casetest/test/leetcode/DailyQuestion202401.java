@@ -48,6 +48,40 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         minimumTimeTest(dq);
         StringUtils.divisionLine();
+        splitArrayTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 410. 分割数组的最大值
+
+    private static void splitArrayTest(DailyQuestion202401 dq){
+        System.out.println(dq.splitArray(new int[]{7,2,5,10,8}, 2));
+        System.out.println(dq.splitArray(new int[]{1,2,3,4,5}, 2));
+        System.out.println(dq.splitArray(new int[]{1,4,4}, 2));
+    }
+
+    public int splitArray(int[] nums, int m) {
+        int len = nums.length;
+        int[] preSum = new int[len+1];
+        for (int i=1; i<len+1; i++){
+            preSum[i] = preSum[i-1] + nums[i-1];
+        }
+        // 在[1,i]中拆分成j个连续子数组的最大值中的最小
+        int[][] dp = new int[len+1][m+1];
+        for (int i=0; i<len+1; i++){
+            for (int j=0; j<m+1; j++){
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        dp[0][0] = 0;
+        for (int i=1; i<=len; i++){
+            for (int j=1; j<=Math.min(i, m); j++){
+                for (int k=0; k<i; k++){
+                    dp[i][j] = Math.min(dp[i][j], Math.max(dp[k][j-1], preSum[i] - preSum[k]));
+                }
+            }
+        }
+        return dp[len][m];
     }
 
     // 2809. 使数组和小于等于 x 的最少时间
@@ -56,10 +90,11 @@ public class DailyQuestion202401 {
         System.out.println(dq.minimumTime(Arrays.asList(1,2,3), Arrays.asList(1,2,3), 4));
         System.out.println(dq.minimumTime(Arrays.asList(1,2,3), Arrays.asList(3,3,3), 4));
         System.out.println(dq.minimumTime(Arrays.asList(1,2,3), Arrays.asList(3,3,3), 14));
+        System.out.println(dq.minimumTime(StringUtils.randomList(1000, 1, 300), StringUtils.randomList(1000, 0, 50), 151234));
     }
 
     public int minimumTime(List<Integer> nums1, List<Integer> nums2, int x) {
-        
+         return 0;
     }
 
     // 2788. 按分隔符拆分字符串
