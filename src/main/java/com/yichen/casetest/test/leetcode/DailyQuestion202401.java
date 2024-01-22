@@ -50,6 +50,34 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         splitArrayTest(dq);
         StringUtils.divisionLine();
+        maximumSwapTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 670. 最大交换
+
+    private static void maximumSwapTest(DailyQuestion202401 dq){
+        System.out.println(dq.maximumSwap(2736));
+        System.out.println(dq.maximumSwap(9973));
+    }
+
+    public int maximumSwap(int num) {
+        int result = num;
+        char[] charArray = String.valueOf(num).toCharArray();
+        for (int i=0; i<charArray.length; i++){
+            for (int j=i+1; j<charArray.length; j++){
+                swap(charArray, i, j);
+                result = Math.max(result, Integer.parseInt(String.valueOf(charArray)));
+                swap(charArray, i, j);
+            }
+        }
+        return result;
+    }
+
+    private void swap(char[] chars, int a, int b){
+        char tmp = chars[a];
+        chars[a] = chars[b];
+        chars[b] = tmp;
     }
 
     // 410. 分割数组的最大值
@@ -97,7 +125,7 @@ public class DailyQuestion202401 {
     }
 
     public int minimumTime(List<Integer> nums1, List<Integer> nums2, int x) {
-         return 0;
+        return 0;
     }
 
     // 2788. 按分隔符拆分字符串
