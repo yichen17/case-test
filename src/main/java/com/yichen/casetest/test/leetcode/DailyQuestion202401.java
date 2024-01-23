@@ -54,6 +54,47 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         alternatingSubarrayTest(dq);
         StringUtils.divisionLine();
+        maximumSumOfHeightsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2865. 美丽塔 I
+
+    private static void maximumSumOfHeightsTest(DailyQuestion202401 dq){
+        System.out.println(dq.maximumSumOfHeights(Arrays.asList(5,3,4,1,1)));
+        System.out.println(dq.maximumSumOfHeights(Arrays.asList(6,5,3,9,2,7)));
+        System.out.println(dq.maximumSumOfHeights(Arrays.asList(3,2,5,5,2,3)));
+        System.out.println(dq.maximumSumOfHeights(StringUtils.randomList(300, 1, 10000)));
+    }
+
+    public long maximumSumOfHeights(List<Integer> maxHeights) {
+        int len = maxHeights.size();
+        long[] preSum = new long[len], sufSum = new long[len];
+        Stack<Integer> stack = new Stack<>();
+        for (int i=0; i<len; i++){
+            while (!stack.isEmpty() && maxHeights.get(stack.peek()) > maxHeights.get(i)){
+                stack.pop();
+            }
+            int start = stack.isEmpty() ? -1 : stack.peek();
+            long count = stack.isEmpty() ? 0 : preSum[stack.peek()];
+            preSum[i] = count + (long) (i - start) * maxHeights.get(i);
+            stack.push(i);
+        }
+        stack = new Stack<>();
+        for (int i=len-1; i>=0; i--){
+            while (!stack.isEmpty() && maxHeights.get(stack.peek()) > maxHeights.get(i)){
+                stack.pop();
+            }
+            int start = stack.isEmpty() ? len : stack.peek();
+            long count = stack.isEmpty() ? 0 : sufSum[stack.peek()];
+            sufSum[i] = count + (long) (start - i) * maxHeights.get(i);
+            stack.push(i);
+        }
+        long result = 0;
+        for (int i=0; i<len; i++){
+            result = Math.max(result, preSum[i] + sufSum[i] - maxHeights.get(i));
+        }
+        return result;
     }
 
     // 2765. 最长交替子数组
