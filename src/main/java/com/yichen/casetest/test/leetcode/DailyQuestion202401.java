@@ -52,6 +52,36 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         maximumSwapTest(dq);
         StringUtils.divisionLine();
+        alternatingSubarrayTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2765. 最长交替子数组
+
+    private static void alternatingSubarrayTest(DailyQuestion202401 dq){
+        System.out.println(dq.alternatingSubarray(new int[]{2,3,4,3,4}));
+        System.out.println(dq.alternatingSubarray(new int[]{4,5,6}));
+        System.out.println(dq.alternatingSubarray(StringUtils.randomIntArray(100, 1, 4)));
+    }
+
+    public int alternatingSubarray(int[] nums) {
+        int result = -1, count, i=1, len=nums.length, nextTrip;
+        while (i<len){
+            nextTrip = 1;
+            count = 0;
+            while (i<len && nums[i] - nums[i-1] == nextTrip){
+                nextTrip *= -1;
+                i++;
+                count++;
+            }
+            if (count != 0){
+                result = Math.max(result, count+1);
+            }
+            else {
+                i++;
+            }
+        }
+        return result;
     }
 
     // 670. 最大交换
