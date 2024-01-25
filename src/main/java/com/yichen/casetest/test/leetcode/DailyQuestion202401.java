@@ -56,6 +56,35 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         maximumSumOfHeightsTest(dq);
         StringUtils.divisionLine();
+        sumIndicesWithKSetBitsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2859. 计算 K 置位下标对应元素的和
+
+    private static void sumIndicesWithKSetBitsTest(DailyQuestion202401 dq){
+        System.out.println(dq.sumIndicesWithKSetBits(Arrays.asList(5,10,1,5,2), 1));
+        System.out.println(dq.sumIndicesWithKSetBits(Arrays.asList(4,3,2,1), 2));
+        System.out.println(dq.sumIndicesWithKSetBits(StringUtils.randomList(500, 1, 1000), 5));
+    }
+
+    public int sumIndicesWithKSetBits(List<Integer> nums, int k) {
+        int result = 0;
+        for (int i=0; i<nums.size(); i++){
+            if (this.bitCount(i) == k){
+                result += nums.get(i);
+            }
+        }
+        return result;
+    }
+
+    private int bitCount(int n){
+        int result = 0;
+        while (n != 0){
+            n = n & (n-1);
+            result++;
+        }
+        return result;
     }
 
     // 2865. 美丽塔 I
