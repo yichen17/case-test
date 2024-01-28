@@ -61,7 +61,42 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         canMeasureWaterTest(dq);
         StringUtils.divisionLine();
+        maxNumberOfAlloysTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 2861. 最大合金数
+
+    private static void maxNumberOfAlloysTest(DailyQuestion202401 dq){
+        System.out.println(dq.maxNumberOfAlloys(2, 5, 48, StringUtils.convert2List("[[6,3],[9,5],[1,9], [1,8],[3,3]]"), Arrays.asList(4,8), Arrays.asList(10,1)));
+        System.out.println(dq.maxNumberOfAlloys(3, 2, 15, StringUtils.convert2List("[[1,1,1],[1,1,10]]"), Arrays.asList(0,0,0), Arrays.asList(1,2,3)));
+        System.out.println(dq.maxNumberOfAlloys(3, 2, 15, StringUtils.convert2List("[[1,1,1],[1,1,10]]"), Arrays.asList(0,0,100), Arrays.asList(1,2,3)));
+        System.out.println(dq.maxNumberOfAlloys(2, 3, 10, StringUtils.convert2List("[[2,1],[1,2],[1,1]]"), Arrays.asList(1,1), Arrays.asList(5,5)));
+    }
+
+    public int maxNumberOfAlloys(int materialNums, int machineNums, int budget, List<List<Integer>> composition, List<Integer> stock, List<Integer> cost) {
+         return -66;
+    }
+
+    private int getRealCost(List<Integer> composition, List<Integer> stock, List<Integer> cost){
+        int total = 0;
+        for (int i=0; i<composition.size(); i++){
+            if (stock.get(i) >= composition.get(i)){
+                continue;
+            }
+            total += (composition.get(i) - stock.get(i)) * cost.get(i);
+        }
+        return total;
+    }
+
+    private int getCost(List<Integer> composition, List<Integer> cost){
+        int total = 0;
+        for (int i=0; i<composition.size(); i++){
+            total += cost.get(i) * composition.get(i);
+        }
+        return total;
+    }
+
 
     // 365. 水壶问题
 
