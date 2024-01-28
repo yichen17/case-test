@@ -1,5 +1,6 @@
 package com.yichen.casetest.test.leetcode;
 
+import com.yichen.casetest.utils.MathUtils;
 import com.yichen.casetest.utils.StringUtils;
 
 import java.util.*;
@@ -58,7 +59,31 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         sumIndicesWithKSetBitsTest(dq);
         StringUtils.divisionLine();
+        canMeasureWaterTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 365. 水壶问题
+
+    private static void canMeasureWaterTest(DailyQuestion202401 dq){
+        System.out.println(dq.canMeasureWater(6, 9, 1));
+        System.out.println(dq.canMeasureWater(3, 5, 4));
+        System.out.println(dq.canMeasureWater(2, 6, 5));
+        System.out.println(dq.canMeasureWater(1, 2, 3));
+        System.out.println(dq.canMeasureWater(2468, 6, 780));
+    }
+
+    public boolean canMeasureWater(int a, int b, int t) {
+         if(a + b < t){
+             return false;
+         }
+        if (a + b == t){
+            return true;
+        }
+        return t % MathUtils.gcd(a, b) == 0;
+    }
+
+
 
     // 2859. 计算 K 置位下标对应元素的和
 

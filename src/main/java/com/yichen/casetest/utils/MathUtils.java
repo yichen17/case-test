@@ -108,10 +108,30 @@ public class MathUtils {
         return result;
     }
 
+
+    /**
+     * greatest common divisor
+     * 获得最大公约数
+     * @param a
+     * @param b
+     * @return
+     */
+    public static int gcd(int a, int b){
+        int remainder = a % b;
+        while (remainder != 0){
+            a = b;
+            b = remainder;
+            remainder = a % b;
+        }
+        return b;
+    }
+
     public static void main(String[] args) {
         System.out.println(permutation(4,2));
         StringUtils.divisionLine();
         System.out.println(getAllBitCombination(4,2));;
+        StringUtils.divisionLine();
+        System.out.println(gcd(4, 8));
     }
 
 }

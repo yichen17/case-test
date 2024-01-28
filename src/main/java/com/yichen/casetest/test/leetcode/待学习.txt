@@ -6,3 +6,5 @@
     1979 年的论文「Traversing Binary Trees Simply and Cheaply」
 4、Gosper’s Hack 算法
     2397. 被列覆盖的最多行数
+5、贝祖定理/裴蜀定理
+    365. 水壶问题
