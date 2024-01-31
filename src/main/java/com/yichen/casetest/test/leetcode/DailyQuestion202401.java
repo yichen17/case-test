@@ -76,27 +76,26 @@ public class DailyQuestion202401 {
     }
 
     public int[] distinctDifferenceArray(int[] nums) {
-        int len=nums.length, count1 = 0;
-        int[] ascend = new int[len], descend = new int[len+1], dp = new int[51];
+        int len=nums.length, count = 0;
+        int[] ascend = new int[len], dp = new int[51];
         for (int i=0; i<len; i++){
             if (dp[nums[i]] == 0){
-                count1++;
+                count++;
             }
             dp[nums[i]]++;
-            ascend[i] = count1;
+            ascend[i] = count;
         }
         dp = new int[51];
-        count1 = 0;
+        count = 0;
+        int[] result = new int[len];
+        int pre = 0;
         for (int i=len-1; i>=0; i--){
             if (dp[nums[i]] == 0){
-                count1++;
+                count++;
             }
             dp[nums[i]]++;
-            descend[i] = count1;
-        }
-        int[] result = new int[len];
-        for (int i=0; i<len; i++){
-            result[i] = ascend[i] - descend[i+1];
+            result[i] = ascend[i] - pre;
+            pre = count;
         }
         return result;
     }
