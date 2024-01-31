@@ -63,6 +63,42 @@ public class DailyQuestion202401 {
         StringUtils.divisionLine();
         maxNumberOfAlloysTest(dq);
         StringUtils.divisionLine();
+        distinctDifferenceArrayTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2670. 找出不同元素数目差数组
+
+    private static void distinctDifferenceArrayTest(DailyQuestion202401 dq){
+        StringUtils.printIntArray(dq.distinctDifferenceArray(new int[]{1,2,3,4,5}));
+        StringUtils.printIntArray(dq.distinctDifferenceArray(new int[]{3,2,3,4,2}));
+        StringUtils.printIntArray(dq.distinctDifferenceArray(StringUtils.randomIntArray(50, 1, 50)));
+    }
+
+    public int[] distinctDifferenceArray(int[] nums) {
+        int len=nums.length, count1 = 0;
+        int[] ascend = new int[len], descend = new int[len+1], dp = new int[51];
+        for (int i=0; i<len; i++){
+            if (dp[nums[i]] == 0){
+                count1++;
+            }
+            dp[nums[i]]++;
+            ascend[i] = count1;
+        }
+        dp = new int[51];
+        count1 = 0;
+        for (int i=len-1; i>=0; i--){
+            if (dp[nums[i]] == 0){
+                count1++;
+            }
+            dp[nums[i]]++;
+            descend[i] = count1;
+        }
+        int[] result = new int[len];
+        for (int i=0; i<len; i++){
+            result[i] = ascend[i] - descend[i+1];
+        }
+        return result;
     }
 
     // 2861. 最大合金数
