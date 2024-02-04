@@ -11,7 +11,7 @@ import java.util.*;
  * @date 2024/1/1 15:07
  * @describe
  */
-public class DailyQuestion202401 {
+class DailyQuestion202401 {
 
     public static void main(String[] args) {
         DailyQuestion202401 dq = new DailyQuestion202401();

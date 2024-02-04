@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * @describe 每日一题，希望自己坚持的下去
  */
 @Slf4j
-public class DailyQuestion {
+class DailyQuestion {
 
     private static final Random random = new Random();
     private static final int MOD = 1000000007;

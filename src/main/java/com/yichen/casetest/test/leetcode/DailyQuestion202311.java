@@ -10,7 +10,7 @@ import java.util.*;
  * @date 2023/11/2 07:59
  * @describe
  */
-public class DailyQuestion202311 {
+class DailyQuestion202311 {
 
     public static void main(String[] args) {
         DailyQuestion202311 dq = new DailyQuestion202311();
