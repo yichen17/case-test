@@ -3,6 +3,8 @@ package com.yichen.casetest.test.leetcode;
 import com.yichen.casetest.utils.StringUtils;
 
 import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * @author banYu
@@ -20,6 +22,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         maxResultTest(dq);
         StringUtils.divisionLine();
+        magicTowerTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -35,6 +39,49 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // LCP 30. 魔塔游戏
+
+    private static void magicTowerTest(DailyQuestion202402 dq){
+        System.out.println(dq.magicTower(new int[]{100,100,100,-250,-60,-140,-50,-50,100,150}));
+        System.out.println(dq.magicTower(new int[]{-200,-300,400,0}));
+        System.out.println(dq.magicTower(StringUtils.randomIntArray(9999, -9999, 9999)));
+    }
+
+    /**
+     * [-7,1,-3,-4]应该移除前面的 -7
+     * @param nums
+     * @return
+     */
+    public int magicTower(int[] nums) {
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1-o2;
+            }
+        });
+        int len = nums.length, result = 0;
+        long sum = 1L, total = 1L;
+        for (int i=0; i<len; i++){
+            total += nums[i];
+            // 小于等于0的挨个加
+            if (nums[i] <= 0){
+                priorityQueue.add(nums[i]);
+                sum += nums[i];
+                continue;
+            }
+            // 大于0的，做校准
+            while (sum <= 0){
+                sum -= priorityQueue.remove();
+                result++;
+            }
+            sum += nums[i];
+        }
+        if (total <= 0){
+            return -1;
+        }
+        return result;
     }
 
     // 1696. 跳跃游戏 VI
