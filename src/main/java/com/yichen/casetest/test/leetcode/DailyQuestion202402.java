@@ -2,9 +2,7 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * @author banYu
@@ -24,6 +22,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         magicTowerTest(dq);
         StringUtils.divisionLine();
+        replaceValueInTreeTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -39,6 +39,57 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 2641. 二叉树的堂兄弟节点 II
+
+    private static void replaceValueInTreeTest(DailyQuestion202402 dq){
+        // [0,0,0,7,7,null,11]
+        TreeNode.printTree(dq.replaceValueInTree(TreeNode.buildTree(new Integer[]{5,4,9,1,10,null,7})));
+        // [0,0,0]
+        TreeNode.printTree(dq.replaceValueInTree(TreeNode.buildTree(new Integer[]{3,1,2})));
+        // [0,0,0,7,7,null,11,12,null,11,null,17,17]
+        TreeNode.printTree(dq.replaceValueInTree(TreeNode.buildTree(new Integer[]{5,4,9,1,10,null,7,8,null,9,null,1,2})));
+    }
+
+    public TreeNode replaceValueInTree(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int total = 0, len;
+        root.val = 0;
+        while (!queue.isEmpty()){
+            total = 0;
+            len = queue.size();
+            for (TreeNode treeNode : queue) {
+                if (treeNode.left != null){
+                    total += treeNode.left.val;
+                }
+                if (treeNode.right != null){
+                    total += treeNode.right.val;
+                }
+            }
+            while (len > 0){
+                TreeNode node = queue.poll();
+                if (node.left == null && node.right == null){
+
+                }
+                else if (node.left == null){
+                    node.right.val = total - node.right.val;
+                    queue.offer(node.right);
+                }
+                else if (node.right == null){
+                    node.left.val = total - node.left.val;
+                    queue.offer(node.left);
+                }
+                else {
+                    node.left.val = node.right.val = total - node.right.val - node.left.val;
+                    queue.offer(node.left);
+                    queue.offer(node.right);
+                }
+                len --;
+            }
+        }
+        return root;
     }
 
     // LCP 30. 魔塔游戏
