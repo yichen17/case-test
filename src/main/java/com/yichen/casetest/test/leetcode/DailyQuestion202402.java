@@ -24,6 +24,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         replaceValueInTreeTest(dq);
         StringUtils.divisionLine();
+        isCousinsTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -39,6 +41,54 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 993. 二叉树的堂兄弟节点
+
+    private static void isCousinsTest(DailyQuestion202402 dq){
+        // false
+        System.out.println(dq.isCousins(TreeNode.buildTree(new Integer[]{1,2,3,4}), 4, 3));
+        // true
+        System.out.println(dq.isCousins(TreeNode.buildTree(new Integer[]{1,2,3,null,4,null,5}), 5, 4));
+        // false
+        System.out.println(dq.isCousins(TreeNode.buildTree(new Integer[]{1,2,3,null,4}), 2, 3));
+    }
+
+    public boolean isCousins(TreeNode root, int x, int y) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int childMatchTimes, allMatchTimes;
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            allMatchTimes = 0;
+            // 确保在同一层
+            while (len > 0){
+                len--;
+                childMatchTimes = 0;
+                TreeNode item = queue.poll();
+                // 过滤是否为统一个父节点
+                if (item.left != null){
+                    queue.add(item.left);
+                    if (item.left.val == x || item.left.val == y){
+                        childMatchTimes++;
+                    }
+                }
+                if (item.right != null){
+                    queue.add(item.right);
+                    if (item.right.val == x || item.right.val == y){
+                        childMatchTimes++;
+                    }
+                }
+                if (childMatchTimes == 2){
+                    return false;
+                }
+                allMatchTimes += childMatchTimes;
+            }
+            if (allMatchTimes == 2){
+                return true;
+            }
+        }
+        return false;
     }
 
     // 2641. 二叉树的堂兄弟节点 II
