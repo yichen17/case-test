@@ -26,6 +26,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         isCousinsTest(dq);
         StringUtils.divisionLine();
+        inorderTraversalTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -41,6 +43,40 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 236. 二叉树的最近公共祖先
+
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+         return null;
+    }
+
+    // 94. 二叉树的中序遍历
+
+    private static void inorderTraversalTest(DailyQuestion202402 dq){
+        // [1,3,2]
+        System.out.println(dq.inorderTraversal(TreeNode.buildTree(new Integer[]{1,null,2,3})));
+        // []
+        System.out.println(dq.inorderTraversal(TreeNode.buildTree(new Integer[]{})));
+        // [1]
+        System.out.println(dq.inorderTraversal(TreeNode.buildTree(new Integer[]{1})));
+    }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+        midSearch(root, result);
+        return result;
+    }
+
+
+    private void midSearch(TreeNode root, List<Integer> path){
+        if (root == null){
+            return ;
+        }
+        midSearch(root.left, path);
+        path.add(root.val);
+        midSearch(root.right, path);
     }
 
     // 993. 二叉树的堂兄弟节点
