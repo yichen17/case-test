@@ -49,8 +49,38 @@ class DailyQuestion202402 {
 
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-         return null;
+        LinkedList<TreeNode> pPath = new LinkedList<>(), qPath = new LinkedList<>();
+        dfs(root, p, pPath);
+        dfs(root, q, qPath);
+        Iterator<TreeNode> pi = pPath.iterator();
+        Iterator<TreeNode> qi = qPath.iterator();
+        TreeNode pre = null;
+        while (pi.hasNext() && qi.hasNext()){
+            TreeNode a = pi.next();
+            TreeNode b = qi.next();
+            if (a != b) {
+                return pre;
+            }
+            pre = a;
+        }
+        return pre;
     }
+
+    private boolean dfs(TreeNode root, TreeNode target, LinkedList<TreeNode> path){
+        if (root == null){
+            return false;
+        }
+        path.add(root);
+        if (root == target){
+            return true;
+        }
+        if (dfs(root.left, target, path) || dfs(root.right, target, path)){
+            return true;
+        }
+        path.removeLast();
+        return false;
+    }
+
 
     // 94. 二叉树的中序遍历
 
