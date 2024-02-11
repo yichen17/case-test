@@ -45,6 +45,23 @@ class DailyQuestion202402 {
         return 0;
     }
 
+    // 144. 二叉树的前序遍历
+
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+        preSearch(root, result);
+        return result;
+    }
+
+    private void preSearch(TreeNode root, List<Integer> result){
+        if (root == null){
+            return;
+        }
+        result.add(root.val);
+        preSearch(root.left, result);
+        preSearch(root.right, result);
+    }
+
     // 236. 二叉树的最近公共祖先
 
 
