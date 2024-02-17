@@ -45,6 +45,27 @@ class DailyQuestion202402 {
         return 0;
     }
 
+    // 589. N 叉树的前序遍历
+
+    public List<Integer> preorder(Node root) {
+        List<Integer> result = new LinkedList<>();
+        preSearch(root, result);
+        return result;
+    }
+
+    private void preSearch(Node root, List<Integer> result){
+        if (root == null){
+            return;
+        }
+        result.add(root.val);
+        if (root.children == null || root.children.isEmpty()){
+            return;
+        }
+        for (Node c : root.children){
+            preSearch(c, result);
+        }
+    }
+
     // 144. 二叉树的前序遍历
 
     public List<Integer> preorderTraversal(TreeNode root) {
