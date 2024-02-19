@@ -28,6 +28,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         inorderTraversalTest(dq);
         StringUtils.divisionLine();
+        postorderTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -43,6 +45,31 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 590. N 叉树的后序遍历
+
+    private static void  postorderTest(DailyQuestion202402 dq){
+        // [5,6,3,2,4,1]
+        StringUtils.rowPrintList(dq.postorder(Node.buildNode(new Integer[]{1,null,3,2,4,null,5,6})));
+        // [2,6,14,11,7,3,12,8,4,13,9,10,5,1]
+        StringUtils.rowPrintList(dq.postorder(Node.buildNode(new Integer[]{1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14})));
+    }
+
+    public List<Integer> postorder(Node root) {
+        List<Integer> result = new LinkedList<>();
+        postSearch(root, result);
+        return result;
+    }
+
+    private void postSearch(Node root, List<Integer> result){
+        if (root == null){
+            return;
+        }
+        for (Node c : root.children){
+            postSearch(c, result);
+        }
+        result.add(root.val);
     }
 
     // 589. N 叉树的前序遍历
