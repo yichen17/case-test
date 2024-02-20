@@ -30,6 +30,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         postorderTest(dq);
         StringUtils.divisionLine();
+        buildTreeTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -45,6 +47,35 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 105. 从前序与中序遍历序列构造二叉树
+
+    private static void buildTreeTest(DailyQuestion202402 dq){
+        // [3,9,20,null,null,15,7]
+        TreeNode.printTree(dq.buildTree(new int[]{3,9,20,15,7}, new int[]{9,3,15,20,7}));
+        // [-1]
+        TreeNode.printTree(dq.buildTree(new int[]{-1}, new int[]{-1}));
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return buildTree(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
+    }
+
+    private TreeNode buildTree(int[] preOrder, int pl, int pr, int[] inOrder, int il, int ir){
+        if (pl > pr || il >ir){
+            return null;
+        }
+        int i;
+        for (i=il; i<=ir; i++){
+            if (inOrder[i] == preOrder[pl]){
+                break;
+            }
+        }
+        TreeNode root = new TreeNode(preOrder[pl]);
+        root.left = this.buildTree(preOrder, pl+1, pl+i-il, inOrder, il, i-1);
+        root.right = this.buildTree(preOrder, pl+i-il+1, pr, inOrder, i+1, ir);
+        return root;
     }
 
     // 590. N 叉树的后序遍历
