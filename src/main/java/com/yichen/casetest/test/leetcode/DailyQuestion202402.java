@@ -30,6 +30,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         postorderTest(dq);
         StringUtils.divisionLine();
+        buildTree1Test(dq);
+        StringUtils.divisionLine();
         buildTreeTest(dq);
         StringUtils.divisionLine();
     }
@@ -49,20 +51,49 @@ class DailyQuestion202402 {
         return 0;
     }
 
-    // 105. 从前序与中序遍历序列构造二叉树
+    // 106. 从中序与后序遍历序列构造二叉树
 
     private static void buildTreeTest(DailyQuestion202402 dq){
         // [3,9,20,null,null,15,7]
-        TreeNode.printTree(dq.buildTree(new int[]{3,9,20,15,7}, new int[]{9,3,15,20,7}));
+        TreeNode.printTree(dq.buildTree(new int[]{9,3,15,20,7}, new int[]{9,15,7,20,3}));
         // [-1]
         TreeNode.printTree(dq.buildTree(new int[]{-1}, new int[]{-1}));
     }
 
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return buildTree(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
+    private int[] posMap;
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        posMap = new int[6002];
+        for (int i=0; i<inorder.length; i++){
+            posMap[inorder[i] + 3000] = i;
+        }
+        return buildTree(inorder, 0 ,inorder.length-1, postorder, 0, postorder.length-1);
+    }
+    private TreeNode buildTree(int[] inOrder, int il, int ir, int[] postOrder, int pl, int pr){
+        if (il > ir || pl >pr){
+            return null;
+        }
+        TreeNode root = new TreeNode(postOrder[pr]);
+        int pos = posMap[postOrder[pr] + 3000];
+        root.left = this.buildTree(inOrder, il, pos-1, postOrder, pl, pl + pos -1-il);
+        root.right = this.buildTree(inOrder, pos+1, ir, postOrder, pl+pos-il, pr-1);
+        return root;
     }
 
-    private TreeNode buildTree(int[] preOrder, int pl, int pr, int[] inOrder, int il, int ir){
+    // 105. 从前序与中序遍历序列构造二叉树
+
+    private static void buildTree1Test(DailyQuestion202402 dq){
+        // [3,9,20,null,null,15,7]
+        TreeNode.printTree(dq.buildTree1(new int[]{3,9,20,15,7}, new int[]{9,3,15,20,7}));
+        // [-1]
+        TreeNode.printTree(dq.buildTree1(new int[]{-1}, new int[]{-1}));
+    }
+
+    public TreeNode buildTree1(int[] preorder, int[] inorder) {
+        return buildTree1(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
+    }
+
+    private TreeNode buildTree1(int[] preOrder, int pl, int pr, int[] inOrder, int il, int ir){
         if (pl > pr || il >ir){
             return null;
         }
@@ -73,8 +104,8 @@ class DailyQuestion202402 {
             }
         }
         TreeNode root = new TreeNode(preOrder[pl]);
-        root.left = this.buildTree(preOrder, pl+1, pl+i-il, inOrder, il, i-1);
-        root.right = this.buildTree(preOrder, pl+i-il+1, pr, inOrder, i+1, ir);
+        root.left = this.buildTree1(preOrder, pl+1, pl+i-il, inOrder, il, i-1);
+        root.right = this.buildTree1(preOrder, pl+i-il+1, pr, inOrder, i+1, ir);
         return root;
     }
 
