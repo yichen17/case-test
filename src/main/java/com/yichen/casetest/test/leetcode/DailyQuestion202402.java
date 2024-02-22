@@ -34,6 +34,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         buildTreeTest(dq);
         StringUtils.divisionLine();
+        constructFromPrePostTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -51,6 +53,40 @@ class DailyQuestion202402 {
         return 0;
     }
 
+    // 889. 根据前序和后序遍历构造二叉树
+
+    private static void constructFromPrePostTest(DailyQuestion202402 dq){
+        // 1,2,3,4,5,6,7
+        TreeNode.printTree(dq.constructFromPrePost(new int[]{1,2,4,5,3,6,7}, new int[]{4,5,2,6,7,3,1}));
+        // 1
+        TreeNode.printTree(dq.constructFromPrePost(new int[]{1}, new int[]{1}));
+    }
+
+    Map<Integer, Integer> posMap;
+
+    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
+        posMap = new HashMap<>();
+        for (int i=0; i<postorder.length; i++){
+            posMap.put(postorder[i], i);
+        }
+        return constructTree(preorder, 0, preorder.length-1, postorder, 0, postorder.length-1);
+    }
+
+    private TreeNode constructTree(int[] preOrder, int pl, int pr, int[] postOrder, int ppl, int ppr){
+        if (pl > pr || ppl > ppr){
+            return null;
+        }
+        TreeNode root = new TreeNode(preOrder[pl]);
+        if (pl == pr || ppl == ppr){
+            return root;
+        }
+        int pos = posMap.get(preOrder[pl+1]);
+        root.left = this.constructTree(preOrder, pl+1, pl+pos-ppl+1, postOrder, ppl, pos);
+        root.right = this.constructTree(preOrder, pl+pos-ppl+2, pr, postOrder, pos+1, ppr-1);
+        return root;
+    }
+
+
     // 106. 从中序与后序遍历序列构造二叉树
 
     private static void buildTreeTest(DailyQuestion202402 dq){
@@ -60,23 +96,23 @@ class DailyQuestion202402 {
         TreeNode.printTree(dq.buildTree(new int[]{-1}, new int[]{-1}));
     }
 
-    private int[] posMap;
+    private int[] posMap2;
 
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        posMap = new int[6002];
+        posMap2 = new int[6002];
         for (int i=0; i<inorder.length; i++){
-            posMap[inorder[i] + 3000] = i;
+            posMap2[inorder[i] + 3000] = i;
         }
-        return buildTree(inorder, 0 ,inorder.length-1, postorder, 0, postorder.length-1);
+        return buildTree2(inorder, 0 ,inorder.length-1, postorder, 0, postorder.length-1);
     }
-    private TreeNode buildTree(int[] inOrder, int il, int ir, int[] postOrder, int pl, int pr){
+    private TreeNode buildTree2(int[] inOrder, int il, int ir, int[] postOrder, int pl, int pr){
         if (il > ir || pl >pr){
             return null;
         }
         TreeNode root = new TreeNode(postOrder[pr]);
-        int pos = posMap[postOrder[pr] + 3000];
-        root.left = this.buildTree(inOrder, il, pos-1, postOrder, pl, pl + pos -1-il);
-        root.right = this.buildTree(inOrder, pos+1, ir, postOrder, pl+pos-il, pr-1);
+        int pos = posMap2[postOrder[pr] + 3000];
+        root.left = this.buildTree2(inOrder, il, pos-1, postOrder, pl, pl + pos -1-il);
+        root.right = this.buildTree2(inOrder, pos+1, ir, postOrder, pl+pos-il, pr-1);
         return root;
     }
 
