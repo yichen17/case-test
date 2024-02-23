@@ -36,6 +36,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         constructFromPrePostTest(dq);
         StringUtils.divisionLine();
+        kthLargestLevelSumTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -51,6 +53,54 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 2583. 二叉树中的第 K 大层和
+
+    private static void kthLargestLevelSumTest(DailyQuestion202402 dq){
+        // 13
+        System.out.println(dq.kthLargestLevelSum(TreeNode.buildTree(new Integer[]{5,8,9,2,1,3,7,4,6}), 2));
+        // 3
+        System.out.println(dq.kthLargestLevelSum(TreeNode.buildTree(new Integer[]{1,2,null,3}), 1));
+
+    }
+
+    public long kthLargestLevelSum(TreeNode root, int k) {
+        if (root == null || k < 1){
+            return -1;
+        }
+        PriorityQueue<Long> priorityQueue = new PriorityQueue<>(new Comparator<Long>() {
+            @Override
+            public int compare(Long o1, Long o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            Long count = 0L;
+            int len = queue.size();
+            while (len > 0){
+                len --;
+                TreeNode item = queue.poll();
+                if (item.left != null){
+                    queue.offer(item.left);
+                }
+                if (item.right != null){
+                    queue.offer(item.right);
+                }
+                count += item.val;
+            }
+            if (priorityQueue.size() < k){
+                priorityQueue.offer(count);
+            }
+            else if (priorityQueue.peek() < count){
+                priorityQueue.poll();
+                priorityQueue.add(count);
+            }
+
+        }
+        return priorityQueue.size() == k ? priorityQueue.peek() : -1;
     }
 
     // 889. 根据前序和后序遍历构造二叉树
