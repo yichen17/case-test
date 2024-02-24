@@ -69,33 +69,45 @@ class DailyQuestion202402 {
                 Arrays.asList(3))));;
     }
 
+    int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+
     public List<List<Integer>> closestNodes(TreeNode root, List<Integer> queries) {
+        min = Integer.MAX_VALUE; max = Integer.MIN_VALUE;
         List<List<Integer>> result = new LinkedList<>();
-        for (Integer query : queries) {
-            result.add(Arrays.asList(searchSmall(root, query, -1), searchGreater(root, query, -1)));
+        TreeSet<Integer> set = new TreeSet<>();
+        dfs(root, set);
+        for (Integer query : queries){
+            if (query < min){
+                result.add(Arrays.asList(-1, min));
+            }
+            else if (query > max){
+                result.add(Arrays.asList(max, -1));
+            }
+            else if (set.contains(query)){
+                result.add(Arrays.asList(query, query));
+            }
+            else {
+                result.add(Arrays.asList(set.lower(query), set.higher(query)));
+            }
         }
         return result;
     }
 
-    private int searchGreater(TreeNode root, int target, int pre){
+
+
+    private void dfs(TreeNode root, TreeSet<Integer> set){
         if (root == null){
-            return pre;
+            return;
         }
-        if (root.val < target){
-            return searchGreater(root.right, target, pre);
-        }
-        return searchGreater(root.left, target, root.val);
+        dfs(root.left, set);
+        min = Math.min(min, root.val);
+        max = Math.max(max, root.val);
+        set.add(root.val);
+        dfs(root.right, set);
     }
 
-    private int searchSmall(TreeNode root, int target, int pre){
-        if (root == null){
-            return pre;
-        }
-        if (root.val > target){
-            return searchSmall(root.left, target, pre);
-        }
-        return searchSmall(root.right, target, root.val);
-    }
+
+
 
     // 2583. 二叉树中的第 K 大层和
 
