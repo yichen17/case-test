@@ -41,6 +41,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         closestNodesTest(dq);
         StringUtils.divisionLine();
+        lowestCommonAncestorTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -56,6 +58,50 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 235. 二叉搜索树的最近公共祖先
+
+    private static void lowestCommonAncestorTest(DailyQuestion202402 dq){
+        Map<Integer, TreeNode> valMap = new HashMap<>();
+        TreeNode root = TreeNode.buildUniqueValTree(new Integer[]{6, 2, 8, 0, 4, 7, 9, null, null, 3, 5}, valMap);
+        // 6
+        System.out.println(dq.lowestCommonAncestor(root, valMap.get(2), valMap.get(8)).getVal());
+        // 2
+        System.out.println(dq.lowestCommonAncestor(root, valMap.get(2), valMap.get(4)).getVal());
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        List<TreeNode> pPath = new LinkedList<>(), qPath = new LinkedList<>();
+        searchNode(root, p, pPath);
+        searchNode(root, q, qPath);
+        TreeNode pre = null;
+        for (int i=0; i<Math.min(pPath.size(), qPath.size()); i++){
+            if (pPath.get(i) == qPath.get(i)){
+                pre = pPath.get(i);
+            }
+            else {
+                break;
+            }
+        }
+        return pre;
+    }
+
+    private void searchNode(TreeNode root, TreeNode target, List<TreeNode> path){
+        if (root == null){
+            return;
+        }
+        path.add(root);
+        if (root == target){
+            return;
+        }
+        if (root.val > target.val){
+            searchNode(root.left, target, path);
+        }
+        else {
+            searchNode(root.right, target, path);
+        }
+
     }
 
     // 2476. 二叉搜索树最近节点查询
@@ -315,7 +361,7 @@ class DailyQuestion202402 {
     // 236. 二叉树的最近公共祖先
 
 
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
         LinkedList<TreeNode> pPath = new LinkedList<>(), qPath = new LinkedList<>();
         dfs(root, p, pPath);
         dfs(root, q, qPath);

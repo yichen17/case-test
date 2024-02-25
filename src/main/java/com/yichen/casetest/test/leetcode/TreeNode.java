@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -39,6 +40,40 @@ public class TreeNode {
     }
 
     private static final String NULL = "null";
+
+    /**
+     * 唯一val构造树
+     * @param nodes 节点数组
+     * @param valMap 唯一val对应的树节点
+     * @return
+     */
+    public static TreeNode buildUniqueValTree(Integer[] nodes, Map<Integer, TreeNode> valMap){
+        if (nodes.length == 0 || (nodes.length == 1 && Objects.isNull(nodes[0]))){
+            return null;
+        }
+        TreeNode root = new TreeNode(nodes[0]);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int pos = 1;
+        while(!queue.isEmpty() && pos < nodes.length){
+            TreeNode node = queue.poll();
+            valMap.put(node.val, node);
+            if (Objects.nonNull(nodes[pos])){
+                node.left = new TreeNode(nodes[pos]);
+                queue.offer(node.left);
+            }
+            pos++;
+            if (pos == nodes.length){
+                break;
+            }
+            if (Objects.nonNull(nodes[pos])){
+                node.right = new TreeNode(nodes[pos]);
+                queue.offer(node.right);
+            }
+            pos++;
+        }
+        return root;
+    }
 
     /**
      * 构造树

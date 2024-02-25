@@ -564,17 +564,7 @@ public class StringUtils {
 
     private static final Pattern convert2ArrayPattern = Pattern.compile("\\[(.*?)\\]");
     public static int[][] convert2Array(String s){
-        s = s.replace(" ", "");
-        List<List<Integer>> list = new ArrayList<>();
-        Matcher matcher = convert2ArrayPattern.matcher(s);
-        while (matcher.find()){
-             String item = matcher.group(1);
-            item = item.replaceAll("^\\[|\\]$", "");
-            if (org.apache.commons.lang3.StringUtils.isEmpty(item)){
-                break;
-            }
-            list.add(Arrays.stream(item.split(CommonConstants.COMMA)).map(Integer::valueOf).collect(Collectors.toList()));
-        }
+        List<List<Integer>> list = convert2List(s);
         if (CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(list.get(0))){
             return new int[0][0];
         }
@@ -585,6 +575,21 @@ public class StringUtils {
             }
         }
         return result;
+    }
+
+    public static List<List<Integer>> convert2List(String s){
+        s = s.replace(" ", "");
+        List<List<Integer>> list = new ArrayList<>();
+        Matcher matcher = convert2ArrayPattern.matcher(s);
+        while (matcher.find()){
+            String item = matcher.group(1);
+            item = item.replaceAll("^\\[|\\]$", "");
+            if (org.apache.commons.lang3.StringUtils.isEmpty(item)){
+                break;
+            }
+            list.add(Arrays.stream(item.split(CommonConstants.COMMA)).map(Integer::valueOf).collect(Collectors.toList()));
+        }
+        return list;
     }
 
     public static void arrayTwoDimensionPrint(int[][] array){
