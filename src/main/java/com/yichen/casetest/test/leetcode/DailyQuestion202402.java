@@ -2,6 +2,7 @@ package com.yichen.casetest.test.leetcode;
 
 import com.alibaba.fastjson.JSON;
 import com.yichen.casetest.utils.StringUtils;
+import javafx.util.Pair;
 
 import java.util.*;
 
@@ -43,6 +44,18 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         lowestCommonAncestorTest(dq);
         StringUtils.divisionLine();
+        postorderTraversalTest(dq);
+        StringUtils.divisionLine();
+        levelOrderTest(dq);
+        StringUtils.divisionLine();
+        levelOrderBottomTest(dq);
+        StringUtils.divisionLine();
+        zigzagLevelOrderTest(dq);
+        StringUtils.divisionLine();
+        levelOrderTest1(dq);
+        StringUtils.divisionLine();
+        verticalTraversalTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -58,6 +71,229 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 987. 二叉树的垂序遍历
+
+    private static void verticalTraversalTest(DailyQuestion202402 dq){
+        // [[9],[3,15],[20],[7]]
+        System.out.println(JSON.toJSONString(dq.verticalTraversal(TreeNode.buildTree(new Integer[]{3,9,20,null,null,15,7}))));
+        // [[4],[2],[1,5,6],[3],[7]]
+        System.out.println(JSON.toJSONString(dq.verticalTraversal(TreeNode.buildTree(new Integer[]{1,2,3,4,5,6,7}))));
+        // [[4],[2],[1,5,6],[3],[7]]
+        System.out.println(JSON.toJSONString(dq.verticalTraversal(TreeNode.buildTree(new Integer[]{1,2,3,4,6,5,7}))));
+    }
+
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> result = new LinkedList<>();
+        if (root == null){
+            return result;
+        }
+        Map<Integer, List<Integer>> posMap = new HashMap<>();
+        Queue<Pair<TreeNode, Integer>> queue = new LinkedList<>();
+        queue.offer(new Pair<>(root, 0));
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            Map<Integer, List<Integer>> linePosMap = new HashMap<>();
+            while (len > 0){
+                len --;
+                Pair<TreeNode, Integer> pair = queue.poll();
+                linePosMap.computeIfAbsent(pair.getValue(), x -> new LinkedList<>());
+                linePosMap.get(pair.getValue()).add(pair.getKey().getVal());
+                if (pair.getKey().left != null){
+                    queue.offer(new Pair<>(pair.getKey().left, pair.getValue() - 1));
+                }
+                if (pair.getKey().right != null){
+                    queue.offer(new Pair<>(pair.getKey().right, pair.getValue() + 1));
+                }
+            }
+            // 将每层的结果合并
+            for (Map.Entry<Integer, List<Integer>> entry : linePosMap.entrySet()) {
+                posMap.computeIfAbsent(entry.getKey(), x -> new LinkedList<>());
+                Collections.sort(entry.getValue());
+                posMap.get(entry.getKey()).addAll(entry.getValue());
+            }
+        }
+        // 从左到右组装结果
+        List<Integer> posList = new ArrayList<>(posMap.keySet());
+        Collections.sort(posList);
+        for (Integer p : posList){
+            result.add(posMap.get(p));
+        }
+        return result;
+    }
+
+
+
+
+    // 429. N 叉树的层序遍历
+
+    private static void levelOrderTest1(DailyQuestion202402 dq){
+        // [[1],[3,2,4],[5,6]]
+        System.out.println(JSON.toJSONString(dq.levelOrder(Node.buildNode(new Integer[]{1,null,3,2,4,null,5,6}))));
+        // [[1],[2,3,4,5],[6,7,8,9,10],[11,12,13],[14]]
+        System.out.println(JSON.toJSONString(dq.levelOrder(Node.buildNode(new Integer[]{1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14}))));
+    }
+
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> result = new LinkedList<>();
+        if (root == null){
+            return result;
+        }
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            List<Integer> lineItem = new LinkedList<>();
+            while (len > 0){
+                len --;
+                Node node = queue.poll();
+                lineItem.add(node.val);
+                if (node.children == null){
+                    continue;
+                }
+                for (Node c : node.children){
+                    queue.offer(c);
+                }
+            }
+            result.add(lineItem);
+        }
+        return result;
+    }
+
+    // 103. 二叉树的锯齿形层序遍历
+
+    private static void zigzagLevelOrderTest(DailyQuestion202402 dq){
+        // [[3],[20,9],[15,7]]
+        System.out.println(JSON.toJSONString(dq.zigzagLevelOrder(TreeNode.buildTree(new Integer[]{3,9,20,null,null,15,7}))));
+        System.out.println(JSON.toJSONString(dq.zigzagLevelOrder(TreeNode.buildTree(new Integer[]{1}))));
+        System.out.println(JSON.toJSONString(dq.zigzagLevelOrder(TreeNode.buildTree(new Integer[]{}))));
+    }
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> result = new LinkedList<>();
+        if (root == null){
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean order = true;
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            List<Integer> lineItem = new LinkedList<>();
+            while (len > 0){
+                len --;
+                TreeNode node = queue.poll();
+                if (order){
+                    lineItem.add(node.val);
+                }
+                else {
+                    lineItem.add(0, node.val);
+                }
+                if (node.left != null){
+                    queue.offer(node.left);
+                }
+                if (node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+            order = !order;
+            result.add(lineItem);
+        }
+        return result;
+    }
+
+    // 107. 二叉树的层序遍历 II
+
+    private static void levelOrderBottomTest(DailyQuestion202402 dq){
+        // [[15,7],[9,20],[3]]
+        System.out.println(JSON.toJSONString(dq.levelOrderBottom(TreeNode.buildTree(new Integer[]{3,9,20,null,null,15,7}))));
+        System.out.println(JSON.toJSONString(dq.levelOrderBottom(TreeNode.buildTree(new Integer[]{1}))));
+        System.out.println(JSON.toJSONString(dq.levelOrderBottom(TreeNode.buildTree(new Integer[]{}))));
+    }
+
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> result = new LinkedList<>();
+        if (root == null){
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            List<Integer> lineItem = new LinkedList<>();
+            while (len > 0){
+                len --;
+                TreeNode node = queue.poll();
+                lineItem.add(node.val);
+                if (node.left != null){
+                    queue.offer(node.left);
+                }
+                if (node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+            result.add(0, lineItem);
+        }
+        return result;
+    }
+
+    // 102. 二叉树的层序遍历
+
+    private static void levelOrderTest(DailyQuestion202402 dq){
+        // [[3],[9,20],[15,7]]
+        System.out.println(JSON.toJSONString(dq.levelOrder(TreeNode.buildTree(new Integer[]{3,9,20,null,null,15,7}))));
+        System.out.println(JSON.toJSONString(dq.levelOrder(TreeNode.buildTree(new Integer[]{1}))));
+        System.out.println(JSON.toJSONString(dq.levelOrder(TreeNode.buildTree(new Integer[]{}))));
+    }
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new LinkedList<>();
+        if (root == null){
+            return result;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            List<Integer> lineItem = new LinkedList<>();
+            while (len > 0){
+                len --;
+                TreeNode node = queue.poll();
+                lineItem.add(node.val);
+                if (node.left != null){
+                    queue.offer(node.left);
+                }
+                if (node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+            result.add(lineItem);
+        }
+        return result;
+    }
+
+    // 145. 二叉树的后序遍历
+
+    private static void postorderTraversalTest(DailyQuestion202402 dq){
+        System.out.println(dq.postorderTraversal(TreeNode.buildTree(new Integer[]{1,null,2,3})));
+        System.out.println(dq.postorderTraversal(TreeNode.buildTree(new Integer[]{})));
+        System.out.println(dq.postorderTraversal(TreeNode.buildTree(new Integer[]{1})));
+    }
+
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result= new LinkedList<>();
+        sufSearch(root, result);
+        return result;
+    }
+
+    private void sufSearch(TreeNode root, List<Integer> result){
+        if (root == null){
+            return;
+        }
+        sufSearch(root.left, result);
+        sufSearch(root.right, result);
+        result.add(root.val);
     }
 
     // 235. 二叉搜索树的最近公共祖先
