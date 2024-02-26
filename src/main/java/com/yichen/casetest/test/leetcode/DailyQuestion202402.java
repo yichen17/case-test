@@ -56,6 +56,8 @@ class DailyQuestion202402 {
         StringUtils.divisionLine();
         verticalTraversalTest(dq);
         StringUtils.divisionLine();
+        rangeSumBSTTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 1686. 石子游戏 VI
@@ -71,6 +73,51 @@ class DailyQuestion202402 {
 
     public int stoneGameVI(int[] aliceValues, int[] bobValues) {
         return 0;
+    }
+
+    // 938. 二叉搜索树的范围和
+
+    private static void rangeSumBSTTest(DailyQuestion202402 dq){
+        // 32
+        System.out.println(dq.rangeSumBST(TreeNode.buildTree(new Integer[]{10,5,15,3,7,null,18}), 7, 15));
+        // 23
+        System.out.println(dq.rangeSumBST(TreeNode.buildTree(new Integer[]{10,5,15,3,7,13,18,1,null,6}), 6, 10));
+        System.out.println(dq.rangeSumBST(TreeNode.buildTree(new Integer[]{10,5,15,3,7,13,18,1,null,6}), 4, 12));
+    }
+
+
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        result = 0;
+        this.status = 0;
+        this.low = low;
+        this.high = high;
+        dfs(root);
+        return result;
+    }
+
+    int result,low,high,status;
+
+
+
+    private void dfs(TreeNode root){
+        if (root == null || status == 2){
+            return;
+        }
+        dfs(root.left);
+        if (status == 0 && root.val >= low){
+            status = 1;
+        }
+        if (status == 1){
+            if (root.val <= high){
+                result += root.val;
+            }
+            else {
+                status = 2;
+                return;
+            }
+        }
+
+        dfs(root.right);
     }
 
     // 987. 二叉树的垂序遍历
