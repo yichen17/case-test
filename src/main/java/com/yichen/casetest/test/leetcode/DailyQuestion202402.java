@@ -75,6 +75,18 @@ class DailyQuestion202402 {
         return 0;
     }
 
+    // 2867. 统计树中的合法路径数目
+
+    /**
+     * 找到质数节点，深度搜索，结果乘积，断开起始连接
+     * @param n
+     * @param edges
+     * @return
+     */
+    public long countPaths(int n, int[][] edges) {
+        return 0L;
+    }
+
     // 938. 二叉搜索树的范围和
 
     private static void rangeSumBSTTest(DailyQuestion202402 dq){

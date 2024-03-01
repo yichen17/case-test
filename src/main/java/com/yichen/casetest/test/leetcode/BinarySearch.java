@@ -116,4 +116,44 @@ public class BinarySearch {
         return nums.length;
     }
 
+    /**
+     * 找到第一个大于等于{@code target}的坐标
+     * @param nums 递增数组，可重复
+     * @param target 比对值
+     * @return
+     */
+    private static int getFirstGreaterEqual(int[] nums, int target){
+        return -1;
+    }
+
+    /**
+     * 找到最后一个小于等于{@code target}的坐标
+     * @param nums 递增数组，可重复
+     * @param target 比对值
+     * @return
+     */
+    private static int getLastSmallerEqual(int[] nums, int target){
+        return -1;
+    }
+
+    /**
+     * 找到对应类型下符合条件的坐标
+     * @param nums 递增数组
+     * @param target 目标值
+     * @param type 类型 true表示第一个大于等于，false表示最后一个小于等于
+     * @return
+     */
+    private static int getPos(int[] nums, int target, boolean type){
+        for (int i=0; i<nums.length; i++){
+            if (type && nums[i] >= target){
+                return i;
+            }
+            else if (!type && nums[i] > target){
+                return i-1;
+            }
+        }
+        return nums.length;
+    }
+
+
 }
