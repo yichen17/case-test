@@ -1,6 +1,12 @@
 package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
+import com.yichen.casetest.utils.TreeUtils;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * @author banYu
@@ -14,6 +20,58 @@ public class DailyQuestion202403 {
         DailyQuestion202403 dq = new DailyQuestion202403();
         validPartitionTest(dq);
         StringUtils.divisionLine();
+        reachableNodesTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2368. 受限条件下可到达节点的数目
+
+    private static void reachableNodesTest(DailyQuestion202403 dq) {
+        System.out.println(dq.reachableNodes(100, TreeUtils.buildNoDirectTree(100), StringUtils.randomNoRepeat(20, 0, 99)));
+        // 4
+        System.out.println(dq.reachableNodes(7, StringUtils.convert2Array("[[0,1],[1,2],[3,1],[4,0],[0,5],[5,6]]"), new int[]{4, 5}));
+        // 3
+        System.out.println(dq.reachableNodes(7, StringUtils.convert2Array("[[0,1],[0,2],[0,5],[0,4],[3,2],[6,5]]"), new int[]{4, 2, 1}));
+
+
+    }
+
+    public int reachableNodes(int n, int[][] edges, int[] restricted) {
+        Set<Integer>[] link = new Set[n];
+        for (int[] edge : edges){
+            if (link[edge[0]] == null){
+                link[edge[0]] = new HashSet<>();
+            }
+            link[edge[0]].add(edge[1]);
+            if (link[edge[1]] == null){
+                link[edge[1]] = new HashSet<>();
+            }
+            link[edge[1]].add(edge[0]);
+        }
+        Set<Integer> excludeNodes = new HashSet<>();
+        for (int i : restricted){
+            excludeNodes.add(i);
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        int result = 0;
+        while (!queue.isEmpty()){
+            result ++;
+            int item = queue.poll();
+            if (link[item] == null){
+                continue;
+            }
+            for (int i : link[item]){
+                if (excludeNodes.contains(i)){
+                    continue;
+                }
+                // 可以加入的节点
+                queue.offer(i);
+                // 移除链接，防止死循环
+                link[i].remove(item);
+            }
+        }
+        return result;
     }
 
     // 2369. 检查数组是否存在有效划分
