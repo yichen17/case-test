@@ -17,6 +17,78 @@ import java.util.*;
 @Slf4j
 public class FileUtils {
 
+
+
+
+
+    /**
+     * 替换 {@code searchDir}中所有remark信息，以及空行   用于解决源码反编译处理费代码
+     * @param searchDir
+     */
+    public static void removeRemarkLine(String searchDir){
+        File directory = new File(searchDir);
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        removeRemarkLine(file.getAbsolutePath());
+                    } else if (file.getName().endsWith(".java")) {
+                        removeCommentsAndEmptyLines(file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+    }
+
+    public static void removeCommentsAndEmptyLines(String filePath) {
+        try {
+            List<String> modifiedLines = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            boolean commentStart = false;
+
+            while ((line = reader.readLine()) != null) {
+                sb.setLength(0);
+                // 每一行逐个字符匹配， 碰到  /* 标记注释开头    碰到  */ 丢弃范围内的东西
+                for (int i=0; i<line.length(); i++){
+                    if (line.charAt(i) == '/' && i != line.length() - 1 && line.charAt(i+1) == '*'){
+                        commentStart = true;
+                        i++;
+                        continue;
+                    }
+                    if (commentStart && line.charAt(i) == '/' && i != 0 && line.charAt(i-1) == '*'){
+                        commentStart = false;
+                        continue;
+                    }
+                    if (!commentStart){
+                        sb.append(line.charAt(i));
+                    }
+                }
+                line = sb.toString();
+                if (line.trim().isEmpty()){
+                    continue;
+                }
+//                modifiedLines.add(line.trim());
+                modifiedLines.add(line);
+            }
+            reader.close();
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            for (String modifiedLine : modifiedLines) {
+                writer.write(modifiedLine);
+                writer.newLine();
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
     /**
      * 默认所有文件的编码格式都是utf-8<br/>
      * 同类功能文件合并，例如两个账户文件合并<br/>
@@ -253,10 +325,9 @@ public class FileUtils {
 
 //        doMergeFileBase(s, "/opt/homebrew/var/db/redis/b.txt", "/opt/homebrew/var/db/redis/a.txt");
 
-        base64EncoderCompare();
+//        base64EncoderCompare();
 
-
-
+        removeRemarkLine("/Users/banyu/personal/agent-demo/agent/src/main/java");
     }
 
     /**
