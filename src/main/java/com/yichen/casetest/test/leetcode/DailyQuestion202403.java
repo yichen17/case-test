@@ -3,10 +3,7 @@ package com.yichen.casetest.test.leetcode;
 import com.yichen.casetest.utils.StringUtils;
 import com.yichen.casetest.utils.TreeUtils;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author banYu
@@ -24,7 +21,65 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         myStackTest(dq);
         StringUtils.divisionLine();
+        MyQueueTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 232. 用栈实现队列
+
+    private static void MyQueueTest(DailyQuestion202403 dq){
+        MyQueue myQueue = new MyQueue();
+        myQueue.push(1);
+        myQueue.push(2);
+        System.out.println(myQueue.peek());
+        System.out.println(myQueue.pop());
+        System.out.println(myQueue.empty());
+        myQueue.push(3);
+        System.out.println(myQueue.peek());
+        System.out.println(myQueue.pop());
+        System.out.println(myQueue.empty());
+        System.out.println(myQueue.peek());
+        System.out.println(myQueue.pop());
+        System.out.println(myQueue.empty());
+    }
+
+    static class MyQueue {
+
+        Stack<Integer> left, right;
+
+        public MyQueue() {
+            left = new Stack<>();
+            right = new Stack<>();
+        }
+
+        public void push(int x) {
+            right.push(x);
+        }
+
+        public int pop() {
+            ttt();
+            return left.pop();
+        }
+
+        private void ttt(){
+            if (left.isEmpty()){
+                while (!right.isEmpty()){
+                    left.push(right.pop());
+                }
+            }
+        }
+
+        public int peek() {
+            ttt();
+            return left.peek();
+        }
+
+        public boolean empty() {
+            return left.isEmpty() && right.isEmpty();
+        }
+    }
+
+    // 225. 用队列实现栈
 
     private static void myStackTest(DailyQuestion202403 dq){
         MyStack myStack = new MyStack();
@@ -51,7 +106,7 @@ public class DailyQuestion202403 {
 
     }
 
-    // 225. 用队列实现栈
+
 
     static class MyStack {
 
