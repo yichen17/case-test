@@ -22,6 +22,74 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         reachableNodesTest(dq);
         StringUtils.divisionLine();
+        myStackTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    private static void myStackTest(DailyQuestion202403 dq){
+        MyStack myStack = new MyStack();
+        myStack.push(1);
+        myStack.push(2);
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+        System.out.println(myStack.empty());
+        // 后续边界值判断
+        System.out.println(myStack.pop());
+
+        myStack.push(1);
+        myStack.push(2);
+        myStack.push(3);
+        myStack.push(4);
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+        System.out.println(myStack.top());
+        System.out.println(myStack.pop());
+
+    }
+
+    // 225. 用队列实现栈
+
+    static class MyStack {
+
+        Queue<Integer> left, right;
+
+        public MyStack() {
+            left = new LinkedList<>();
+            right = new LinkedList<>();
+        }
+
+        public void push(int x) {
+            right.offer(x);
+        }
+
+        public int pop() {
+            ttt();
+            return right.poll();
+        }
+
+        private void ttt(){
+            if (right.isEmpty()){
+                Queue<Integer> tmp = right;
+                right = left;
+                left = tmp;
+            }
+            while (right.size() > 1){
+                left.offer(right.poll());
+            }
+        }
+
+        public int top() {
+            ttt();
+            return right.peek();
+        }
+
+        public boolean empty() {
+            return left.isEmpty() && right.isEmpty();
+        }
     }
 
     // 2368. 受限条件下可到达节点的数目
