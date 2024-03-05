@@ -23,6 +23,67 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         MyQueueTest(dq);
         StringUtils.divisionLine();
+        countPathsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1976. 到达目的地的方案数
+
+    private static void countPathsTest(DailyQuestion202403 dq){
+        // 4
+        System.out.println(dq.countPaths(7, StringUtils.convert2Array("[[0,6,7],[0,1,2],[1,2,3],[1,3,3],[6,3,3],[3,5,1],[6,5,1],[2,5,1],[0,4,5],[4,6,2]]")));
+        // 1
+        System.out.println(dq.countPaths(2, StringUtils.convert2Array("[[1,0,10]]")));
+    }
+
+    private int minTime = Integer.MAX_VALUE;
+    private int result = 0;
+
+    public int countPaths(int n, int[][] roads) {
+
+        result = 0;
+        minTime = Integer.MAX_VALUE;
+
+        Set<Integer> visited = new HashSet<>();
+        int[][] times = new int[n][n];
+        List<Integer>[] link = new List[n];
+        for (int i=0; i<n; i++){
+            link[i] = new LinkedList<>();
+        }
+        for (int[] road : roads){
+            int from = road[0];
+            int to = road[1];
+            int w = road[2];
+            times[from][to] = w;
+            times[to][from] = w;
+            link[from].add(to);
+            link[to].add(from);
+        }
+        visited.add(0);
+        dfs(times, link, visited, 0, 0);
+        return result;
+    }
+
+    private void dfs(int[][] times, List<Integer>[] link, Set<Integer> visited, int pos, int count){
+        if (count > minTime){
+            return;
+        }
+        if (pos == times.length-1){
+            if (count < minTime){
+                minTime = count;
+                result = 1;
+            }
+            else {
+                result ++;
+            }
+            return;
+        }
+        for (Integer i : link[pos]) {
+            if (visited.add(i)){
+                dfs(times, link, visited, i, count + times[i][pos]);
+                visited.remove(i);
+            }
+        }
     }
 
     // 232. 用栈实现队列
