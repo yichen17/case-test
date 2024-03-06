@@ -25,6 +25,41 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         countPathsTest(dq);
         StringUtils.divisionLine();
+        findKOrTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2917. 找出数组中的 K-or 值
+
+    private static void findKOrTest(DailyQuestion202403 dq){
+        // 9
+        System.out.println(dq.findKOr(new int[]{7,12,9,8,9,15}, 4));
+        // 0
+        System.out.println(dq.findKOr(new int[]{2,12,1,11,4,5}, 6));
+        // 15
+        System.out.println(dq.findKOr(new int[]{10,8,5,9,11,6,8}, 1));
+
+        System.out.println(dq.findKOr(StringUtils.randomIntArray(40, 0, 1000000000), 20));
+    }
+
+    public int findKOr(int[] nums, int k) {
+        int[] f = new int[32];
+        for (int num : nums){
+            int i = 0;
+            while (num > 0){
+                f[31 - i] += num & 1;
+                num = num >> 1;
+                i++;
+            }
+        }
+        int result = 0;
+        for (int i=0; i<32; i++){
+            result *= 2;
+            if (f[i] >= k){
+                result += 1;
+            }
+        }
+        return result;
     }
 
     // 1976. 到达目的地的方案数
