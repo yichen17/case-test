@@ -27,6 +27,31 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         findKOrTest(dq);
         StringUtils.divisionLine();
+        divisibilityArrayTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2575. 找出字符串的可整除数组
+
+    private static void divisibilityArrayTest(DailyQuestion202403 dq){
+        // [1,1,0,0,0,1,1,0,0]
+        StringUtils.printIntArray(dq.divisibilityArray("998244353", 3));
+        // [0,1,0,1]
+        StringUtils.printIntArray(dq.divisibilityArray("1010", 10));
+    }
+
+    public int[] divisibilityArray(String word, int m) {
+        int len = word.length();
+        int[] result = new int[len];
+        long ttt = 0;
+        for (int i=0; i<len; i++){
+            ttt = ttt * 10 + word.charAt(i) - '0';
+            if (ttt % m == 0){
+                result[i] = 1;
+            }
+            ttt = ttt % m;
+        }
+        return result;
     }
 
     // 2917. 找出数组中的 K-or 值
