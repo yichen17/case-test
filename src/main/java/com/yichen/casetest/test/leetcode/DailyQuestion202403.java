@@ -29,6 +29,40 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         divisibilityArrayTest(dq);
         StringUtils.divisionLine();
+        minimumPossibleSumTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2834. 找出美丽数组的最小和
+
+    private static void minimumPossibleSumTest(DailyQuestion202403 dq){
+        System.out.println(dq.minimumPossibleSum(1000000000, 1000000000));
+        // 4
+        System.out.println(dq.minimumPossibleSum(2, 3));
+        // 8
+        System.out.println(dq.minimumPossibleSum(3, 3));
+        // 1
+        System.out.println(dq.minimumPossibleSum(1, 1));
+
+        System.out.println(dq.minimumPossibleSum(10000000, 10000000));
+    }
+
+    /**
+     * 切分  n小于target/2，直接算[1,target/2],不然后拼 【target,target+剩余]
+     * @param n
+     * @param target
+     * @return
+     */
+    public int minimumPossibleSum(int n, int target) {
+        int mod = 1000000007;
+        long tt = target / 2;
+        if (n <= tt) {
+            long result = (long) (1 + n) * n / 2;
+            return (int) (result % mod);
+        }
+        long resultA = (tt + 1) * tt / 2;
+        long resultB = ((((long) target + target + n) - tt - 1) % mod) * (n - tt) / 2;
+        return (int) ((resultA % mod + resultB % mod) % mod);
     }
 
     // 2575. 找出字符串的可整除数组
