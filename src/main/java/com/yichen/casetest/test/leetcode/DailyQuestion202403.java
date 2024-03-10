@@ -31,7 +31,27 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         minimumPossibleSumTest(dq);
         StringUtils.divisionLine();
+        kSumTest(dq);
+        StringUtils.divisionLine();
     }
+
+    // 2386. 找出数组的第 K 大和
+
+    private static void kSumTest(DailyQuestion202403 dq){
+        System.out.println(dq.kSum(StringUtils.randomIntArray(9999, -100000, 100000), 1888));
+        // 2
+        System.out.println(dq.kSum(new int[]{2,4,-2}, 5));
+        // 10
+        System.out.println(dq.kSum(new int[]{1,-2,3,4,-10,12}, 16));
+
+
+    }
+
+    public long kSum(int[] nums, int k) {
+         return -1L;
+    }
+
+
 
     // 2834. 找出美丽数组的最小和
 
