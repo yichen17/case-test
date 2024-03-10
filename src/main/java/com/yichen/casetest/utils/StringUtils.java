@@ -33,6 +33,14 @@ public class StringUtils {
                 "======================================{}============================================", desc);
     }
 
+    public static String fillSpaces(int n) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            builder.append(" ");
+        }
+        return builder.toString();
+    }
+
     public static void print(Object object){
         log.info("==> {}", FastJsonUtils.toJson(object));
     }
@@ -505,6 +513,10 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static String[] randomArrayInSpecificCharacters(String s, int vertical, int horizontal){
+        char[] charArray = s.toCharArray();
+        return randomArrayInSpecificCharacters(charArray, vertical, horizontal);
+    }
 
     public static String[] randomArrayInSpecificCharacters(char[] chars, int vertical, int horizontal){
         String[] result = new String[vertical];

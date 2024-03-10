@@ -33,6 +33,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         kSumTest(dq);
         StringUtils.divisionLine();
+        getHintTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 2386. 找出数组的第 K 大和
@@ -49,6 +51,38 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 299. 猜数字游戏
+
+    private static void getHintTest(DailyQuestion202403 dq){
+        // 1A3B
+        System.out.println(dq.getHint("1807", "7810"));
+        // 1A1B
+        System.out.println(dq.getHint("1123", "0111"));
+
+        System.out.println(dq.getHint(StringUtils.randomArrayInSpecificCharacters("0123456789", 1, 900)[0],
+                StringUtils.randomArrayInSpecificCharacters("0123456789", 1, 900)[0]));
+    }
+
+    public String getHint(String secret, String guess) {
+        int match = 0, contains = 0;
+        int[] times = new int[10];
+        for (int i=0; i<secret.length(); i++){
+            if (secret.charAt(i) == guess.charAt(i)){
+                match ++;
+                continue;
+            }
+            if (times[guess.charAt(i) - '0'] > 0){
+                contains ++;
+            }
+            times[guess.charAt(i) - '0'] --;
+            if (times[secret.charAt(i) - '0'] < 0){
+                contains ++;
+            }
+            times[secret.charAt(i) - '0'] ++;
+        }
+        return match + "A" + contains + "B";
     }
 
 
