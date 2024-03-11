@@ -35,6 +35,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         getHintTest(dq);
         StringUtils.divisionLine();
+        capitalizeTitleTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 2386. 找出数组的第 K 大和
@@ -51,6 +53,36 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 2129. 将标题首字母大写
+
+    private static void capitalizeTitleTest(DailyQuestion202403 dq){
+        // Capitalize The Title
+        System.out.println(dq.capitalizeTitle("capiTalIze tHe titLe"));
+        // First Letter of Each Word
+        System.out.println(dq.capitalizeTitle("First leTTeR of EACH Word"));
+        // i lOve leetcode
+        System.out.println(dq.capitalizeTitle("i Love Leetcode"));
+    }
+
+    public String capitalizeTitle(String title) {
+        String[] items = title.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<items.length; i++){
+            if (items[i].length() < 3){
+                sb.append(items[i].toLowerCase());
+            }
+            else {
+                String item = items[i].toLowerCase();
+                sb.append((char) (item.charAt(0) - 'a' + 'A'))
+                        .append(item.substring(1));
+            }
+            if (i != items.length -1){
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
     }
 
     // 299. 猜数字游戏
