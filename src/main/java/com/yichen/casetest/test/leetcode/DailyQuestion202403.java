@@ -55,6 +55,37 @@ public class DailyQuestion202403 {
          return -1L;
     }
 
+    // 1261. 在受污染的二叉树中查找元素
+
+
+
+    static class FindElements {
+
+        private Set<Integer> set;
+
+        public FindElements(TreeNode root) {
+            set = new HashSet<>();
+            dfs(root, 0);
+        }
+
+        private void dfs(TreeNode root, int pre){
+            if (root == null){
+                return;
+            }
+            set.add(pre);
+            if (root.left != null){
+                dfs(root.left, pre * 2 + 1);
+            }
+            if (root.right != null){
+                dfs(root.right, pre * 2 + 2);
+            }
+        }
+
+        public boolean find(int target) {
+            return set.contains(target);
+        }
+    }
+
     // 2129. 将标题首字母大写
 
     private static void capitalizeTitleTest(DailyQuestion202403 dq){
