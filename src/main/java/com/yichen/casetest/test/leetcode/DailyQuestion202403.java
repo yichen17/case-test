@@ -37,6 +37,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         capitalizeTitleTest(dq);
         StringUtils.divisionLine();
+        maximumOddBinaryNumberTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 2386. 找出数组的第 K 大和
@@ -53,6 +55,41 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 2864. 最大二进制奇数
+
+    private static void maximumOddBinaryNumberTest(DailyQuestion202403 dq){
+        // 001
+        System.out.println(dq.maximumOddBinaryNumber("010"));
+        // 1001
+        System.out.println(dq.maximumOddBinaryNumber("0101"));
+    }
+
+    public String maximumOddBinaryNumber(String s) {
+        if (s.length() < 2){
+            return s;
+        }
+        char[] charArray = s.toCharArray();
+        int left = 0, right = charArray.length - 1;
+        while (left < right){
+            while (left < right && charArray[left] == '1'){
+                left ++;
+            }
+            while (left < right && charArray[right] == '0'){
+                right --;
+            }
+            if (left >= right){
+                break;
+            }
+            char tmp = charArray[left];
+            charArray[left] = charArray[right];
+            charArray[right] = tmp;
+        }
+        char tmp = charArray[left-1];
+        charArray[left-1] = charArray[charArray.length-1];
+        charArray[charArray.length-1] = tmp;
+        return new String(charArray);
     }
 
     // 1261. 在受污染的二叉树中查找元素
