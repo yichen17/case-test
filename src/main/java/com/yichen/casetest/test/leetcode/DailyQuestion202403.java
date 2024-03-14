@@ -39,6 +39,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         maximumOddBinaryNumberTest(dq);
         StringUtils.divisionLine();
+        maxArrayValueTest(dq);
+        StringUtils.divisionLine();
     }
 
     // 2386. 找出数组的第 K 大和
@@ -55,6 +57,29 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 2789. 合并后数组中的最大元素
+
+    private static void maxArrayValueTest(DailyQuestion202403 dq){
+        // 21
+        System.out.println(dq.maxArrayValue(new int[]{2,3,7,9,3}));
+        // 11
+        System.out.println(dq.maxArrayValue(new int[]{5,3,3}));
+
+        System.out.println(dq.maxArrayValue(StringUtils.randomIntArray(9999, 1, 100000)));
+    }
+
+    public long maxArrayValue(int[] nums) {
+        long result = nums[nums.length - 1];
+        for (int i=nums.length-2; i>=0; i--){
+            if (result >= nums[i]){
+                result += nums[i];
+                continue;
+            }
+            result = nums[i];
+        }
+        return result;
     }
 
     // 2864. 最大二进制奇数
