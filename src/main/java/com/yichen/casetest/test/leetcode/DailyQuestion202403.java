@@ -41,7 +41,11 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         maxArrayValueTest(dq);
         StringUtils.divisionLine();
+        minNonZeroProductTest(dq);
+        StringUtils.divisionLine();
     }
+
+
 
     // 2386. 找出数组的第 K 大和
 
@@ -57,6 +61,45 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 1969. 数组元素的最小非零乘积
+
+    private static void minNonZeroProductTest(DailyQuestion202403 dq){
+        // 1
+        System.out.println(dq.minNonZeroProduct(1));
+        // 6
+        System.out.println(dq.minNonZeroProduct(2));
+        // 1512
+        System.out.println(dq.minNonZeroProduct(3));
+    }
+
+    /**
+     * 一的个数为 p * 2的(p-1)次幂
+     * 计算快速幂。。。
+     * @param p
+     * @return
+     */
+    public int minNonZeroProduct(int p) {
+        long tmp=0, times;
+        int mod = 1_000_000_007;
+        for (int i=0; i<p; i++){
+            tmp = (tmp << 1) | 1;
+        }
+        times = tmp/2;
+        return (int)(quickPower((tmp-1)%mod, times, mod) * (tmp % mod) % mod);
+    }
+
+    private long quickPower(long n, long times, int mod){
+        long result = 1;
+        while (times > 0){
+            if ((times & 1) == 1){
+                result = result * n % mod;
+            }
+            n = n * n % mod;
+            times >>= 1;
+        }
+        return result;
     }
 
     // 2789. 合并后数组中的最大元素
