@@ -43,6 +43,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         minNonZeroProductTest(dq);
         StringUtils.divisionLine();
+        frequencyTrackerTest();
+        StringUtils.divisionLine();
     }
 
 
@@ -61,6 +63,67 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 2671. 频率跟踪器
+
+    private static void frequencyTrackerTest(){
+        // [null, null, null, true]
+        FrequencyTracker frequencyTracker = new FrequencyTracker();
+        frequencyTracker.add(3);
+        frequencyTracker.add(3);
+        System.out.println(frequencyTracker.hasFrequency(2));
+        StringUtils.divisionLine();
+        // [null, null, null, false]
+        frequencyTracker = new FrequencyTracker();
+        frequencyTracker.add(1);
+        frequencyTracker.deleteOne(1);
+        System.out.println(frequencyTracker.hasFrequency(1));
+        StringUtils.divisionLine();
+        // [null, false, null, true]
+        frequencyTracker = new FrequencyTracker();
+        System.out.println(frequencyTracker.hasFrequency(2));
+        frequencyTracker.add(3);
+        System.out.println(frequencyTracker.hasFrequency(1));
+    }
+
+    static class FrequencyTracker {
+
+        private Map<Integer, Integer> countMap, timesMap;
+
+        public FrequencyTracker() {
+            // 和总数  次数
+            countMap = new HashMap<>();
+            // 值  次数
+            timesMap = new HashMap<>();
+        }
+
+        public void add(int number) {
+            Integer val;
+            if ((val = timesMap.get(number)) != null && val > 0) {
+                countMap.put(val, countMap.get(val) - 1);
+            }
+            timesMap.put(number, timesMap.getOrDefault(number, 0) + 1);
+            val = timesMap.get(number);
+            countMap.put(val, countMap.getOrDefault(val, 0) + 1);
+        }
+
+        public void deleteOne(int number) {
+            Integer val;
+            if ((val = timesMap.get(number)) != null && val > 0){
+                countMap.put(val, countMap.get(val) - 1);
+            }
+            if (val == null || val < 1){
+                return;
+            }
+            timesMap.put(number, timesMap.getOrDefault(number, 0) -1);
+            val = timesMap.get(number);
+            countMap.put(val, countMap.getOrDefault(val, 0) + 1);
+        }
+
+        public boolean hasFrequency(int frequency) {
+            return countMap.get(frequency) != null && countMap.get(frequency) > 0;
+        }
     }
 
     // 1969. 数组元素的最小非零乘积
