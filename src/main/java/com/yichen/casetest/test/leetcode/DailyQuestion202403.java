@@ -45,9 +45,9 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         frequencyTrackerTest();
         StringUtils.divisionLine();
-        minimumVisitedCellsTest(dq);
-        StringUtils.divisionLine();
         distinctIntegersTest(dq);
+        StringUtils.divisionLine();
+        minimumVisitedCellsTest(dq);
         StringUtils.divisionLine();
     }
 
@@ -78,7 +78,7 @@ public class DailyQuestion202403 {
         System.out.println(dq.minimumVisitedCells(StringUtils.convert2Array("[[3,4,2,1],[4,2,1,1],[2,1,1,0],[3,4,1,0]]")));
         // -1
         System.out.println(dq.minimumVisitedCells(StringUtils.convert2Array("[[2,1,0],[1,0,0]]")));
-
+        System.out.println(dq.minimumVisitedCells(StringUtils.constructTwoDimensionArray(1000, 10, 1, 10)));
     }
 
     /**
@@ -87,7 +87,27 @@ public class DailyQuestion202403 {
      * @return
      */
     public int minimumVisitedCells(int[][] grid) {
-        return -1;
+        int row = grid.length, col = grid[0].length;
+        int[][] dp = new int[row][col];
+        for (int i=0; i<row; i++){
+            for (int j=0; j<col; j++){
+                dp[i][j] = 100001;
+            }
+        }
+        dp[row-1][col-1]=1;
+        for (int i=row-1; i>=0; i--){
+            for (int j=col-1; j>=0; j--){
+                // 向右搜索
+                for (int k=1; k<=grid[i][j] && j+k<col; k++){
+                    dp[i][j] = Math.min(dp[i][j], dp[i][k+j] + 1);
+                }
+                // 向下搜索
+                for (int k=1; k<=grid[i][j] && i+k<row; k++){
+                    dp[i][j] = Math.min(dp[i][j], dp[k+i][j] + 1);
+                }
+            }
+        }
+        return dp[0][0] == 100001 ? -1 : dp[0][0];
     }
 
     // 2549. 统计桌面上的不同数字
