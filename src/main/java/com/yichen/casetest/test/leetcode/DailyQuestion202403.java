@@ -45,6 +45,10 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         frequencyTrackerTest();
         StringUtils.divisionLine();
+        minimumVisitedCellsTest(dq);
+        StringUtils.divisionLine();
+        distinctIntegersTest(dq);
+        StringUtils.divisionLine();
     }
 
 
@@ -63,6 +67,61 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 2617. 网格图中最少访问的格子数
+
+    private static void minimumVisitedCellsTest(DailyQuestion202403 dq){
+        // 4
+        System.out.println(dq.minimumVisitedCells(StringUtils.convert2Array("[[3,4,2,1],[4,2,3,1],[2,1,0,0],[2,4,0,0]]")));
+        //3
+        System.out.println(dq.minimumVisitedCells(StringUtils.convert2Array("[[3,4,2,1],[4,2,1,1],[2,1,1,0],[3,4,1,0]]")));
+        // -1
+        System.out.println(dq.minimumVisitedCells(StringUtils.convert2Array("[[2,1,0],[1,0,0]]")));
+
+    }
+
+    /**
+     * dp 存储任意一点到右下角之间的最小移动格子数
+     * @param grid
+     * @return
+     */
+    public int minimumVisitedCells(int[][] grid) {
+        return -1;
+    }
+
+    // 2549. 统计桌面上的不同数字
+
+
+    private static void distinctIntegersTest(DailyQuestion202403 dq){
+        // 4
+        System.out.println(dq.distinctIntegers(5));
+        // 2
+        System.out.println(dq.distinctIntegers(3));
+    }
+
+    public int distinctIntegers(int n) {
+        Set<Integer> valid = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(n);
+        valid.add(n);
+        int p = n, q;
+        while (!queue.isEmpty()){
+            int len = queue.size();
+            q = Integer.MIN_VALUE;
+            while (len > 0){
+                int item = queue.poll();
+                for (int i=1; i<p; i++){
+                    if ((item % i == 1) && valid.add(i)){
+                        queue.offer(i);
+                        q = Math.max(q, i);
+                    }
+                }
+                len --;
+            }
+            p = q;
+        }
+        return valid.size();
     }
 
     // 2671. 频率跟踪器
