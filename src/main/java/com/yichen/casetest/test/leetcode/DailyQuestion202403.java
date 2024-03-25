@@ -49,6 +49,10 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         minimumVisitedCellsTest(dq);
         StringUtils.divisionLine();
+        changeTest(dq);
+        StringUtils.divisionLine();
+        coinChangeTest(dq);
+        StringUtils.divisionLine();
     }
 
 
@@ -68,6 +72,70 @@ public class DailyQuestion202403 {
     public long kSum(int[] nums, int k) {
          return -1L;
     }
+
+    // 518. 零钱兑换 II
+
+    private static void changeTest(DailyQuestion202403 dq){
+        // 4
+        System.out.println(dq.change(5, new int[]{1,2,5}));
+        // 0
+        System.out.println(dq.change(3, new int[]{2}));
+        // 1
+        System.out.println(dq.change(10, new int[]{10}));
+    }
+
+    public int change(int amount, int[] coins) {
+        return -1;
+    }
+
+    // 322. 零钱兑换
+
+    private static void coinChangeTest(DailyQuestion202403 dq){
+        // 3
+        System.out.println(dq.coinChange(new int[]{1,2,5}, 11));
+        // -1
+        System.out.println(dq.coinChange(new int[]{2}, 3));
+        // 0
+        System.out.println(dq.coinChange(new int[]{1}, 0));
+        // 105
+        System.out.println(dq.coinChange(new int[]{12,93,31,24,55,90,15,8,56,96,60,53}, 10000));
+
+        System.out.println(dq.coinChange(StringUtils.randomIntArray(12, 1, 100), 10000));
+    }
+
+
+    public int coinChange(int[] coins, int amount) {
+        if (amount == 0){
+            return 0;
+        }
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, 200000);
+        for (int coin : coins){
+            if (coin > amount){
+                continue;
+            }
+            dp[coin] = 1;
+        }
+        for (int i=1; i<amount; i++){
+            for (int coin : coins){
+                if (dp[i] == 0){
+                    continue;
+                }
+                if (coin > amount || i + coin > amount){
+                    continue;
+                }
+                dp[i+coin] = Math.min(dp[i+coin], dp[i]+1);
+            }
+        }
+        return dp[amount] == 200000 ? -1 : dp[amount];
+    }
+
+
+
+
+
+
+
 
     // 2617. 网格图中最少访问的格子数
 
