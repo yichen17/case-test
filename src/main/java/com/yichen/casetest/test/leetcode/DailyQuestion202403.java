@@ -49,9 +49,9 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         minimumVisitedCellsTest(dq);
         StringUtils.divisionLine();
-        changeTest(dq);
-        StringUtils.divisionLine();
         coinChangeTest(dq);
+        StringUtils.divisionLine();
+        changeTest(dq);
         StringUtils.divisionLine();
     }
 
@@ -82,10 +82,19 @@ public class DailyQuestion202403 {
         System.out.println(dq.change(3, new int[]{2}));
         // 1
         System.out.println(dq.change(10, new int[]{10}));
+
+        System.out.println(dq.change(5000, StringUtils.randomNoRepeat(10, 1, 500)));
     }
 
     public int change(int amount, int[] coins) {
-        return -1;
+        int[] dp = new int[amount+1];
+        dp[0] = 1;
+        for (int coin : coins){
+            for (int i=coin; i<=amount; i++){
+                dp[i] = dp[i] + dp[i-coin];
+            }
+        }
+        return dp[amount];
     }
 
     // 322. 零钱兑换
