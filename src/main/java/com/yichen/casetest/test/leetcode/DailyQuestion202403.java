@@ -1,5 +1,6 @@
 package com.yichen.casetest.test.leetcode;
 
+import com.yichen.casetest.utils.ArrayUtils;
 import com.yichen.casetest.utils.StringUtils;
 import com.yichen.casetest.utils.TreeUtils;
 
@@ -113,7 +114,7 @@ public class DailyQuestion202403 {
         System.out.println(dq.countWays(StringUtils.convert2Array("[[1,3],[10,20],[2,5],[4,8]]")));
 
         
-        System.out.println(dq.countWays(StringUtils.constructEdges(1, 1000, 50, false, true, true)));
+        System.out.println(dq.countWays(ArrayUtils.same(900, 1, 900)));
     }
 
     public int countWays(int[][] ranges) {
