@@ -53,6 +53,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         changeTest(dq);
         StringUtils.divisionLine();
+        countWaysTest(dq);
+        StringUtils.divisionLine();
     }
 
 
@@ -72,6 +74,77 @@ public class DailyQuestion202403 {
     public long kSum(int[] nums, int k) {
          return -1L;
     }
+
+    // 2642. 设计可以求最短路径的图类
+
+    private static class Graph {
+        // 最初可以计算点到点的距离
+        int[][] dp;
+        public Graph(int n, int[][] edges) {
+            dp = new int[n][n];
+            List<Integer>[] arrow = new List[n];
+            for (int i=0; i<n; i++){
+                arrow[i] = new LinkedList<>();
+            }
+            for (int[] edge : edges){
+                int from = edge[0], to = edge[1];
+                dp[from][to] = edge[2];
+                arrow[from].add(to);
+            }
+            Queue<int[]> queue = new LinkedList<>();
+
+        }
+        //加入边后，以新边出发点为中点的路径重算最小值
+        public void addEdge(int[] edge) {
+
+        }
+
+        public int shortestPath(int node1, int node2) {
+            return dp[node1][node2];
+        }
+    }
+
+    // 2580. 统计将重叠区间合并成组的方案数
+
+    private static void countWaysTest(DailyQuestion202403 dq){
+        // 2
+        System.out.println(dq.countWays(StringUtils.convert2Array("[[6,10],[5,15]]")));
+        // 4
+        System.out.println(dq.countWays(StringUtils.convert2Array("[[1,3],[10,20],[2,5],[4,8]]")));
+
+        
+        System.out.println(dq.countWays(StringUtils.constructEdges(1, 1000, 50, false, true, true)));
+    }
+
+    public int countWays(int[][] ranges) {
+        int validTimes = 0;
+        Arrays.sort(ranges, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] == o2[0]){
+                    return o1[1] - o2[1];
+                }
+                return o1[0] - o2[0];
+            }
+        });
+        int[] items = null;
+        for (int[] range : ranges){
+            // 两个区间独立的场景
+            if (items == null || items[1] < range[0]){
+                validTimes ++;
+                items = range;
+                continue;
+            }
+            items[1] = Math.max(items[1], range[1]);
+        }
+        int result = 1;
+        for (int i=0; i<validTimes; i++){
+            result = result * 2 % 1_000_000_007;
+        }
+        return result;
+    }
+
+
 
     // 518. 零钱兑换 II
 
