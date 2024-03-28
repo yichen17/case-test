@@ -56,6 +56,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         countWaysTest(dq);
         StringUtils.divisionLine();
+        firstDayBeenInAllRoomsTest(dq);
+        StringUtils.divisionLine();
     }
 
 
@@ -74,6 +76,37 @@ public class DailyQuestion202403 {
 
     public long kSum(int[] nums, int k) {
          return -1L;
+    }
+
+    // 1997. 访问完所有房间的第一天
+
+    private static void firstDayBeenInAllRoomsTest(DailyQuestion202403 dq){
+        // 2
+        System.out.println(dq.firstDayBeenInAllRooms(new int[]{0, 0}));
+        // 6
+        System.out.println(dq.firstDayBeenInAllRooms(new int[]{0, 0, 2}));
+        // 6
+        System.out.println(dq.firstDayBeenInAllRooms(new int[]{0, 1, 2, 0}));
+
+        System.out.println(dq.firstDayBeenInAllRooms(ArrayUtils.posLessThen(9000)));
+    }
+
+    public int firstDayBeenInAllRooms(int[] nextVisit) {
+        int len = nextVisit.length;
+        int[] dp = new int[len];
+        int[] preSum = new int[len];
+        dp[0] = 2;
+        preSum[0] = 2;
+        for (int i=1; i<len-1; i++){
+            int ttt = nextVisit[i] == 0 ? 0 : preSum[nextVisit[i]-1];
+            dp[i] = (preSum[i-1] - ttt + 2) % 1_000_000_007;
+            // 避免多减
+            if (dp[i] < 0){
+                dp[i] += 1_000_000_007;
+            }
+            preSum[i] = (preSum[i-1] + dp[i]) % 1_000_000_007;
+        }
+        return preSum[len-2];
     }
 
     // 2642. 设计可以求最短路径的图类
