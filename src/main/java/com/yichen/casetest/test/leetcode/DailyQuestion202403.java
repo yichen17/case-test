@@ -58,6 +58,8 @@ public class DailyQuestion202403 {
         StringUtils.divisionLine();
         firstDayBeenInAllRoomsTest(dq);
         StringUtils.divisionLine();
+        minimumSumTest(dq);
+        StringUtils.divisionLine();
     }
 
 
@@ -77,6 +79,54 @@ public class DailyQuestion202403 {
     public long kSum(int[] nums, int k) {
          return -1L;
     }
+
+    // 2908. 元素和最小的山形三元组 I
+
+    private static void minimumSumTest(DailyQuestion202403 dq){
+        // 9
+        System.out.println(dq.minimumSum(new int[]{8, 6, 1, 5, 3}));
+        // 13
+        System.out.println(dq.minimumSum(new int[]{5, 4, 8, 7, 10, 2}));
+        // -1
+        System.out.println(dq.minimumSum(new int[]{6, 5, 4, 3, 4, 5}));
+
+        System.out.println(dq.minimumSum(StringUtils.randomIntArray(50, 1, 50)));
+    }
+
+
+    public int minimumSum(int[] nums) {
+        int result = Integer.MAX_VALUE, len = nums.length;
+        int[] descend = new int[len], ascend = new int[len];
+        int min = nums[0];
+        ascend[0] = -1;
+        descend[len-1] = -1;
+        for (int i=1; i<len; i++){
+            if (min < nums[i]){
+                ascend[i] = min;
+            }
+            else {
+                ascend[i] = -1;
+            }
+            min = Math.min(min, nums[i]);
+        }
+        min = nums[len-1];
+        for (int i=len-1; i>=0; i--){
+            if (min < nums[i]){
+                descend[i] = min;
+            }
+            else {
+                descend[i] = -1;
+            }
+            min = Math.min(min, nums[i]);
+        }
+        for (int i=1; i<len-1; i++){
+            if (descend[i] != -1 && ascend[i] != -1){
+                result = Math.min(result, descend[i] + nums[i] + ascend[i]);
+            }
+        }
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
 
     // 1997. 访问完所有房间的第一天
 
