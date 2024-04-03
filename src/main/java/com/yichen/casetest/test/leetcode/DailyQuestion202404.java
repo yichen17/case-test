@@ -16,6 +16,23 @@ public class DailyQuestion202404 {
         StringUtils.divisionLine();
     }
 
+    // 1379. 找出克隆二叉树中的相同节点
+
+
+    public final TreeNode getTargetCopy(final TreeNode original, final TreeNode cloned, final TreeNode target) {
+        if (original == target){
+            return cloned;
+        }
+        TreeNode result;
+        if (original.left != null && (result = getTargetCopy(original.left, cloned.left, target)) != null){
+            return result;
+        }
+        if (original.right != null && (result = getTargetCopy(original.right, cloned.right, target)) != null){
+            return result;
+        }
+        return null;
+    }
+
     // 2810. 故障键盘
 
     private static void finalStringTest(DailyQuestion202404 dq){
