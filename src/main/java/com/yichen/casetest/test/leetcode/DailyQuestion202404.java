@@ -22,6 +22,20 @@ public class DailyQuestion202404 {
         StringUtils.divisionLine();
     }
 
+    // 2529. 正整数和负整数的最大计数
+
+    public int maximumCount(int[] nums) {
+        int a = 0, b = 0;
+        for (int num : nums){
+            if (num > 0){
+                a++;
+            } else if (num < 0) {
+                b++;
+            }
+        }
+        return Math.max(a, b);
+    }
+
     // 2009. 使数组连续的最少操作数
 
     private static void minOperationsTest(DailyQuestion202404 dq){
