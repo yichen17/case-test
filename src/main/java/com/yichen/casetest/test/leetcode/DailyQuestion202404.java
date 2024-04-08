@@ -2,6 +2,10 @@ package com.yichen.casetest.test.leetcode;
 
 import com.yichen.casetest.utils.StringUtils;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author banYu
  * @version 1.0
@@ -14,6 +18,59 @@ public class DailyQuestion202404 {
         DailyQuestion202404 dq = new DailyQuestion202404();
         finalStringTest(dq);
         StringUtils.divisionLine();
+        minOperationsTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 2009. 使数组连续的最少操作数
+
+    private static void minOperationsTest(DailyQuestion202404 dq){
+        //
+        System.out.println(dq.minOperations(new int[]{44,28,33,49,4,2,35,28,25,38,47,20,14,30,27,38,42,14,34}));
+        //
+        System.out.println(dq.minOperations(new int[]{1,1,1,1}));
+        // 0
+        System.out.println(dq.minOperations(new int[]{4,2,5,3}));
+        // 1
+        System.out.println(dq.minOperations(new int[]{1,2,3,5,6}));
+        // 3
+        System.out.println(dq.minOperations(new int[]{1,10,100,1000}));
+        System.out.println(dq.minOperations(StringUtils.randomIntArray(5000, 1, 1_000_000_000)));
+    }
+
+    public int minOperations(int[] nums) {
+        Arrays.sort(nums);
+        List<Integer> notRepeatList = new LinkedList<>();
+        for (int i=0; i<nums.length; i++){
+            if (i == 0 || nums[i] != nums[i-1]){
+                notRepeatList.add(nums[i]);
+            }
+        }
+        int result = Integer.MAX_VALUE;
+        for (int i=0; i<notRepeatList.size(); i++){
+            result = Math.min(result, nums.length - (getFirstGreaterPos(notRepeatList.get(i) + nums.length - 1, notRepeatList) - i + 1) + 1);
+            // 提前跳出
+            if (result <= nums.length - (notRepeatList.size()) - i){
+                break;
+            }
+        }
+        return result;
+    }
+
+    private int getFirstGreaterPos(int n, List<Integer> nums){
+        int left = 0, right = nums.size() - 1, mid;
+        while (left <= right){
+            mid = (left + right) >> 1;
+            if (nums.get(mid) <= n){
+                left = mid + 1;
+                continue;
+            }
+            if (mid == 0 || nums.get(mid-1) <= n){
+                return mid;
+            }
+            right = mid - 1;
+        }
+        return left;
     }
 
     // 1379. 找出克隆二叉树中的相同节点
