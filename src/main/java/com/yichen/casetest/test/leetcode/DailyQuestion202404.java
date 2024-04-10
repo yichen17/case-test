@@ -20,6 +20,53 @@ public class DailyQuestion202404 {
         StringUtils.divisionLine();
         minOperationsTest(dq);
         StringUtils.divisionLine();
+        maximumBinaryStringTest(dq);
+        StringUtils.divisionLine();
+    }
+
+    // 1702. 修改后的最大二进制字符串
+
+    private static void maximumBinaryStringTest(DailyQuestion202404 dq){
+        System.out.println(dq.maximumBinaryString("1100"));
+        // 111011
+        System.out.println(dq.maximumBinaryString("000110"));
+        // 01
+        System.out.println(dq.maximumBinaryString("01"));
+
+        System.out.println(dq.maximumBinaryString(StringUtils.randomArrayInSpecificCharacters(new char[]{'1', '0'}, 50000)));
+    }
+
+    /**
+     * 从左往右，有0才去借
+     * @param binary
+     * @return
+     */
+    public String maximumBinaryString(String binary) {
+        char[] charArray = binary.toCharArray();
+        int prev = -1;
+        for (int i=0; i<charArray.length; i++) {
+            if (charArray[i] == '1') {
+                continue;
+            }
+            if (prev == -1){
+                prev = i;
+                continue;
+            }
+            // 上一个也是0
+            if (prev == i-1) {
+                charArray[prev] = '1';
+                charArray[i] = '0';
+                prev = i;
+                continue;
+            }
+            // 不是连续的0，中间有gap
+            charArray[prev] = '1';
+            charArray[prev+1] = '0';
+            charArray[i] = '1';
+            prev = prev + 1;
+        }
+
+        return new String(charArray);
     }
 
     // 2529. 正整数和负整数的最大计数
