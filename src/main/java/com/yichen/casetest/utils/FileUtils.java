@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Qiuxinchao
@@ -327,7 +329,26 @@ public class FileUtils {
 
 //        base64EncoderCompare();
 
-        removeRemarkLine("/Users/banyu/personal/agent-demo/agent/src/main/java");
+//        removeRemarkLine("/Users/banyu/personal/agent-demo/agent/src/main/java");
+
+//        formatCode("/Users/banyu/personal/case-test/test", 4);
+//        formatCode("/Users/banyu/personal/agent-demo/agent/src/main/java", 4);
+
+//        fileConvert("~/tmp/origin.txt", null, "~/tmp/target.txt");
+        fileConvert("/Users/banyu/tmp/origin.txt", (p) -> {
+            if (StringUtils.isBlank(p)) {
+                return p;
+            }
+            String[] items = p.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < items.length; i++) {
+                if (i != 0) {
+                    sb.append("\n");
+                }
+                sb.append(items[i]);
+            }
+            return sb.toString();
+        }, "/Users/banyu/tmp/target.txt");
     }
 
     /**
@@ -443,6 +464,42 @@ public class FileUtils {
         FileReader fr = new FileReader(s);
         System.out.println(fr.getEncoding());
         fr.close();
+    }
+
+    public static void writeFile(String filePath, String data) throws Exception {
+//        File file = new File(filePath);
+//        if (!file.exists()) {
+//            file.mkdirs();
+//        }
+        FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+        fileOutputStream.write(data.getBytes(StandardCharsets.UTF_8));
+        fileOutputStream.flush();
+        fileOutputStream.close();
+    }
+
+
+    /**
+     * 疑惑，为啥不能用~指定用户目录？？？
+     * @param originPath
+     * @param convertFunction
+     * @param targetPath
+     * @throws Exception
+     */
+    public static void fileConvert(String originPath, Function<String, String> convertFunction, String targetPath) throws Exception{
+        String originData = readFile(originPath);
+        String targetData = convertFunction.apply(originData);
+        writeFile(targetPath, targetData);
+
+//        String[] items = originData.split(",");
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < items.length; i++) {
+//            if (i != 0) {
+//                sb.append("\n");
+//            }
+//            sb.append(items[i]);
+//        }
+//        writeFile("/Users/banyu/tmp/20240514.txt", sb.toString());
+
     }
 
 
